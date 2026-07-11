@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  pr:
+  test:
     strategy:
       fail-fast: false
       matrix:
@@ -34,3 +34,12 @@ jobs:
       - run: npm test
       - run: npm run type-check
       - run: npm run lint
+
+  pr:
+    name: pr
+    if: always()
+    needs: test
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Verify matrix
+        run: test "${{ needs.test.result }}" = success
