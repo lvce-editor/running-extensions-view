@@ -1,0 +1,41 @@
+{
+  "name": "@lvce-editor/running-extensions-view-monorepo",
+  "version": "0.0.0-dev",
+  "keywords": [
+    "running-extensions"
+  ],
+  "license": "MIT",
+  "author": "Lvce Editor",
+  "type": "module",
+  "scripts": {
+    "build": "node packages/build/src/build.js",
+    "build:watch": "./packages/build/node_modules/.bin/esbuild --format=esm --bundle --external:node:buffer --external:electron --external:ws --external:node:worker_threads --bundle --watch packages/running-extensions-view/src/runningExtensionsViewMain.ts --outfile=.tmp/dist/dist/runningExtensionsViewMain.js",
+    "dev": "node packages/build/src/dev.js",
+    "format": "prettier --write .",
+    "postinstall": "lerna bootstrap --ci",
+    "lint": "eslint . && prettier --check . && knip --no-config-hints",
+    "test": "lerna run test",
+    "type-check": "tsc -b"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src"
+    ],
+    "ext": "ts,js",
+    "exec": "node scripts/build.js"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 150
+  },
+  "devDependencies": {
+    "@lerna/legacy-package-management": "^8.2.4",
+    "@lvce-editor/eslint-config": "^16.3.0",
+    "eslint": "^10.7.0",
+    "knip": "^6.24.0",
+    "lerna": "^8.2.4",
+    "prettier": "^3.9.4",
+    "typescript": "^6.0.3"
+  }
+}

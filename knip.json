@@ -1,0 +1,17 @@
+{
+  "$schema": "https://unpkg.com/knip@6/schema.json",
+  "workspaces": {
+    ".": {
+      "project": ["*.js"],
+      "ignoreDependencies": ["@lerna/legacy-package-management"]
+    },
+    "packages/build": {
+      "project": ["src/**/*.js", "src/**/*.ts"],
+      "ignoreDependencies": ["@lvce-editor/verror", "esbuild"]
+    },
+    "packages/running-extensions-view": {
+      "entry": ["test/**/*.test.ts"],
+      "project": ["src/**/*.ts", "test/**/*.ts"]
+    }
+  }
+}
