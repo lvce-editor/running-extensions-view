@@ -1,6 +1,3 @@
-# about-view
+# Running Extensions View
 
-About View.
-
-
-<!--  -->
+Worker-backed editor view for inspecting activated extensions and their activation times in Lvce Editor.
