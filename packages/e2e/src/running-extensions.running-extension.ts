@@ -2,10 +2,10 @@ import type { Test } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions.running-extension'
 
-export const test: Test = async ({ Command, expect, Extension, Locator, Main }) => {
+export const test: Test = async ({ expect, Extension, Locator, Main, QuickPick }) => {
   const extensionUri = import.meta.resolve('../fixtures/sample.running-extension')
   await Extension.addWebExtension(extensionUri)
-  await Command.executeExtensionCommand('sample.activate')
+  await QuickPick.executeCommand('Activate Sample Extension')
 
   await Main.openUri('running-extensions:///running')
 
