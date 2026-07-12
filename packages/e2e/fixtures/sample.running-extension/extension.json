@@ -1,0 +1,14 @@
+{
+  "id": "sample.running-extension",
+  "name": "Sample Running Extension",
+  "version": "1.2.3",
+  "browser": "main.js",
+  "main": "main.js",
+  "activation": ["onCommand:sample.activate"],
+  "commands": [
+    {
+      "id": "sample.activate",
+      "label": "Activate Sample Extension"
+    }
+  ]
+}
