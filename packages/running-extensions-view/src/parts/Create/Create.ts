@@ -5,6 +5,7 @@ export const create = (uid: number, uri: string, x: number, y: number, width: nu
   const state: RunningExtensionsState = {
     assetDir,
     extensions: [],
+    focusedIndex: -1,
     height,
     loaded: false,
     platform,

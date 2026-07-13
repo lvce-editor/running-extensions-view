@@ -26,7 +26,13 @@ test('renders running extension details and icon', () => {
     ],
     true,
   )
-  expect(dom).toContainEqual({ childCount: 0, className: 'RunningExtensionIcon', src: '/icons/sample.png', type: VirtualDomElements.Img })
+  expect(dom).toContainEqual({
+    childCount: 0,
+    className: 'RunningExtensionIcon',
+    'data-index': 0,
+    src: '/icons/sample.png',
+    type: VirtualDomElements.Img,
+  })
   expect(dom).toContainEqual({ childCount: 0, text: 'Sample Extension', type: VirtualDomElements.Text })
   expect(dom).toContainEqual({ childCount: 0, text: '1.2.3', type: VirtualDomElements.Text })
   expect(dom).toContainEqual({ childCount: 0, text: 'sample.extension', type: VirtualDomElements.Text })
@@ -41,6 +47,7 @@ test('falls back to the extension id and default icon', () => {
   expect(dom).toContainEqual({
     childCount: 0,
     className: 'RunningExtensionIcon RunningExtensionDefaultIcon MaskIcon MaskIconExtensions',
+    'data-index': 0,
     role: 'none',
     type: VirtualDomElements.Div,
   })

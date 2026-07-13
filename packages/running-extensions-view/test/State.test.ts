@@ -11,6 +11,7 @@ test('create registers the initial state', () => {
   expect(RunningExtensionsStates.get(1).newState).toMatchObject({
     assetDir: '/test/assets',
     extensions: [],
+    focusedIndex: -1,
     height: 400,
     loaded: false,
     platform: 1,
