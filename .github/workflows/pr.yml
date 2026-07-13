@@ -35,6 +35,8 @@ jobs:
       - run: npm run lint
       - run: npm run type-check
       - run: npm test
+      - name: Build release archive
+        run: npm run build
       - name: install playwright dependencies
         working-directory: ./packages/e2e
         run: npx playwright install chromium
@@ -45,7 +47,5 @@ jobs:
         run: npm run e2e:headless
         env:
           PLAYWRIGHT_BROWSERS_PATH: 0
-      - name: Build release archive
-        run: npm run build
       - name: Build static site
         run: npm run build:static
