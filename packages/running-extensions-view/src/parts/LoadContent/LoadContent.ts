@@ -2,7 +2,8 @@ import type { RunningExtensionsState } from '../RunningExtensionsState/RunningEx
 import * as ExtensionManagement from '../ExtensionManagement/ExtensionManagement.ts'
 
 export const loadContent = async (state: RunningExtensionsState): Promise<RunningExtensionsState> => {
-  const extensions = await ExtensionManagement.getRunningExtensions()
+  const { assetDir, platform } = state
+  const extensions = await ExtensionManagement.getRunningExtensions(assetDir, platform)
   return {
     ...state,
     extensions,
