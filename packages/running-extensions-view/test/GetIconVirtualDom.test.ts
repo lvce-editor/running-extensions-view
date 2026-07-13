@@ -1,5 +1,6 @@
 import { expect, test } from '@jest/globals'
-import { VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
+import { mergeClassNames, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
+import * as AriaRoles from '../src/parts/AriaRoles/AriaRoles.ts'
 import { getIconVirtualDom } from '../src/parts/GetIconVirtualDom/GetIconVirtualDom.ts'
 
 test('renders an image when the extension has an icon', () => {
@@ -42,9 +43,9 @@ test('renders the default icon when the extension has no icon', () => {
   expect(dom).toEqual([
     {
       childCount: 0,
-      className: 'RunningExtensionIcon RunningExtensionDefaultIcon MaskIcon MaskIconExtensions',
+      className: mergeClassNames('RunningExtensionIcon', 'RunningExtensionDefaultIcon', 'MaskIcon', 'MaskIconExtensions'),
       'data-index': 2,
-      role: 'none',
+      role: AriaRoles.None,
       type: VirtualDomElements.Div,
     },
   ])

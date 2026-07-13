@@ -3,11 +3,12 @@ import type { MenuEntry } from '../MenuEntry/MenuEntry.ts'
 import type { RunningExtensionsState } from '../RunningExtensionsState/RunningExtensionsState.ts'
 
 export const getMenuEntries = (state: RunningExtensionsState): readonly MenuEntry[] => {
-  const extension = state.extensions[state.focusedIndex]
+  const { extensions, focusedIndex } = state
+  const extension = extensions[focusedIndex]
   if (!extension) {
     return []
   }
-  const args = [state.focusedIndex]
+  const args = [focusedIndex]
   return [
     {
       args,

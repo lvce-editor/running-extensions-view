@@ -1,5 +1,6 @@
 import { text, type VirtualDomNode, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
 import type { RunningExtension } from '../RunningExtension/RunningExtension.ts'
+import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
 import { getIconVirtualDom } from '../GetIconVirtualDom/GetIconVirtualDom.ts'
 
 export const getExtensionVirtualDom = (extension: RunningExtension, index?: number): readonly VirtualDomNode[] => {
@@ -9,7 +10,7 @@ export const getExtensionVirtualDom = (extension: RunningExtension, index?: numb
       childCount: 3,
       className: 'RunningExtension',
       'data-index': index,
-      role: 'listitem',
+      role: AriaRoles.ListItem,
       type: VirtualDomElements.Div,
     },
     ...getIconVirtualDom(extension, index),

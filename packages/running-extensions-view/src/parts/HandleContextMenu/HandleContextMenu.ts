@@ -9,16 +9,17 @@ export const handleContextMenu = async (
   x: number = 0,
   y: number = 0,
 ): Promise<RunningExtensionsState> => {
+  const { extensions, uid } = state
   const focusedIndex = Number(index)
-  if (!state.extensions[focusedIndex]) {
+  if (!extensions[focusedIndex]) {
     return state
   }
   const newState = {
     ...state,
     focusedIndex,
   }
-  RunningExtensionsStates.set(state.uid, state, newState)
-  await ContextMenu.show(state.uid, MenuEntryId.RunningExtensions, x, y, {
+  RunningExtensionsStates.set(uid, state, newState)
+  await ContextMenu.show(uid, MenuEntryId.RunningExtensions, x, y, {
     menuId: MenuEntryId.RunningExtensions,
   })
   return newState

@@ -1,5 +1,6 @@
 import { expect, test } from '@jest/globals'
-import { VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
+import { mergeClassNames, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
+import * as AriaRoles from '../src/parts/AriaRoles/AriaRoles.ts'
 import * as DomEventListenerFunctions from '../src/parts/DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import { getRunningExtensionsVirtualDom } from '../src/parts/GetRunningExtensionsVirtualDom/GetRunningExtensionsVirtualDom.ts'
 
@@ -9,7 +10,7 @@ test('registers the context menu listener on the list', () => {
     childCount: 1,
     className: 'RunningExtensions',
     onContextMenu: DomEventListenerFunctions.HandleContextMenu,
-    role: 'list',
+    role: AriaRoles.List,
     type: VirtualDomElements.Div,
   })
 })
@@ -58,9 +59,9 @@ test('falls back to the extension id and default icon', () => {
   )
   expect(dom).toContainEqual({
     childCount: 0,
-    className: 'RunningExtensionIcon RunningExtensionDefaultIcon MaskIcon MaskIconExtensions',
+    className: mergeClassNames('RunningExtensionIcon', 'RunningExtensionDefaultIcon', 'MaskIcon', 'MaskIconExtensions'),
     'data-index': 0,
-    role: 'none',
+    role: AriaRoles.None,
     type: VirtualDomElements.Div,
   })
   expect(dom).toContainEqual({ childCount: 0, text: 'sample.extension', type: VirtualDomElements.Text })

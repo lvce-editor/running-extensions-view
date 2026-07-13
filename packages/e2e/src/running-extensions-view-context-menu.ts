@@ -1,10 +1,10 @@
-import type { Test } from '@lvce-editor/test-with-playwright'
+import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-context-menu'
 
 export const skip = ['webkit'] as const
 
-export const test: Test = async ({ Command, expect, Locator, RunningExtensions }) => {
+export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
   await RunningExtensions.show()
   await Command.execute('RunningExtensions.setExtensions', [
     {
