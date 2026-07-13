@@ -12,7 +12,7 @@ const getRunningExtensionsEmptyDom = (loaded: boolean): readonly VirtualDomNode[
       childCount: 1,
       className: 'RunningExtensions',
       onContextMenu: DomEventListenerFunctions.HandleContextMenu,
-      role: 'list',
+      role: AriaRoles.List,
       type: VirtualDomElements.Div,
     },
     {
