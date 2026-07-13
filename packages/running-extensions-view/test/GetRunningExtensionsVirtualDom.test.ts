@@ -1,6 +1,18 @@
 import { expect, test } from '@jest/globals'
 import { VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
+import * as DomEventListenerFunctions from '../src/parts/DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import { getRunningExtensionsVirtualDom } from '../src/parts/GetRunningExtensionsVirtualDom/GetRunningExtensionsVirtualDom.ts'
+
+test('registers the context menu listener on the list', () => {
+  const dom = getRunningExtensionsVirtualDom([], true)
+  expect(dom[0]).toEqual({
+    childCount: 1,
+    className: 'RunningExtensions',
+    onContextMenu: DomEventListenerFunctions.HandleContextMenu,
+    role: 'list',
+    type: VirtualDomElements.Div,
+  })
+})
 
 test('renders a loading message before content is loaded', () => {
   const dom = getRunningExtensionsVirtualDom([], false)
