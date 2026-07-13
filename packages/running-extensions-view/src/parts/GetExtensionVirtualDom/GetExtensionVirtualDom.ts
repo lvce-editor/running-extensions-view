@@ -2,47 +2,54 @@ import { text, type VirtualDomNode, VirtualDomElements } from '@lvce-editor/virt
 import type { RunningExtension } from '../RunningExtension/RunningExtension.ts'
 import { getIconVirtualDom } from '../GetIconVirtualDom/GetIconVirtualDom.ts'
 
-export const getExtensionVirtualDom = (extension: RunningExtension): readonly VirtualDomNode[] => {
+export const getExtensionVirtualDom = (extension: RunningExtension, index?: number): readonly VirtualDomNode[] => {
   const displayName = extension.name || extension.id
   return [
     {
       childCount: 3,
       className: 'RunningExtension',
+      'data-index': index,
       role: 'listitem',
       type: VirtualDomElements.Div,
     },
-    ...getIconVirtualDom(extension),
+    ...getIconVirtualDom(extension, index),
     {
       childCount: 2,
       className: 'RunningExtensionDetails',
+      'data-index': index,
       type: VirtualDomElements.Div,
     },
     {
       childCount: 2,
       className: 'RunningExtensionTitle',
+      'data-index': index,
       type: VirtualDomElements.Div,
     },
     {
       childCount: 1,
       className: 'RunningExtensionName',
+      'data-index': index,
       type: VirtualDomElements.Strong,
     },
     text(displayName),
     {
       childCount: 1,
       className: 'RunningExtensionVersion',
+      'data-index': index,
       type: VirtualDomElements.Span,
     },
     text(extension.version),
     {
       childCount: 1,
       className: 'RunningExtensionId',
+      'data-index': index,
       type: VirtualDomElements.Div,
     },
     text(extension.id),
     {
       childCount: 1,
       className: 'RunningExtensionActivationTime',
+      'data-index': index,
       type: VirtualDomElements.Div,
     },
     text(`Activation: ${Math.round(extension.activationTime)}ms`),
