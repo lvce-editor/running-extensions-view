@@ -1,10 +1,10 @@
-import type { Test } from '@lvce-editor/test-with-playwright'
+import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-context-menu'
 
 export const skip = 1
 
-export const test: Test = async ({ Command, expect, Locator, Main }) => {
+export const test: Test = async ({ Command, expect, Locator, Main }: TestApi) => {
   await Main.openUri('running-extensions:///1')
   const firstExtension = Locator('.RunningExtension').first()
   await expect(firstExtension).toBeVisible()
