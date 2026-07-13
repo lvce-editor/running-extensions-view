@@ -4,8 +4,8 @@ import { getMenuEntries } from '../src/parts/GetMenuEntries/GetMenuEntries.ts'
 import { getMenuEntryIds } from '../src/parts/GetMenuEntryIds/GetMenuEntryIds.ts'
 import * as MenuEntryId from '../src/parts/MenuEntryId/MenuEntryId.ts'
 
-test('returns the running extension menu', () => {
-  const entries = getMenuEntries({ extensions: [{ id: 'sample.extension' }], focusedIndex: 0 } as any)
+test('returns the running extension menu in electron', () => {
+  const entries = getMenuEntries({ extensions: [{ id: 'sample.extension', isolated: true }], focusedIndex: 0, platform: 2 } as any)
   expect(entries).toEqual([
     { args: [0], command: 'RunningExtensions.copyId', flags: MenuItemFlags.None, id: 'copyId', label: 'Copy id (sample.extension)' },
     { args: [0], command: 'RunningExtensions.reportIssue', flags: MenuItemFlags.None, id: 'reportIssue', label: 'Report Issue' },
@@ -14,7 +14,18 @@ test('returns the running extension menu', () => {
     { args: [0], command: 'RunningExtensions.disable', flags: MenuItemFlags.None, id: 'disable', label: 'Disable' },
     { command: '', flags: MenuItemFlags.Separator, id: 'separator2', label: '' },
     { command: 'RunningExtensions.startProfile', flags: MenuItemFlags.None, id: 'startProfile', label: 'Start Extension Host Profile' },
+    { args: [0], command: 'RunningExtensions.takeHeapSnapshot', flags: MenuItemFlags.None, id: 'takeHeapSnapshot', label: 'Take Heap Snapshot' },
   ])
+})
+
+test('does not show the heap snapshot entry in the browser', () => {
+  const entries = getMenuEntries({ extensions: [{ id: 'sample.extension', isolated: true }], focusedIndex: 0, platform: 1 } as any)
+  expect(entries.map((entry) => entry.id)).not.toContain('takeHeapSnapshot')
+})
+
+test('does not show the heap snapshot entry for a shared extension host', () => {
+  const entries = getMenuEntries({ extensions: [{ id: 'sample.extension', isolated: false }], focusedIndex: 0, platform: 2 } as any)
+  expect(entries.map((entry) => entry.id)).not.toContain('takeHeapSnapshot')
 })
 
 test('returns no entries without a focused extension', () => {

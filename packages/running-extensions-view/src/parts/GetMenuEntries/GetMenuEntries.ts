@@ -1,15 +1,15 @@
-import { MenuItemFlags } from '@lvce-editor/constants'
+import { MenuItemFlags, PlatformType } from '@lvce-editor/constants'
 import type { MenuEntry } from '../MenuEntry/MenuEntry.ts'
 import type { RunningExtensionsState } from '../RunningExtensionsState/RunningExtensionsState.ts'
 
 export const getMenuEntries = (state: RunningExtensionsState): readonly MenuEntry[] => {
-  const { extensions, focusedIndex } = state
+  const { extensions, focusedIndex, platform } = state
   const extension = extensions[focusedIndex]
   if (!extension) {
     return []
   }
   const args = [focusedIndex]
-  return [
+  const menuEntries: MenuEntry[] = [
     {
       args,
       command: 'RunningExtensions.copyId',
@@ -57,4 +57,14 @@ export const getMenuEntries = (state: RunningExtensionsState): readonly MenuEntr
       label: 'Start Extension Host Profile',
     },
   ]
+  if (platform === PlatformType.Electron && extension.isolated) {
+    menuEntries.push({
+      args,
+      command: 'RunningExtensions.takeHeapSnapshot',
+      flags: MenuItemFlags.None,
+      id: 'takeHeapSnapshot',
+      label: 'Take Heap Snapshot',
+    })
+  }
+  return menuEntries
 }
