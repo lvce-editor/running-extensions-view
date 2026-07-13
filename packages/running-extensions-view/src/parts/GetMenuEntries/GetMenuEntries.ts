@@ -3,11 +3,12 @@ import type { MenuEntry } from '../MenuEntry/MenuEntry.ts'
 import type { RunningExtensionsState } from '../RunningExtensionsState/RunningExtensionsState.ts'
 
 export const getMenuEntries = (state: RunningExtensionsState): readonly MenuEntry[] => {
-  const extension = state.extensions[state.focusedIndex]
+  const { extensions, focusedIndex, platform } = state
+  const extension = extensions[focusedIndex]
   if (!extension) {
     return []
   }
-  const args = [state.focusedIndex]
+  const args = [focusedIndex]
   const menuEntries: MenuEntry[] = [
     {
       args,
@@ -56,7 +57,7 @@ export const getMenuEntries = (state: RunningExtensionsState): readonly MenuEntr
       label: 'Start Extension Host Profile',
     },
   ]
-  if (state.platform === PlatformType.Electron && extension.isolated) {
+  if (platform === PlatformType.Electron && extension.isolated) {
     menuEntries.push({
       args,
       command: 'RunningExtensions.takeHeapSnapshot',

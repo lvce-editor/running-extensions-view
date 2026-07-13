@@ -1,5 +1,6 @@
 import { expect, test } from '@jest/globals'
 import { VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
+import * as AriaRoles from '../src/parts/AriaRoles/AriaRoles.ts'
 import { getExtensionVirtualDom } from '../src/parts/GetExtensionVirtualDom/GetExtensionVirtualDom.ts'
 
 test('renders extension details', () => {
@@ -16,7 +17,7 @@ test('renders extension details', () => {
   )
 
   expect(dom).toEqual([
-    { childCount: 3, className: 'RunningExtension', 'data-index': 7, role: 'listitem', type: VirtualDomElements.Div },
+    { childCount: 3, className: 'RunningExtension', 'data-index': 7, role: AriaRoles.ListItem, type: VirtualDomElements.Div },
     { childCount: 0, className: 'RunningExtensionIcon', 'data-index': 7, src: '/icons/sample.png', type: VirtualDomElements.Img },
     { childCount: 2, className: 'RunningExtensionDetails', 'data-index': 7, type: VirtualDomElements.Div },
     { childCount: 2, className: 'RunningExtensionTitle', 'data-index': 7, type: VirtualDomElements.Div },

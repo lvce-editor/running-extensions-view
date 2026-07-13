@@ -2,7 +2,8 @@ import { RendererWorker } from '@lvce-editor/rpc-registry'
 import type { RunningExtensionsState } from '../RunningExtensionsState/RunningExtensionsState.ts'
 
 export const takeHeapSnapshot = async (state: RunningExtensionsState, index: number): Promise<RunningExtensionsState> => {
-  const extension = state.extensions[index]
+  const { extensions } = state
+  const extension = extensions[index]
   if (!extension) {
     return state
   }
