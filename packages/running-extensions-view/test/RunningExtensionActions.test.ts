@@ -5,6 +5,7 @@ import { disable } from '../src/parts/Disable/Disable.ts'
 import { disableWorkspace } from '../src/parts/DisableWorkspace/DisableWorkspace.ts'
 import { reportIssue } from '../src/parts/ReportIssue/ReportIssue.ts'
 import { startProfile } from '../src/parts/StartProfile/StartProfile.ts'
+import { takeHeapSnapshot } from '../src/parts/TakeHeapSnapshot/TakeHeapSnapshot.ts'
 
 const state = {
   extensions: [{ id: 'sample.extension' }],
@@ -73,4 +74,46 @@ test('startProfile explains that extension host profiling is unavailable', async
   })
   await expect(startProfile(state)).resolves.toBe(state)
   expect(mockRpc.invocations).toEqual([['ConfirmPrompt.prompt', 'Extension host profiling is not available yet.', undefined]])
+})
+
+test('takeHeapSnapshot takes a snapshot of the selected isolated extension worker', async () => {
+  using mockRpc = RendererWorker.registerMockRpc({
+    'Developer.takeWorkerHeapSnapshot'() {
+      return '/home/test/Downloads/sample.heapsnapshot'
+    },
+    'GetWindowId.getWindowId'() {
+      return 7
+    },
+  })
+
+  await expect(takeHeapSnapshot(state, 0)).resolves.toBe(state)
+
+  expect(mockRpc.invocations).toEqual([
+    ['GetWindowId.getWindowId'],
+    ['Developer.takeWorkerHeapSnapshot', 7, 'Extension API (Electron): sample.extension'],
+  ])
+})
+
+test('takeHeapSnapshot ignores an invalid index', async () => {
+  using mockRpc = RendererWorker.registerMockRpc({})
+
+  await expect(takeHeapSnapshot(state, 4)).resolves.toBe(state)
+  expect(mockRpc.invocations).toEqual([])
+})
+
+test('takeHeapSnapshot uses a custom worker name', async () => {
+  using mockRpc = RendererWorker.registerMockRpc({
+    'Developer.takeWorkerHeapSnapshot'() {},
+    'GetWindowId.getWindowId'() {
+      return 7
+    },
+  })
+  const stateWithCustomWorkerName = {
+    ...state,
+    extensions: [{ id: 'sample.extension', workerName: 'Sample Extension Worker' }],
+  }
+
+  await takeHeapSnapshot(stateWithCustomWorkerName, 0)
+
+  expect(mockRpc.invocations).toEqual([['GetWindowId.getWindowId'], ['Developer.takeWorkerHeapSnapshot', 7, 'Sample Extension Worker']])
 })

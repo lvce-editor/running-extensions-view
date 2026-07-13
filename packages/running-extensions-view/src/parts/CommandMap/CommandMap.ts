@@ -13,6 +13,7 @@ import * as ReportIssue from '../ReportIssue/ReportIssue.ts'
 import * as Resize from '../Resize/Resize.ts'
 import * as RunningExtensionsStates from '../RunningExtensionsStates/RunningExtensionsStates.ts'
 import * as StartProfile from '../StartProfile/StartProfile.ts'
+import * as TakeHeapSnapshot from '../TakeHeapSnapshot/TakeHeapSnapshot.ts'
 
 export const commandMap = {
   'RunningExtensions.copyId': RunningExtensionsStates.wrapCommand(CopyId.copyId),
@@ -31,4 +32,5 @@ export const commandMap = {
   'RunningExtensions.reportIssue': RunningExtensionsStates.wrapCommand(ReportIssue.reportIssue),
   'RunningExtensions.resize': RunningExtensionsStates.wrapCommand(Resize.resize),
   'RunningExtensions.startProfile': RunningExtensionsStates.wrapCommand(StartProfile.startProfile),
+  'RunningExtensions.takeHeapSnapshot': RunningExtensionsStates.wrapCommand(TakeHeapSnapshot.takeHeapSnapshot),
 }
