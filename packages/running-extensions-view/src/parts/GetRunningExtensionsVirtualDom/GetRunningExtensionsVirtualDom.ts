@@ -4,22 +4,34 @@ import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import { getExtensionVirtualDom } from '../GetExtensionVirtualDom/GetExtensionVirtualDom.ts'
 
-export const getRunningExtensionsVirtualDom = (extensions: readonly RunningExtension[], loaded: boolean): readonly VirtualDomNode[] => {
+const getRunningExtensionsEmptyDom = (loaded: boolean): readonly VirtualDomNode[] => {
   const message = loaded ? 'No running extensions' : 'Loading running extensions…'
-  const children =
-    extensions.length === 0
-      ? [
-          {
-            childCount: 1,
-            className: 'RunningExtensionsEmpty',
-            type: VirtualDomElements.Div,
-          },
-          text(message),
-        ]
-      : extensions.flatMap(getExtensionVirtualDom)
+
   return [
     {
-      childCount: extensions.length === 0 ? 1 : extensions.length,
+      childCount: 1,
+      className: 'RunningExtensions',
+      onContextMenu: DomEventListenerFunctions.HandleContextMenu,
+      role: 'list',
+      type: VirtualDomElements.Div,
+    },
+    {
+      childCount: 1,
+      className: 'RunningExtensionsEmpty',
+      type: VirtualDomElements.Div,
+    },
+    text(message),
+  ]
+}
+
+export const getRunningExtensionsVirtualDom = (extensions: readonly RunningExtension[], loaded: boolean): readonly VirtualDomNode[] => {
+  if (extensions.length === 0) {
+    return getRunningExtensionsEmptyDom(loaded)
+  }
+  const children = extensions.flatMap(getExtensionVirtualDom)
+  return [
+    {
+      childCount: extensions.length,
       className: 'RunningExtensions',
       onContextMenu: DomEventListenerFunctions.HandleContextMenu,
       role: AriaRoles.List,
