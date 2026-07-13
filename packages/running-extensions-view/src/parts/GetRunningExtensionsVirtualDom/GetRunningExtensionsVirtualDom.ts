@@ -3,13 +3,14 @@ import type { RunningExtension } from '../RunningExtension/RunningExtension.ts'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import { getExtensionVirtualDom } from '../GetExtensionVirtualDom/GetExtensionVirtualDom.ts'
 
-const getRunningExensionsEmptyDom = (loaded: boolean) => {
+const getRunningExtensionsEmptyDom = (loaded: boolean): readonly VirtualDomNode[] => {
   const message = loaded ? 'No running extensions' : 'Loading running extensions…'
 
   return [
     {
       childCount: 1,
       className: 'RunningExtensions',
+      onContextMenu: DomEventListenerFunctions.HandleContextMenu,
       role: 'list',
       type: VirtualDomElements.Div,
     },
@@ -24,12 +25,12 @@ const getRunningExensionsEmptyDom = (loaded: boolean) => {
 
 export const getRunningExtensionsVirtualDom = (extensions: readonly RunningExtension[], loaded: boolean): readonly VirtualDomNode[] => {
   if (extensions.length === 0) {
-    return getRunningExensionsEmptyDom(loaded)
+    return getRunningExtensionsEmptyDom(loaded)
   }
   const children = extensions.flatMap(getExtensionVirtualDom)
   return [
     {
-      childCount: extensions.length === 0 ? 1 : extensions.length,
+      childCount: extensions.length,
       className: 'RunningExtensions',
       onContextMenu: DomEventListenerFunctions.HandleContextMenu,
       role: 'list',
