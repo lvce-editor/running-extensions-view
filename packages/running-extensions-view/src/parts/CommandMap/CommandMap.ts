@@ -12,6 +12,7 @@ import * as RenderEventListeners from '../RenderEventListeners/RenderEventListen
 import * as ReportIssue from '../ReportIssue/ReportIssue.ts'
 import * as Resize from '../Resize/Resize.ts'
 import * as RunningExtensionsStates from '../RunningExtensionsStates/RunningExtensionsStates.ts'
+import * as SetExtensions from '../SetExtensions/SetExtensions.ts'
 import * as StartProfile from '../StartProfile/StartProfile.ts'
 
 export const commandMap = {
@@ -30,5 +31,6 @@ export const commandMap = {
   'RunningExtensions.renderEventListeners': RenderEventListeners.renderEventListeners,
   'RunningExtensions.reportIssue': RunningExtensionsStates.wrapCommand(ReportIssue.reportIssue),
   'RunningExtensions.resize': RunningExtensionsStates.wrapCommand(Resize.resize),
+  'RunningExtensions.setExtensions': RunningExtensionsStates.wrapCommand(SetExtensions.setExtensions),
   'RunningExtensions.startProfile': RunningExtensionsStates.wrapCommand(StartProfile.startProfile),
 }
