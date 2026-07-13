@@ -7,6 +7,7 @@ export default defineConfig([
   ...config.recommendedActions,
   ...config.recommendedRegex,
   ...config.recommendedTsconfig,
+  ...config.recommendedVirtualDom,
   globalIgnores(['**/*.js', '**/*.cjs', '**/*.mjs']),
 ])
 
