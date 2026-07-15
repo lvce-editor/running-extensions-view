@@ -34,6 +34,10 @@ jobs:
         if: steps.npm-cache.outputs.cache-hit != 'true'
       - name: Build release archive
         run: npm run build
+      - name: Build static site
+        run: npm run build:static
+      - run: npm test
+      - run: npm run type-check
       - name: install playwright dependencies
         working-directory: ./packages/e2e
         run: npx playwright install chromium
@@ -44,8 +48,4 @@ jobs:
         run: npm run e2e:headless
         env:
           PLAYWRIGHT_BROWSERS_PATH: 0
-      - name: Build static site
-        run: npm run build:static
-      - run: npm test
-      - run: npm run type-check
       - run: npm run lint
