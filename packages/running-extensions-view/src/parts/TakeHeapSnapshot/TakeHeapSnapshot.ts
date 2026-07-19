@@ -1,6 +1,6 @@
 import { RendererWorker } from '@lvce-editor/rpc-registry'
-import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
 import type { RunningExtensionsState } from '../RunningExtensionsState/RunningExtensionsState.ts'
+import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
 
 export const takeHeapSnapshot = async (state: RunningExtensionsState, index: number): Promise<RunningExtensionsState> => {
   const { extensions } = state

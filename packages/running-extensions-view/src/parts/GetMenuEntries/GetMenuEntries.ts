@@ -1,7 +1,7 @@
 import { MenuItemFlags, PlatformType } from '@lvce-editor/constants'
 import type { MenuEntry } from '../MenuEntry/MenuEntry.ts'
-import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
 import type { RunningExtensionsState } from '../RunningExtensionsState/RunningExtensionsState.ts'
+import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
 
 export const getMenuEntries = (state: RunningExtensionsState): readonly MenuEntry[] => {
   const { extensions, focusedIndex, platform } = state
