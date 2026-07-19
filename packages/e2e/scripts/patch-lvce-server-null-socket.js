@@ -1,7 +1,7 @@
 import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
-const file = join(import.meta.dirname, '..', '..', 'server', 'node_modules', '@lvce-editor', 'server', 'src', 'server.js')
+const file = join(import.meta.dirname, '..', '..', '..', 'node_modules', '@lvce-editor', 'server', 'src', 'server.js')
 const before = `  if (!hasErrorListener.has(res.socket)) {
     res.socket.on('error', handleSocketError)
     hasErrorListener.add(res.socket)
