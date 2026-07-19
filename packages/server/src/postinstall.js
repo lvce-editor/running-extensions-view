@@ -10,7 +10,7 @@ const getRemoteUrl = (path) => {
   return `/remote/${url}`
 }
 
-const nodeModulesPath = join(root, 'packages', 'server', 'node_modules')
+const nodeModulesPath = join(root, 'node_modules')
 const workerPath = join(root, '.tmp', 'dist', 'dist', 'runningExtensionsViewMain.js')
 const serverStaticPath = join(nodeModulesPath, '@lvce-editor', 'static-server', 'static')
 const isCommitHash = (dirent) => dirent.length === 7 && /^[a-z\d]+$/.test(dirent)

@@ -5,12 +5,12 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "e2e": "node ./node_modules/@lvce-editor/test-with-playwright/bin/test-with-playwright.js --only-extension=. --test-path=.",
-    "e2e:firefox": "npm run patch:playwright-firefox-worker-websocket && node ./node_modules/@lvce-editor/test-with-playwright/bin/test-with-playwright.js --only-extension=. --test-path=. --browser=firefox",
-    "e2e:firefox:headless": "npm run patch:playwright-firefox-worker-websocket && node ./node_modules/@lvce-editor/test-with-playwright/bin/test-with-playwright.js --only-extension=. --test-path=. --browser=firefox --headless",
-    "e2e:headless": "node ./node_modules/@lvce-editor/test-with-playwright/bin/test-with-playwright.js --only-extension=. --test-path=. --headless",
-    "e2e:webkit": "npm run patch:lvce-server-null-socket && node ./node_modules/@lvce-editor/test-with-playwright/bin/test-with-playwright.js --only-extension=. --test-path=. --browser=webkit",
-    "e2e:webkit:headless": "npm run patch:lvce-server-null-socket && node ./node_modules/@lvce-editor/test-with-playwright/bin/test-with-playwright.js --only-extension=. --test-path=. --browser=webkit --headless",
+    "e2e": "test-with-playwright --only-extension=. --test-path=.",
+    "e2e:firefox": "npm run patch:playwright-firefox-worker-websocket && test-with-playwright --only-extension=. --test-path=. --browser=firefox",
+    "e2e:firefox:headless": "npm run patch:playwright-firefox-worker-websocket && test-with-playwright --only-extension=. --test-path=. --browser=firefox --headless",
+    "e2e:headless": "test-with-playwright --only-extension=. --test-path=. --headless",
+    "e2e:webkit": "npm run patch:lvce-server-null-socket && test-with-playwright --only-extension=. --test-path=. --browser=webkit",
+    "e2e:webkit:headless": "npm run patch:lvce-server-null-socket && test-with-playwright --only-extension=. --test-path=. --browser=webkit --headless",
     "patch:lvce-server-null-socket": "node ./scripts/patch-lvce-server-null-socket.js",
     "patch:playwright-firefox-worker-websocket": "node ./scripts/patch-playwright-firefox-worker-websocket.js",
     "type-check": "tsc"
