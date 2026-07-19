@@ -1,4 +1,5 @@
 import { RendererWorker } from '@lvce-editor/rpc-registry'
+import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
 import type { RunningExtensionsState } from '../RunningExtensionsState/RunningExtensionsState.ts'
 
 export const takeHeapSnapshot = async (state: RunningExtensionsState, index: number): Promise<RunningExtensionsState> => {
@@ -8,7 +9,7 @@ export const takeHeapSnapshot = async (state: RunningExtensionsState, index: num
     return state
   }
   const windowId = await RendererWorker.getWindowId()
-  const workerName = extension.workerName || `Extension API (Electron): ${extension.id}`
+  const workerName = extension.workerName || RunningExtensionsStrings.extensionApiElectron(extension.id)
   await RendererWorker.invoke('Developer.takeWorkerHeapSnapshot', windowId, workerName)
   return state
 }

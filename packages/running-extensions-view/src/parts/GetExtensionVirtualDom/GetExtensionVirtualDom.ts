@@ -2,6 +2,7 @@ import { mergeClassNames, text, type VirtualDomNode, VirtualDomElements } from '
 import type { RunningExtension } from '../RunningExtension/RunningExtension.ts'
 import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
 import { getIconVirtualDom } from '../GetIconVirtualDom/GetIconVirtualDom.ts'
+import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
 
 const sshRemotePrefix = 'ssh-remote+'
 
@@ -17,7 +18,7 @@ const getRemoteAuthorityVirtualDom = (remoteAuthority: string | undefined, index
       'data-index': index,
       type: VirtualDomElements.Div,
     },
-    text(`SSH: ${host}`),
+    text(RunningExtensionsStrings.ssh(host)),
   ]
 }
 
@@ -73,6 +74,6 @@ export const getExtensionVirtualDom = (extension: RunningExtension, index?: numb
       'data-index': index,
       type: VirtualDomElements.Div,
     },
-    text(`Activation: ${Math.round(extension.activationTime)}ms`),
+    text(RunningExtensionsStrings.activationTime(Math.round(extension.activationTime))),
   ]
 }
