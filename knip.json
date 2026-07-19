@@ -8,9 +8,16 @@
       "project": ["src/**/*.js", "src/**/*.ts"],
       "ignoreDependencies": ["@lvce-editor/verror", "esbuild"]
     },
+    "packages/e2e": {
+      "entry": ["src/**/*.ts"],
+      "project": ["src/**/*.ts"]
+    },
     "packages/running-extensions-view": {
       "entry": ["test/**/*.test.ts"],
       "project": ["src/**/*.ts", "test/**/*.ts"]
+    },
+    "packages/server": {
+      "project": ["src/**/*.js"]
     }
   }
 }
