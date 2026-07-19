@@ -60,6 +60,24 @@ test('uses the extension id when the name is empty', () => {
   expect(dom).not.toContainEqual(expect.objectContaining({ className: expect.stringContaining('RunningExtensionActivationReason') }))
 })
 
+test('adds the active class when the extension is selected', () => {
+  const dom = getExtensionVirtualDom(
+    {
+      activationEvent: 'onStartupFinished',
+      activationTime: 1,
+      icon: '',
+      id: 'sample.extension',
+      name: 'Sample Extension',
+      version: '1.0.0',
+    },
+    2,
+    false,
+    true,
+  )
+
+  expect(dom[0]).toMatchObject({ className: mergeClassNames('RunningExtension', 'ExtensionActive') })
+})
+
 test('renders the remote SSH authority', () => {
   const dom = getExtensionVirtualDom(
     {

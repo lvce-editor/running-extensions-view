@@ -8,5 +8,10 @@ export const renderEventListeners = (): readonly any[] => {
       params: ['handleContextMenu', 'event.target.dataset.index', EventExpression.ClientX, EventExpression.ClientY],
       preventDefault: true,
     },
+    {
+      name: DomEventListenerFunctions.HandleClick,
+      params: ['handleClickAt', EventExpression.ClientY],
+      preventDefault: true,
+    },
   ]
 }

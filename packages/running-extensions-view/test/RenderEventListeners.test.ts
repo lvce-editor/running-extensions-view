@@ -9,5 +9,10 @@ test('registers the context menu listener', () => {
       params: ['handleContextMenu', 'event.target.dataset.index', 'event.clientX', 'event.clientY'],
       preventDefault: true,
     },
+    {
+      name: DomEventListenerFunctions.HandleClick,
+      params: ['handleClickAt', 'event.clientY'],
+      preventDefault: true,
+    },
   ])
 })
