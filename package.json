@@ -13,7 +13,7 @@
   "scripts": {
     "build": "node packages/build/src/build.ts",
     "build:static": "node packages/build/src/build-static.ts",
-    "build:watch": "npm exec --workspace=packages/build -- esbuild --format=esm --bundle --external:node:buffer --external:electron --external:ws --external:node:worker_threads --bundle --watch packages/running-extensions-view/src/runningExtensionsViewMain.ts --outfile=.tmp/dist/dist/runningExtensionsViewMain.js",
+    "build:watch": "npm exec --workspace=packages/build -- esbuild --format=esm --bundle --external:node:buffer --external:electron --external:ws --external:node:worker_threads --bundle --watch ../running-extensions-view/src/runningExtensionsViewMain.ts --outfile=../../.tmp/dist/dist/runningExtensionsViewMain.js",
     "dev": "node packages/build/src/dev.ts",
     "e2e": "npm run e2e --workspace=packages/e2e",
     "e2e:firefox": "npm run e2e:firefox --workspace=packages/e2e",
