@@ -9,6 +9,7 @@ test('registers the context menu listener on the list', () => {
   expect(dom[0]).toEqual({
     childCount: 1,
     className: 'RunningExtensions',
+    onClick: DomEventListenerFunctions.HandleClick,
     onContextMenu: DomEventListenerFunctions.HandleContextMenu,
     role: AriaRoles.List,
     type: VirtualDomElements.Div,
@@ -51,6 +52,28 @@ test('renders running extension details and icon', () => {
   expect(dom).toContainEqual({ childCount: 0, text: 'sample.extension', type: VirtualDomElements.Text })
   expect(dom).toContainEqual({ childCount: 0, text: 'Activation: 13ms', type: VirtualDomElements.Text })
   expect(dom).toContainEqual({ childCount: 0, text: 'Activation reason: onStartupFinished', type: VirtualDomElements.Text })
+})
+
+test('registers one delegated click listener and renders the selected extension', () => {
+  const extension = {
+    activationEvent: 'onStartupFinished',
+    activationTime: 1,
+    icon: '',
+    id: 'sample.extension',
+    name: 'Sample Extension',
+    version: '1.0.0',
+  }
+  const dom = getRunningExtensionsVirtualDom([extension, extension], true, -1, 1)
+  expect(dom[0]).toMatchObject({
+    childCount: 2,
+    onClick: DomEventListenerFunctions.HandleClick,
+  })
+  expect(dom).toContainEqual(
+    expect.objectContaining({
+      className: mergeClassNames('RunningExtension', 'ExtensionActive'),
+      'data-index': 1,
+    }),
+  )
 })
 
 test('falls back to the extension id and default icon', () => {

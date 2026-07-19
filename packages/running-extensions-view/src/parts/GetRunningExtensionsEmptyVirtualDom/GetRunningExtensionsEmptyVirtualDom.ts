@@ -11,6 +11,7 @@ export const getRunningExtensionsEmptyDom = (loaded: boolean): readonly VirtualD
     {
       childCount: 1,
       className: ClassNames.RunningExtensions,
+      onClick: DomEventListenerFunctions.HandleClick,
       onContextMenu: DomEventListenerFunctions.HandleContextMenu,
       role: AriaRoles.List,
       type: VirtualDomElements.Div,

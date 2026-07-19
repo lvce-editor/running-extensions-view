@@ -1,6 +1,7 @@
 export const FocusOutline = 'FocusOutline'
 export const MaskIcon = 'MaskIcon'
 export const MaskIconExtensions = 'MaskIconExtensions'
+export const ExtensionActive = 'ExtensionActive'
 export const RunningExtension = 'RunningExtension'
 export const RunningExtensionActivationDetails = 'RunningExtensionActivationDetails'
 export const RunningExtensionActivationReason = 'RunningExtensionActivationReason'
