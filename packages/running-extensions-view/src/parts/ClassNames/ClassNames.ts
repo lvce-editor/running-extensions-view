@@ -1,6 +1,8 @@
 export const MaskIcon = 'MaskIcon'
 export const MaskIconExtensions = 'MaskIconExtensions'
 export const RunningExtension = 'RunningExtension'
+export const RunningExtensionActivationDetails = 'RunningExtensionActivationDetails'
+export const RunningExtensionActivationReason = 'RunningExtensionActivationReason'
 export const RunningExtensionActivationTime = 'RunningExtensionActivationTime'
 export const RunningExtensionDefaultIcon = 'RunningExtensionDefaultIcon'
 export const RunningExtensionDetails = 'RunningExtensionDetails'
