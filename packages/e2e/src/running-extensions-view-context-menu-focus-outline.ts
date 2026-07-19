@@ -4,9 +4,9 @@ export const name = 'running-extensions-view-context-menu-focus-outline'
 
 export const skip = ['webkit'] as const
 
-export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
+export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   await RunningExtensions.show()
-  await Command.execute('RunningExtensions.setExtensions', [
+  await RunningExtensions.setExtensions([
     {
       activationEvent: 'onStartupFinished',
       activationTime: 1,
@@ -25,9 +25,7 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
     },
   ])
 
-  const extensions = Locator('.RunningExtension')
-  const secondExtension = extensions.nth(1)
   await RunningExtensions.handleContextMenu(1)
 
-  await expect(secondExtension).toHaveClass('FocusOutline')
+  await expect(RunningExtensions.row(1)).toHaveClass('FocusOutline')
 }

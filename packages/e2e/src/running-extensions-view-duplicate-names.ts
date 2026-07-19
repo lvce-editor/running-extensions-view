@@ -2,9 +2,9 @@ import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-duplicate-names'
 
-export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
+export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   await RunningExtensions.show()
-  await Command.execute('RunningExtensions.setExtensions', [
+  await RunningExtensions.setExtensions([
     {
       activationEvent: 'onStartupFinished',
       activationTime: 1,
@@ -23,11 +23,6 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
     },
   ])
 
-  const rows = Locator('.RunningExtension')
-  const firstRow = rows.nth(0)
-  const secondRow = rows.nth(1)
-  const firstId = firstRow.locator('.RunningExtensionId')
-  const secondId = secondRow.locator('.RunningExtensionId')
-  await expect(firstId).toHaveText('first.extension')
-  await expect(secondId).toHaveText('second.extension')
+  await expect(RunningExtensions.id(0)).toHaveText('first.extension')
+  await expect(RunningExtensions.id(1)).toHaveText('second.extension')
 }
