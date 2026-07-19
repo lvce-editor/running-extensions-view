@@ -23,6 +23,11 @@ test('does not show the heap snapshot entry in the browser', () => {
   expect(entries.map((entry) => entry.id)).not.toContain('takeHeapSnapshot')
 })
 
+test('does not show the heap snapshot entry in node', () => {
+  const entries = getMenuEntries({ extensions: [{ id: 'sample.extension', isolated: true }], focusedIndex: 0, platform: 3 } as any)
+  expect(entries.map((entry) => entry.id)).not.toContain('takeHeapSnapshot')
+})
+
 test('does not show the heap snapshot entry for a shared extension host', () => {
   const entries = getMenuEntries({ extensions: [{ id: 'sample.extension', isolated: false }], focusedIndex: 0, platform: 2 } as any)
   expect(entries.map((entry) => entry.id)).not.toContain('takeHeapSnapshot')
