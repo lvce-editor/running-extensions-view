@@ -1,6 +1,7 @@
 import { mergeClassNames, text, type VirtualDomNode, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
 import type { RunningExtension } from '../RunningExtension/RunningExtension.ts'
 import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
+import * as ClassNames from '../ClassNames/ClassNames.ts'
 import { getIconVirtualDom } from '../GetIconVirtualDom/GetIconVirtualDom.ts'
 
 const sshRemotePrefix = 'ssh-remote+'
@@ -13,7 +14,7 @@ const getRemoteAuthorityVirtualDom = (remoteAuthority: string | undefined, index
   return [
     {
       childCount: 1,
-      className: mergeClassNames('RunningExtensionId', 'RunningExtensionRemoteAuthority'),
+      className: mergeClassNames(ClassNames.RunningExtensionId, ClassNames.RunningExtensionRemoteAuthority),
       'data-index': index,
       type: VirtualDomElements.Div,
     },
@@ -27,7 +28,7 @@ export const getExtensionVirtualDom = (extension: RunningExtension, index?: numb
   return [
     {
       childCount: 3,
-      className: 'RunningExtension',
+      className: ClassNames.RunningExtension,
       'data-index': index,
       role: AriaRoles.ListItem,
       type: VirtualDomElements.Div,
@@ -35,26 +36,26 @@ export const getExtensionVirtualDom = (extension: RunningExtension, index?: numb
     ...getIconVirtualDom(extension, index),
     {
       childCount: remoteAuthorityDom.length > 0 ? 3 : 2,
-      className: 'RunningExtensionDetails',
+      className: ClassNames.RunningExtensionDetails,
       'data-index': index,
       type: VirtualDomElements.Div,
     },
     {
       childCount: 2,
-      className: 'RunningExtensionTitle',
+      className: ClassNames.RunningExtensionTitle,
       'data-index': index,
       type: VirtualDomElements.Div,
     },
     {
       childCount: 1,
-      className: 'RunningExtensionName',
+      className: ClassNames.RunningExtensionName,
       'data-index': index,
       type: VirtualDomElements.Strong,
     },
     text(displayName),
     {
       childCount: 1,
-      className: 'RunningExtensionVersion',
+      className: ClassNames.RunningExtensionVersion,
       'data-index': index,
       type: VirtualDomElements.Span,
     },
@@ -62,14 +63,14 @@ export const getExtensionVirtualDom = (extension: RunningExtension, index?: numb
     ...remoteAuthorityDom,
     {
       childCount: 1,
-      className: 'RunningExtensionId',
+      className: ClassNames.RunningExtensionId,
       'data-index': index,
       type: VirtualDomElements.Div,
     },
     text(extension.id),
     {
       childCount: 1,
-      className: 'RunningExtensionActivationTime',
+      className: ClassNames.RunningExtensionActivationTime,
       'data-index': index,
       type: VirtualDomElements.Div,
     },
