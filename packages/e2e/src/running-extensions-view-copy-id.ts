@@ -2,10 +2,10 @@ import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-copy-id'
 
-export const test: Test = async ({ ClipBoard, Command, RunningExtensions }: TestApi) => {
+export const test: Test = async ({ ClipBoard, RunningExtensions }: TestApi) => {
   await ClipBoard.enableMemoryClipBoard()
   await RunningExtensions.show()
-  await Command.execute('RunningExtensions.setExtensions', [
+  await RunningExtensions.setExtensions([
     {
       activationEvent: 'onStartupFinished',
       activationTime: 1,

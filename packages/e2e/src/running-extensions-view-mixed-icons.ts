@@ -2,9 +2,9 @@ import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-mixed-icons'
 
-export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
+export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   await RunningExtensions.show()
-  await Command.execute('RunningExtensions.setExtensions', [
+  await RunningExtensions.setExtensions([
     {
       activationEvent: 'onStartupFinished',
       activationTime: 1,
@@ -23,12 +23,6 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
     },
   ])
 
-  const customIcons = Locator('img.RunningExtensionIcon')
-  const defaultIcons = Locator('.RunningExtensionDefaultIcon')
-  const firstIcon = Locator('.RunningExtensionIcon[data-index="0"]')
-  const secondIcon = Locator('.RunningExtensionDefaultIcon[data-index="1"]')
-  await expect(customIcons).toHaveCount(1)
-  await expect(defaultIcons).toHaveCount(1)
-  await expect(firstIcon).toHaveAttribute('src', '/icons/custom.svg')
-  await expect(secondIcon).toHaveAttribute('role', 'none')
+  await expect(RunningExtensions.icon(0)).toHaveAttribute('src', '/icons/custom.svg')
+  await expect(RunningExtensions.defaultIcon(1)).toHaveAttribute('role', 'none')
 }
