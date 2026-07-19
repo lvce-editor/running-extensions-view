@@ -67,3 +67,21 @@ test('falls back to the extension id and default icon', () => {
   })
   expect(dom).toContainEqual({ childCount: 0, text: 'sample.extension', type: VirtualDomElements.Text })
 })
+
+test('renders a focus outline on the focused extension', () => {
+  const extension = {
+    activationEvent: 'onStartupFinished',
+    activationTime: 1,
+    icon: '',
+    id: 'sample.extension',
+    name: 'Sample Extension',
+    version: '1.0.0',
+  }
+  const dom = getRunningExtensionsVirtualDom([extension, extension], true, 1)
+
+  const rows = dom.filter((node) => node.role === AriaRoles.ListItem)
+  expect(rows).toEqual([
+    expect.objectContaining({ className: 'RunningExtension', 'data-index': 0 }),
+    expect.objectContaining({ className: mergeClassNames('RunningExtension', 'FocusOutline'), 'data-index': 1 }),
+  ])
+})

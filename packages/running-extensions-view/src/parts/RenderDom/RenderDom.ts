@@ -3,5 +3,5 @@ import type { RunningExtensionsState } from '../RunningExtensionsState/RunningEx
 import { getRunningExtensionsVirtualDom } from '../GetRunningExtensionsVirtualDom/GetRunningExtensionsVirtualDom.ts'
 
 export const renderDom = (oldState: RunningExtensionsState, newState: RunningExtensionsState): readonly any[] => {
-  return [ViewletCommand.SetDom2, newState.uid, getRunningExtensionsVirtualDom(newState.extensions, newState.loaded)]
+  return [ViewletCommand.SetDom2, newState.uid, getRunningExtensionsVirtualDom(newState.extensions, newState.loaded, newState.focusedIndex)]
 }

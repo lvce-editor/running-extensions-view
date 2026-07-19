@@ -38,14 +38,15 @@ const getRemoteAuthorityVirtualDom = (remoteAuthority: string | undefined, index
   ]
 }
 
-export const getExtensionVirtualDom = (extension: RunningExtension, index?: number): readonly VirtualDomNode[] => {
+export const getExtensionVirtualDom = (extension: RunningExtension, index?: number, focused = false): readonly VirtualDomNode[] => {
   const displayName = extension.name || extension.id
   const activationReasonDom = getActivationReasonVirtualDom(extension.activationEvent, index)
   const remoteAuthorityDom = getRemoteAuthorityVirtualDom(extension.remoteAuthority, index)
+  const className = focused ? mergeClassNames(ClassNames.RunningExtension, ClassNames.FocusOutline) : ClassNames.RunningExtension
   return [
     {
       childCount: 3,
-      className: ClassNames.RunningExtension,
+      className,
       'data-index': index,
       role: AriaRoles.ListItem,
       type: VirtualDomElements.Div,

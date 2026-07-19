@@ -6,11 +6,15 @@ import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEven
 import { getExtensionVirtualDom } from '../GetExtensionVirtualDom/GetExtensionVirtualDom.ts'
 import { getRunningExtensionsEmptyDom } from '../GetRunningExtensionsEmptyVirtualDom/GetRunningExtensionsEmptyVirtualDom.ts'
 
-export const getRunningExtensionsVirtualDom = (extensions: readonly RunningExtension[], loaded: boolean): readonly VirtualDomNode[] => {
+export const getRunningExtensionsVirtualDom = (
+  extensions: readonly RunningExtension[],
+  loaded: boolean,
+  focusedIndex: number = -1,
+): readonly VirtualDomNode[] => {
   if (extensions.length === 0) {
     return getRunningExtensionsEmptyDom(loaded)
   }
-  const children = extensions.flatMap(getExtensionVirtualDom)
+  const children = extensions.flatMap((extension, index) => getExtensionVirtualDom(extension, index, index === focusedIndex))
   return [
     {
       childCount: extensions.length,
