@@ -60,12 +60,49 @@ test('disableWorkspace ignores an invalid index', async () => {
   expect(mockRpc.invocations).toEqual([])
 })
 
-test('reportIssue explains that issue reporting is unavailable', async () => {
+test('reportIssue explains that issue reporting is unsupported without a repository', async () => {
   using mockRpc = RendererWorker.registerMockRpc({
     'ConfirmPrompt.prompt'() {},
   })
-  await expect(reportIssue(state)).resolves.toBe(state)
-  expect(mockRpc.invocations).toEqual([['ConfirmPrompt.prompt', 'Reporting issues for running extensions is not available yet.', undefined]])
+  await expect(reportIssue(state, 0)).resolves.toBe(state)
+  expect(mockRpc.invocations).toEqual([['ConfirmPrompt.prompt', 'Reporting issues is not supported for this extension.', undefined]])
+})
+
+test('reportIssue explains that issue reporting is unsupported for an invalid repository', async () => {
+  using mockRpc = RendererWorker.registerMockRpc({
+    'ConfirmPrompt.prompt'() {},
+  })
+  const stateWithInvalidRepository = {
+    ...state,
+    extensions: [{ id: 'sample.extension', repository: 'not-a-url' }],
+  }
+  await expect(reportIssue(stateWithInvalidRepository, 0)).resolves.toBe(stateWithInvalidRepository)
+  expect(mockRpc.invocations).toEqual([['ConfirmPrompt.prompt', 'Reporting issues is not supported for this extension.', undefined]])
+})
+
+test('reportIssue opens GitHub issues externally on Electron', async () => {
+  using mockRpc = RendererWorker.registerMockRpc({
+    'Open.openExternal'() {},
+  })
+  const stateWithRepository = {
+    ...state,
+    extensions: [{ id: 'sample.extension', repository: 'https://github.com/example/sample-extension' }],
+  }
+  await expect(reportIssue(stateWithRepository, 0)).resolves.toBe(stateWithRepository)
+  expect(mockRpc.invocations).toEqual([['Open.openExternal', 'https://github.com/example/sample-extension/issues']])
+})
+
+test('reportIssue opens GitHub issues in a new browser tab', async () => {
+  using mockRpc = RendererWorker.registerMockRpc({
+    'Open.openUrl'() {},
+  })
+  const stateWithRepository = {
+    ...state,
+    extensions: [{ id: 'sample.extension', repository: 'https://github.com/example/sample-extension' }],
+    platform: 1,
+  }
+  await expect(reportIssue(stateWithRepository, 0)).resolves.toBe(stateWithRepository)
+  expect(mockRpc.invocations).toEqual([['Open.openUrl', 'https://github.com/example/sample-extension/issues']])
 })
 
 test('startProfile explains that extension host profiling is unavailable', async () => {
