@@ -4,6 +4,12 @@ import * as ClassNames from '../ClassNames/ClassNames.ts'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
 
+const emptyNode: VirtualDomNode = {
+  childCount: 1,
+  className: ClassNames.RunningExtensionsEmpty,
+  type: VirtualDomElements.Div,
+}
+
 export const getRunningExtensionsEmptyDom = (loaded: boolean): readonly VirtualDomNode[] => {
   const message = loaded ? RunningExtensionsStrings.noRunningExtensions() : RunningExtensionsStrings.loadingRunningExtensions()
 
@@ -16,11 +22,7 @@ export const getRunningExtensionsEmptyDom = (loaded: boolean): readonly VirtualD
       role: AriaRoles.List,
       type: VirtualDomElements.Div,
     },
-    {
-      childCount: 1,
-      className: ClassNames.RunningExtensionsEmpty,
-      type: VirtualDomElements.Div,
-    },
+    emptyNode,
     text(message),
   ]
 }

@@ -4,6 +4,21 @@ import * as AriaRoles from '../src/parts/AriaRoles/AriaRoles.ts'
 import * as DomEventListenerFunctions from '../src/parts/DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import { getRunningExtensionsVirtualDom } from '../src/parts/GetRunningExtensionsVirtualDom/GetRunningExtensionsVirtualDom.ts'
 
+const expectedActivationReason = { childCount: 0, text: 'Activation reason: onStartupFinished', type: VirtualDomElements.Text }
+const expectedActivationTime = { childCount: 0, text: 'Activation: 13ms', type: VirtualDomElements.Text }
+const expectedEmptyMessage = { childCount: 0, text: 'No running extensions', type: VirtualDomElements.Text }
+const expectedExtensionId = { childCount: 0, text: 'sample.extension', type: VirtualDomElements.Text }
+const expectedExtensionName = { childCount: 0, text: 'Sample Extension', type: VirtualDomElements.Text }
+const expectedExtensionVersion = { childCount: 0, text: '1.2.3', type: VirtualDomElements.Text }
+const expectedIcon = {
+  childCount: 0,
+  className: 'RunningExtensionIcon',
+  'data-index': 0,
+  src: '/icons/sample.png',
+  type: VirtualDomElements.Img,
+}
+const expectedLoadingMessage = { childCount: 0, text: 'Loading running extensions…', type: VirtualDomElements.Text }
+
 test('registers the context menu listener on the list', () => {
   const dom = getRunningExtensionsVirtualDom([], true)
   expect(dom[0]).toEqual({
@@ -38,12 +53,12 @@ test('grows the populated list to fit the editor content', () => {
 
 test('renders a loading message before content is loaded', () => {
   const dom = getRunningExtensionsVirtualDom([], false)
-  expect(dom[2]).toEqual({ childCount: 0, text: 'Loading running extensions…', type: VirtualDomElements.Text })
+  expect(dom[2]).toEqual(expectedLoadingMessage)
 })
 
 test('renders an empty message when no extensions are running', () => {
   const dom = getRunningExtensionsVirtualDom([], true)
-  expect(dom[2]).toEqual({ childCount: 0, text: 'No running extensions', type: VirtualDomElements.Text })
+  expect(dom[2]).toEqual(expectedEmptyMessage)
 })
 
 test('renders running extension details and icon', () => {
@@ -60,18 +75,12 @@ test('renders running extension details and icon', () => {
     ],
     true,
   )
-  expect(dom).toContainEqual({
-    childCount: 0,
-    className: 'RunningExtensionIcon',
-    'data-index': 0,
-    src: '/icons/sample.png',
-    type: VirtualDomElements.Img,
-  })
-  expect(dom).toContainEqual({ childCount: 0, text: 'Sample Extension', type: VirtualDomElements.Text })
-  expect(dom).toContainEqual({ childCount: 0, text: '1.2.3', type: VirtualDomElements.Text })
-  expect(dom).toContainEqual({ childCount: 0, text: 'sample.extension', type: VirtualDomElements.Text })
-  expect(dom).toContainEqual({ childCount: 0, text: 'Activation: 13ms', type: VirtualDomElements.Text })
-  expect(dom).toContainEqual({ childCount: 0, text: 'Activation reason: onStartupFinished', type: VirtualDomElements.Text })
+  expect(dom).toContainEqual(expectedIcon)
+  expect(dom).toContainEqual(expectedExtensionName)
+  expect(dom).toContainEqual(expectedExtensionVersion)
+  expect(dom).toContainEqual(expectedExtensionId)
+  expect(dom).toContainEqual(expectedActivationTime)
+  expect(dom).toContainEqual(expectedActivationReason)
 })
 
 test('registers one delegated click listener and renders the selected extension', () => {
@@ -108,7 +117,7 @@ test('falls back to the extension id and default icon', () => {
     role: AriaRoles.None,
     type: VirtualDomElements.Div,
   })
-  expect(dom).toContainEqual({ childCount: 0, text: 'sample.extension', type: VirtualDomElements.Text })
+  expect(dom).toContainEqual(expectedExtensionId)
 })
 
 test('renders a focus outline on the focused extension', () => {

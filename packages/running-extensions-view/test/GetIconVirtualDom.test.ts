@@ -3,6 +3,16 @@ import { mergeClassNames, VirtualDomElements } from '@lvce-editor/virtual-dom-wo
 import * as AriaRoles from '../src/parts/AriaRoles/AriaRoles.ts'
 import { getIconVirtualDom } from '../src/parts/GetIconVirtualDom/GetIconVirtualDom.ts'
 
+const expectedImageDom = [
+  {
+    childCount: 0,
+    className: 'RunningExtensionIcon',
+    'data-index': 2,
+    src: '/icons/sample.png',
+    type: VirtualDomElements.Img,
+  },
+]
+
 test('renders an image when the extension has an icon', () => {
   const dom = getIconVirtualDom(
     {
@@ -16,15 +26,7 @@ test('renders an image when the extension has an icon', () => {
     2,
   )
 
-  expect(dom).toEqual([
-    {
-      childCount: 0,
-      className: 'RunningExtensionIcon',
-      'data-index': 2,
-      src: '/icons/sample.png',
-      type: VirtualDomElements.Img,
-    },
-  ])
+  expect(dom).toEqual(expectedImageDom)
 })
 
 test('renders the default icon when the extension has no icon', () => {
