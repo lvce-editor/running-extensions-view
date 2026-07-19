@@ -40,5 +40,5 @@ test('diff helpers compare dom and css fields', () => {
 test('renderCss emits dimensions', () => {
   create(4, '', 0, 0, 320, 240, 1, '/test/assets')
   const state = RunningExtensionsStates.get(4).newState
-  expect(renderCss(state, state)).toEqual([ViewletCommand.SetCss, 4, 'width: 320px; height: 240px;'])
+  expect(renderCss(state, state)).toEqual([ViewletCommand.SetCss, 4, 'width: 320px; height: 240px; flex: 1;'])
 })
