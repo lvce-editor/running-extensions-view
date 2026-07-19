@@ -1,4 +1,5 @@
 export const FocusOutline = 'FocusOutline'
+export const Grow = 'Grow'
 export const MaskIcon = 'MaskIcon'
 export const MaskIconExtensions = 'MaskIconExtensions'
 export const ExtensionActive = 'ExtensionActive'
