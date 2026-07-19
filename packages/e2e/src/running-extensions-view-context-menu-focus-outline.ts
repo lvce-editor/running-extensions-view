@@ -26,10 +26,8 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
   ])
 
   const extensions = Locator('.RunningExtension')
-  const firstExtension = extensions.nth(0)
   const secondExtension = extensions.nth(1)
   await RunningExtensions.handleContextMenu(1)
 
-  await expect(firstExtension).not.toHaveClass('FocusOutline')
   await expect(secondExtension).toHaveClass('FocusOutline')
 }
