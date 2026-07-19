@@ -12,6 +12,7 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
       activationTime: 1,
       icon: '',
       id: 'test.running-extension',
+      isolated: true,
       name: 'Running Extension',
       version: '1.0.0',
     },

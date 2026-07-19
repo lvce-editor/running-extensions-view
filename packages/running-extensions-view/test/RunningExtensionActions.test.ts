@@ -8,7 +8,7 @@ import { startProfile } from '../src/parts/StartProfile/StartProfile.ts'
 import { takeHeapSnapshot } from '../src/parts/TakeHeapSnapshot/TakeHeapSnapshot.ts'
 
 const state = {
-  extensions: [{ id: 'sample.extension' }],
+  extensions: [{ id: 'sample.extension', isolated: true }],
   platform: 2,
 } as any
 
@@ -79,11 +79,15 @@ test('startProfile explains that extension host profiling is unavailable', async
 test('takeHeapSnapshot takes a snapshot of the selected isolated extension worker', async () => {
   using mockRpc = RendererWorker.registerMockRpc({
     'Developer.takeWorkerHeapSnapshot'() {
-      return '/home/test/Downloads/sample.heapsnapshot'
+      return {
+        ok: true,
+        uri: '/home/test/Downloads/sample.heapsnapshot',
+      }
     },
     'GetWindowId.getWindowId'() {
       return 7
     },
+    'Main.openUri'() {},
   })
 
   await expect(takeHeapSnapshot(state, 0)).resolves.toBe(state)
@@ -91,6 +95,7 @@ test('takeHeapSnapshot takes a snapshot of the selected isolated extension worke
   expect(mockRpc.invocations).toEqual([
     ['GetWindowId.getWindowId'],
     ['Developer.takeWorkerHeapSnapshot', 7, 'Extension API (Electron): sample.extension'],
+    ['Main.openUri', '/home/test/Downloads/sample.heapsnapshot'],
   ])
 })
 
@@ -103,17 +108,74 @@ test('takeHeapSnapshot ignores an invalid index', async () => {
 
 test('takeHeapSnapshot uses a custom worker name', async () => {
   using mockRpc = RendererWorker.registerMockRpc({
-    'Developer.takeWorkerHeapSnapshot'() {},
+    'Developer.takeWorkerHeapSnapshot'() {
+      return {
+        ok: true,
+        uri: '/home/test/Downloads/sample.heapsnapshot',
+      }
+    },
     'GetWindowId.getWindowId'() {
       return 7
     },
+    'Main.openUri'() {},
   })
   const stateWithCustomWorkerName = {
     ...state,
-    extensions: [{ id: 'sample.extension', workerName: 'Sample Extension Worker' }],
+    extensions: [{ id: 'sample.extension', isolated: true, workerName: 'Sample Extension Worker' }],
   }
 
   await takeHeapSnapshot(stateWithCustomWorkerName, 0)
 
-  expect(mockRpc.invocations).toEqual([['GetWindowId.getWindowId'], ['Developer.takeWorkerHeapSnapshot', 7, 'Sample Extension Worker']])
+  expect(mockRpc.invocations).toEqual([
+    ['GetWindowId.getWindowId'],
+    ['Developer.takeWorkerHeapSnapshot', 7, 'Sample Extension Worker'],
+    ['Main.openUri', '/home/test/Downloads/sample.heapsnapshot'],
+  ])
+})
+
+test('takeHeapSnapshot shows an error when the worker is not found', async () => {
+  using mockRpc = RendererWorker.registerMockRpc({
+    'ConfirmPrompt.prompt'() {},
+    'Developer.takeWorkerHeapSnapshot'() {
+      return {
+        error: 'Worker not found: Sample Extension Worker',
+        ok: false,
+      }
+    },
+    'GetWindowId.getWindowId'() {
+      return 7
+    },
+  })
+
+  await takeHeapSnapshot(state, 0)
+
+  expect(mockRpc.invocations).toEqual([
+    ['GetWindowId.getWindowId'],
+    ['Developer.takeWorkerHeapSnapshot', 7, 'Extension API (Electron): sample.extension'],
+    ['ConfirmPrompt.prompt', 'Worker not found: Sample Extension Worker', undefined],
+  ])
+})
+
+test('takeHeapSnapshot is unavailable outside electron', async () => {
+  using mockRpc = RendererWorker.registerMockRpc({})
+  const browserState = {
+    ...state,
+    platform: 1,
+  }
+
+  await takeHeapSnapshot(browserState, 0)
+
+  expect(mockRpc.invocations).toEqual([])
+})
+
+test('takeHeapSnapshot is unavailable for shared extension hosts', async () => {
+  using mockRpc = RendererWorker.registerMockRpc({})
+  const sharedExtensionHostState = {
+    ...state,
+    extensions: [{ id: 'sample.extension', isolated: false }],
+  }
+
+  await takeHeapSnapshot(sharedExtensionHostState, 0)
+
+  expect(mockRpc.invocations).toEqual([])
 })
