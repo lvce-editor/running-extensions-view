@@ -3,8 +3,24 @@ import type { RunningExtension } from '../RunningExtension/RunningExtension.ts'
 import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
 import * as ClassNames from '../ClassNames/ClassNames.ts'
 import { getIconVirtualDom } from '../GetIconVirtualDom/GetIconVirtualDom.ts'
+import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
 
 const sshRemotePrefix = 'ssh-remote+'
+
+const getActivationReasonVirtualDom = (activationEvent: string, index?: number): readonly VirtualDomNode[] => {
+  if (!activationEvent) {
+    return []
+  }
+  return [
+    {
+      childCount: 1,
+      className: ClassNames.RunningExtensionActivationReason,
+      'data-index': index,
+      type: VirtualDomElements.Div,
+    },
+    text(RunningExtensionsStrings.activationReason(activationEvent)),
+  ]
+}
 
 const getRemoteAuthorityVirtualDom = (remoteAuthority: string | undefined, index?: number): readonly VirtualDomNode[] => {
   if (!remoteAuthority) {
@@ -18,17 +34,25 @@ const getRemoteAuthorityVirtualDom = (remoteAuthority: string | undefined, index
       'data-index': index,
       type: VirtualDomElements.Div,
     },
-    text(`SSH: ${host}`),
+    text(RunningExtensionsStrings.ssh(host)),
   ]
 }
 
-export const getExtensionVirtualDom = (extension: RunningExtension, index?: number): readonly VirtualDomNode[] => {
+export const getExtensionVirtualDom = (extension: RunningExtension, index?: number, focused = false, selected = false): readonly VirtualDomNode[] => {
   const displayName = extension.name || extension.id
+  const activationReasonDom = getActivationReasonVirtualDom(extension.activationEvent, index)
   const remoteAuthorityDom = getRemoteAuthorityVirtualDom(extension.remoteAuthority, index)
+  let className = ClassNames.RunningExtension
+  if (focused) {
+    className = mergeClassNames(className, ClassNames.FocusOutline)
+  }
+  if (selected) {
+    className = mergeClassNames(className, ClassNames.ExtensionActive)
+  }
   return [
     {
       childCount: 3,
-      className: ClassNames.RunningExtension,
+      className,
       'data-index': index,
       role: AriaRoles.ListItem,
       type: VirtualDomElements.Div,
@@ -69,11 +93,18 @@ export const getExtensionVirtualDom = (extension: RunningExtension, index?: numb
     },
     text(extension.id),
     {
+      childCount: activationReasonDom.length > 0 ? 2 : 1,
+      className: ClassNames.RunningExtensionActivationDetails,
+      'data-index': index,
+      type: VirtualDomElements.Div,
+    },
+    {
       childCount: 1,
       className: ClassNames.RunningExtensionActivationTime,
       'data-index': index,
       type: VirtualDomElements.Div,
     },
-    text(`Activation: ${Math.round(extension.activationTime)}ms`),
+    text(RunningExtensionsStrings.activationTime(Math.round(extension.activationTime))),
+    ...activationReasonDom,
   ]
 }

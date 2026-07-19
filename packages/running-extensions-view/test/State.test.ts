@@ -13,8 +13,10 @@ test('create registers the initial state', () => {
     extensions: [],
     focusedIndex: -1,
     height: 400,
+    itemHeight: 72,
     loaded: false,
     platform: 1,
+    selectedIndex: -1,
     uid: 1,
     width: 300,
     x: 10,
@@ -33,6 +35,8 @@ test('diff helpers compare dom and css fields', () => {
   const state = RunningExtensionsStates.get(3).newState
   expect(isDomEqual(state, state)).toBe(true)
   expect(isDomEqual(state, { ...state, loaded: true })).toBe(false)
+  expect(isDomEqual(state, { ...state, focusedIndex: 0 })).toBe(false)
+  expect(isDomEqual(state, { ...state, selectedIndex: 0 })).toBe(false)
   expect(isCssEqual(state, state)).toBe(true)
   expect(isCssEqual(state, { ...state, width: 200 })).toBe(false)
 })
@@ -40,5 +44,5 @@ test('diff helpers compare dom and css fields', () => {
 test('renderCss emits dimensions', () => {
   create(4, '', 0, 0, 320, 240, 1, '/test/assets')
   const state = RunningExtensionsStates.get(4).newState
-  expect(renderCss(state, state)).toEqual([ViewletCommand.SetCss, 4, 'width: 320px; height: 240px;'])
+  expect(renderCss(state, state)).toEqual([ViewletCommand.SetCss, 4, 'width: 320px; height: 240px; flex: 1;'])
 })
