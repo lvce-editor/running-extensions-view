@@ -1,4 +1,4 @@
-import { type VirtualDomNode, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
+import { mergeClassNames, type VirtualDomNode, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
 import type { RunningExtension } from '../RunningExtension/RunningExtension.ts'
 import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
 import * as ClassNames from '../ClassNames/ClassNames.ts'
@@ -19,7 +19,7 @@ export const getRunningExtensionsVirtualDom = (
   return [
     {
       childCount: extensions.length,
-      className: ClassNames.RunningExtensions,
+      className: mergeClassNames(ClassNames.RunningExtensions, ClassNames.Grow),
       onClick: DomEventListenerFunctions.HandleClick,
       onContextMenu: DomEventListenerFunctions.HandleContextMenu,
       role: AriaRoles.List,

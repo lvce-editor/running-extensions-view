@@ -8,11 +8,31 @@ test('registers the context menu listener on the list', () => {
   const dom = getRunningExtensionsVirtualDom([], true)
   expect(dom[0]).toEqual({
     childCount: 1,
-    className: 'RunningExtensions',
+    className: mergeClassNames('RunningExtensions', 'Grow'),
     onClick: DomEventListenerFunctions.HandleClick,
     onContextMenu: DomEventListenerFunctions.HandleContextMenu,
     role: AriaRoles.List,
     type: VirtualDomElements.Div,
+  })
+})
+
+test('grows the populated list to fit the editor content', () => {
+  const dom = getRunningExtensionsVirtualDom(
+    [
+      {
+        activationEvent: '',
+        activationTime: 0,
+        icon: '',
+        id: 'sample.extension',
+        name: 'Sample Extension',
+        version: '1.0.0',
+      },
+    ],
+    true,
+  )
+
+  expect(dom[0]).toMatchObject({
+    className: mergeClassNames('RunningExtensions', 'Grow'),
   })
 })
 
