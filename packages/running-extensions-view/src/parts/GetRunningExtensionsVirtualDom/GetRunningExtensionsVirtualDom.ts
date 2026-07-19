@@ -1,6 +1,7 @@
 import { type VirtualDomNode, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
 import type { RunningExtension } from '../RunningExtension/RunningExtension.ts'
 import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
+import * as ClassNames from '../ClassNames/ClassNames.ts'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import { getExtensionVirtualDom } from '../GetExtensionVirtualDom/GetExtensionVirtualDom.ts'
 import { getRunningExtensionsEmptyDom } from '../GetRunningExtensionsEmptyVirtualDom/GetRunningExtensionsEmptyVirtualDom.ts'
@@ -13,7 +14,7 @@ export const getRunningExtensionsVirtualDom = (extensions: readonly RunningExten
   return [
     {
       childCount: extensions.length,
-      className: 'RunningExtensions',
+      className: ClassNames.RunningExtensions,
       onContextMenu: DomEventListenerFunctions.HandleContextMenu,
       role: AriaRoles.List,
       type: VirtualDomElements.Div,
