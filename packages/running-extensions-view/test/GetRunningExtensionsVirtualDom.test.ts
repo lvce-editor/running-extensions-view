@@ -50,6 +50,7 @@ test('renders running extension details and icon', () => {
   expect(dom).toContainEqual({ childCount: 0, text: '1.2.3', type: VirtualDomElements.Text })
   expect(dom).toContainEqual({ childCount: 0, text: 'sample.extension', type: VirtualDomElements.Text })
   expect(dom).toContainEqual({ childCount: 0, text: 'Activation: 13ms', type: VirtualDomElements.Text })
+  expect(dom).toContainEqual({ childCount: 0, text: 'Activation reason: onStartupFinished', type: VirtualDomElements.Text })
 })
 
 test('falls back to the extension id and default icon', () => {

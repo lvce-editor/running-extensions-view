@@ -27,8 +27,16 @@ test('renders extension details', () => {
     { childCount: 0, text: '1.2.3', type: VirtualDomElements.Text },
     { childCount: 1, className: 'RunningExtensionId', 'data-index': 7, type: VirtualDomElements.Div },
     { childCount: 0, text: 'sample.extension', type: VirtualDomElements.Text },
+    { childCount: 2, className: 'RunningExtensionActivationDetails', 'data-index': 7, type: VirtualDomElements.Div },
     { childCount: 1, className: 'RunningExtensionActivationTime', 'data-index': 7, type: VirtualDomElements.Div },
     { childCount: 0, text: 'Activation: 13ms', type: VirtualDomElements.Text },
+    {
+      childCount: 1,
+      className: 'RunningExtensionActivationReason',
+      'data-index': 7,
+      type: VirtualDomElements.Div,
+    },
+    { childCount: 0, text: 'Activation reason: onStartupFinished', type: VirtualDomElements.Text },
   ])
 })
 
@@ -43,6 +51,13 @@ test('uses the extension id when the name is empty', () => {
   })
 
   expect(dom).toContainEqual({ childCount: 0, text: 'sample.extension', type: VirtualDomElements.Text })
+  expect(dom).toContainEqual({
+    childCount: 1,
+    className: 'RunningExtensionActivationDetails',
+    'data-index': undefined,
+    type: VirtualDomElements.Div,
+  })
+  expect(dom).not.toContainEqual(expect.objectContaining({ className: expect.stringContaining('RunningExtensionActivationReason') }))
 })
 
 test('renders the remote SSH authority', () => {

@@ -32,10 +32,12 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
   await expect(firstExtension.locator('.RunningExtensionVersion')).toHaveText('1.2.3')
   await expect(firstExtension.locator('.RunningExtensionId')).toHaveText('sample.extension')
   await expect(firstExtension.locator('.RunningExtensionActivationTime')).toHaveText('Activation: 13ms')
+  await expect(firstExtension.locator('.RunningExtensionActivationReason')).toHaveText('Activation reason: onStartupFinished')
   await expect(firstExtension.locator('.RunningExtensionIcon')).toHaveAttribute('src', '/icons/sample.svg')
 
   const secondExtension = Locator('.RunningExtension[data-index="1"]')
   await expect(secondExtension).toHaveAttribute('role', 'listitem')
   await expect(secondExtension.locator('.RunningExtensionName')).toHaveText('Another Extension')
   await expect(secondExtension.locator('.RunningExtensionActivationTime')).toHaveText('Activation: 4ms')
+  await expect(secondExtension.locator('.RunningExtensionActivationReason')).toHaveText('Activation reason: onCommand:another.run')
 }

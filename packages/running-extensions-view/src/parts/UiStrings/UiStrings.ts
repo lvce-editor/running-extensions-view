@@ -1,3 +1,4 @@
+export const ActivationReason = 'Activation reason: {PH1}'
 export const ActivationTime = 'Activation: {PH1}ms'
 export const CopyId = 'Copy id ({PH1})'
 export const Disable = 'Disable'

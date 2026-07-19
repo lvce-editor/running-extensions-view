@@ -1,6 +1,10 @@
 import { expect, test } from '@jest/globals'
 import * as RunningExtensionsStrings from '../src/parts/RunningExtensionsStrings/RunningExtensionsStrings.ts'
 
+test('activationReason', () => {
+  expect(RunningExtensionsStrings.activationReason('onCommand:sample.run')).toBe('Activation reason: onCommand:sample.run')
+})
+
 test('activationTime', () => {
   expect(RunningExtensionsStrings.activationTime(13)).toBe('Activation: 13ms')
 })

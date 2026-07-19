@@ -7,6 +7,21 @@ import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningEx
 
 const sshRemotePrefix = 'ssh-remote+'
 
+const getActivationReasonVirtualDom = (activationEvent: string, index?: number): readonly VirtualDomNode[] => {
+  if (!activationEvent) {
+    return []
+  }
+  return [
+    {
+      childCount: 1,
+      className: ClassNames.RunningExtensionActivationReason,
+      'data-index': index,
+      type: VirtualDomElements.Div,
+    },
+    text(RunningExtensionsStrings.activationReason(activationEvent)),
+  ]
+}
+
 const getRemoteAuthorityVirtualDom = (remoteAuthority: string | undefined, index?: number): readonly VirtualDomNode[] => {
   if (!remoteAuthority) {
     return []
@@ -25,6 +40,7 @@ const getRemoteAuthorityVirtualDom = (remoteAuthority: string | undefined, index
 
 export const getExtensionVirtualDom = (extension: RunningExtension, index?: number): readonly VirtualDomNode[] => {
   const displayName = extension.name || extension.id
+  const activationReasonDom = getActivationReasonVirtualDom(extension.activationEvent, index)
   const remoteAuthorityDom = getRemoteAuthorityVirtualDom(extension.remoteAuthority, index)
   return [
     {
@@ -70,11 +86,18 @@ export const getExtensionVirtualDom = (extension: RunningExtension, index?: numb
     },
     text(extension.id),
     {
+      childCount: activationReasonDom.length > 0 ? 2 : 1,
+      className: ClassNames.RunningExtensionActivationDetails,
+      'data-index': index,
+      type: VirtualDomElements.Div,
+    },
+    {
       childCount: 1,
       className: ClassNames.RunningExtensionActivationTime,
       'data-index': index,
       type: VirtualDomElements.Div,
     },
     text(RunningExtensionsStrings.activationTime(Math.round(extension.activationTime))),
+    ...activationReasonDom,
   ]
 }

@@ -1,6 +1,12 @@
 import * as I18nString from '../I18NString/I18NString.ts'
 import * as UiStrings from '../UiStrings/UiStrings.ts'
 
+export const activationReason = (reason: string): string => {
+  return I18nString.i18nString(UiStrings.ActivationReason, {
+    PH1: reason,
+  })
+}
+
 export const activationTime = (milliseconds: number): string => {
   return I18nString.i18nString(UiStrings.ActivationTime, {
     PH1: milliseconds,
