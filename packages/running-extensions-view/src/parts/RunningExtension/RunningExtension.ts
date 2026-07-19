@@ -6,6 +6,7 @@ export interface RunningExtension {
   readonly isolated?: boolean
   readonly name: string
   readonly remoteAuthority?: string
+  readonly repository?: string
   readonly version: string
   readonly workerName?: string
 }

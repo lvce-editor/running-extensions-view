@@ -49,8 +49,8 @@ export const reportIssue = (): string => {
   return I18nString.i18nString(UiStrings.ReportIssue)
 }
 
-export const reportingIssuesForRunningExtensionsNotAvailable = (): string => {
-  return I18nString.i18nString(UiStrings.ReportingIssuesForRunningExtensionsNotAvailable)
+export const reportingIssuesNotSupported = (): string => {
+  return I18nString.i18nString(UiStrings.ReportingIssuesNotSupported)
 }
 
 export const ssh = (host: string): string => {
