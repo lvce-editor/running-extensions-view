@@ -1,6 +1,7 @@
 import { MenuItemFlags, PlatformType } from '@lvce-editor/constants'
 import type { MenuEntry } from '../MenuEntry/MenuEntry.ts'
 import type { RunningExtensionsState } from '../RunningExtensionsState/RunningExtensionsState.ts'
+import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
 
 export const getMenuEntries = (state: RunningExtensionsState): readonly MenuEntry[] => {
   const { extensions, focusedIndex, platform } = state
@@ -15,14 +16,14 @@ export const getMenuEntries = (state: RunningExtensionsState): readonly MenuEntr
       command: 'RunningExtensions.copyId',
       flags: MenuItemFlags.None,
       id: 'copyId',
-      label: `Copy id (${extension.id})`,
+      label: RunningExtensionsStrings.copyId(extension.id),
     },
     {
       args,
       command: 'RunningExtensions.reportIssue',
       flags: MenuItemFlags.None,
       id: 'reportIssue',
-      label: 'Report Issue',
+      label: RunningExtensionsStrings.reportIssue(),
     },
     {
       command: '',
@@ -35,14 +36,14 @@ export const getMenuEntries = (state: RunningExtensionsState): readonly MenuEntr
       command: 'RunningExtensions.disableWorkspace',
       flags: MenuItemFlags.None,
       id: 'disableWorkspace',
-      label: 'Disable (Workspace)',
+      label: RunningExtensionsStrings.disableWorkspace(),
     },
     {
       args,
       command: 'RunningExtensions.disable',
       flags: MenuItemFlags.None,
       id: 'disable',
-      label: 'Disable',
+      label: RunningExtensionsStrings.disable(),
     },
     {
       command: '',
@@ -54,7 +55,7 @@ export const getMenuEntries = (state: RunningExtensionsState): readonly MenuEntr
       command: 'RunningExtensions.startProfile',
       flags: MenuItemFlags.None,
       id: 'startProfile',
-      label: 'Start Extension Host Profile',
+      label: RunningExtensionsStrings.startExtensionHostProfile(),
     },
   ]
   if (platform === PlatformType.Electron && extension.isolated) {
@@ -63,7 +64,7 @@ export const getMenuEntries = (state: RunningExtensionsState): readonly MenuEntr
       command: 'RunningExtensions.takeHeapSnapshot',
       flags: MenuItemFlags.None,
       id: 'takeHeapSnapshot',
-      label: 'Take Heap Snapshot',
+      label: RunningExtensionsStrings.takeHeapSnapshot(),
     })
   }
   return menuEntries
