@@ -41,10 +41,8 @@ test('reportIssue', () => {
   expect(RunningExtensionsStrings.reportIssue()).toBe('Report Issue')
 })
 
-test('reportingIssuesForRunningExtensionsNotAvailable', () => {
-  expect(RunningExtensionsStrings.reportingIssuesForRunningExtensionsNotAvailable()).toBe(
-    'Reporting issues for running extensions is not available yet.',
-  )
+test('reportingIssuesNotSupported', () => {
+  expect(RunningExtensionsStrings.reportingIssuesNotSupported()).toBe('Reporting issues is not supported for this extension.')
 })
 
 test('ssh', () => {
