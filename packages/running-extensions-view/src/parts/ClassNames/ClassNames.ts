@@ -1,3 +1,4 @@
+export const FocusOutline = 'FocusOutline'
 export const MaskIcon = 'MaskIcon'
 export const MaskIconExtensions = 'MaskIconExtensions'
 export const RunningExtension = 'RunningExtension'

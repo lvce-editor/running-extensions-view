@@ -82,3 +82,23 @@ test('renders a plain remote SSH host', () => {
 
   expect(dom).toContainEqual({ childCount: 0, text: 'SSH: remote.example.com', type: VirtualDomElements.Text })
 })
+
+test('renders a focus outline', () => {
+  const dom = getExtensionVirtualDom(
+    {
+      activationEvent: 'onStartupFinished',
+      activationTime: 12.6,
+      icon: '/icons/sample.png',
+      id: 'sample.extension',
+      name: 'Sample Extension',
+      version: '1.2.3',
+    },
+    7,
+    true,
+  )
+
+  expect(dom[0]).toMatchObject({
+    className: mergeClassNames('RunningExtension', 'FocusOutline'),
+    'data-index': 7,
+  })
+})

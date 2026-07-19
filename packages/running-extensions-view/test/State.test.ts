@@ -33,6 +33,7 @@ test('diff helpers compare dom and css fields', () => {
   const state = RunningExtensionsStates.get(3).newState
   expect(isDomEqual(state, state)).toBe(true)
   expect(isDomEqual(state, { ...state, loaded: true })).toBe(false)
+  expect(isDomEqual(state, { ...state, focusedIndex: 0 })).toBe(false)
   expect(isCssEqual(state, state)).toBe(true)
   expect(isCssEqual(state, { ...state, width: 200 })).toBe(false)
 })
