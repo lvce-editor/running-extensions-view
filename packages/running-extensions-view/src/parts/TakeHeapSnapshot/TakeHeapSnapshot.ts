@@ -19,9 +19,5 @@ export const takeHeapSnapshot = async (state: RunningExtensionsState, index: num
     await RendererWorker.confirm(message)
     return state
   }
-<<<<<<< HEAD
-  await RendererWorker.openUri(result.uri)
-=======
->>>>>>> origin/main
   return state
 }
