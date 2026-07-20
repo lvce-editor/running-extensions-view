@@ -17,9 +17,6 @@ export const getRunningExtensionsVirtualDom = (
   if (extensions.length === 0) {
     return getRunningExtensionsEmptyDom(loaded)
   }
-  const children = extensions.flatMap((extension, index) =>
-    getExtensionVirtualDom(extension, index, focusOutline && index === focusedIndex, index === selectedIndex),
-  )
   return [
     {
       childCount: extensions.length,
@@ -31,6 +28,8 @@ export const getRunningExtensionsVirtualDom = (
       tabIndex: TabIndex.Focusable,
       type: VirtualDomElements.Div,
     },
-    ...children,
+    ...extensions.flatMap((extension, index) =>
+      getExtensionVirtualDom(extension, index, focusOutline && index === focusedIndex, index === selectedIndex),
+    ),
   ]
 }
