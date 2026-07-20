@@ -4,8 +4,9 @@ import type { RunningExtensionsState } from '../RunningExtensionsState/RunningEx
 export const copyId = async (state: RunningExtensionsState, index: number): Promise<RunningExtensionsState> => {
   const { extensions } = state
   const extension = extensions[index]
-  if (extension) {
-    await ClipBoardWorker.writeText(extension.id)
+  if (!extension) {
+    return state
   }
+  await ClipBoardWorker.writeText(extension.id)
   return state
 }
