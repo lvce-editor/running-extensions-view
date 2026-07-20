@@ -6,7 +6,11 @@ import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningEx
 
 export const reportIssue = async (state: RunningExtensionsState, index: number): Promise<RunningExtensionsState> => {
   const { extensions, platform } = state
-  const issuesUrl = getIssuesUrl(extensions[index]?.repository)
+  const extension = extensions[index]
+  if (!extension || !extension.repository) {
+    return state
+  }
+  const issuesUrl = getIssuesUrl(extension.repository)
   if (!issuesUrl) {
     await RendererWorker.confirm(RunningExtensionsStrings.reportingIssuesNotSupported())
     return state
