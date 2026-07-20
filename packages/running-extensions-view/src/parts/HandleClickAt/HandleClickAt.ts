@@ -5,6 +5,7 @@ export const handleClickAt = (state: RunningExtensionsState, eventY: number): Ru
   const index = Math.floor((eventY - y) / itemHeight)
   return {
     ...state,
+    focusOutline: false,
     selectedIndex: extensions[index] ? index : -1,
   }
 }

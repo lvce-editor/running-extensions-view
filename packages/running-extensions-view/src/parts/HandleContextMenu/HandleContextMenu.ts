@@ -17,6 +17,7 @@ export const handleContextMenu = async (
   const newState = {
     ...state,
     focusedIndex,
+    focusOutline: true,
   }
   RunningExtensionsStates.set(uid, state, newState)
   await ContextMenu.show(uid, MenuEntryId.RunningExtensions, x, y, {

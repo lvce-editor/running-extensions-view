@@ -6,6 +6,7 @@ export const create = (uid: number, uri: string, x: number, y: number, width: nu
     assetDir,
     extensions: [],
     focusedIndex: -1,
+    focusOutline: false,
     height,
     itemHeight: 72,
     loaded: false,

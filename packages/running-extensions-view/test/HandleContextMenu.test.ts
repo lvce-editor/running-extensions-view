@@ -6,6 +6,7 @@ import * as MenuEntryId from '../src/parts/MenuEntryId/MenuEntryId.ts'
 const state = {
   extensions: [{ id: 'sample.extension' }, { id: 'other.extension' }],
   focusedIndex: -1,
+  focusOutline: false,
   uid: 7,
 } as any
 
@@ -16,6 +17,7 @@ test('shows the context menu for the selected extension', async () => {
   await expect(handleContextMenu(state, '1', 10, 20)).resolves.toEqual({
     ...state,
     focusedIndex: 1,
+    focusOutline: true,
   })
   expect(mockRpc.invocations).toEqual([['ContextMenu.show2', 7, MenuEntryId.RunningExtensions, 10, 20, { menuId: MenuEntryId.RunningExtensions }]])
 })
