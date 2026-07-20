@@ -13,5 +13,9 @@ export const renderEventListeners = (): readonly any[] => {
       params: ['handleClickAt', EventExpression.ClientY],
       preventDefault: true,
     },
+    {
+      name: DomEventListenerFunctions.HandleBlur,
+      params: ['handleBlur'],
+    },
   ]
 }

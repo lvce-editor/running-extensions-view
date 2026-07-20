@@ -6,6 +6,6 @@ export const renderDom = (oldState: RunningExtensionsState, newState: RunningExt
   return [
     ViewletCommand.SetDom2,
     newState.uid,
-    getRunningExtensionsVirtualDom(newState.extensions, newState.loaded, newState.focusedIndex, newState.selectedIndex),
+    getRunningExtensionsVirtualDom(newState.extensions, newState.loaded, newState.focusedIndex, newState.selectedIndex, newState.focusOutline),
   ]
 }

@@ -3,6 +3,7 @@ import { mergeClassNames, VirtualDomElements } from '@lvce-editor/virtual-dom-wo
 import * as AriaRoles from '../src/parts/AriaRoles/AriaRoles.ts'
 import * as DomEventListenerFunctions from '../src/parts/DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import { getRunningExtensionsVirtualDom } from '../src/parts/GetRunningExtensionsVirtualDom/GetRunningExtensionsVirtualDom.ts'
+import * as TabIndex from '../src/parts/TabIndex/TabIndex.ts'
 
 const expectedActivationReason = { childCount: 0, text: 'Activation reason: onStartupFinished', type: VirtualDomElements.Text }
 const expectedActivationTime = { childCount: 0, text: 'Activation: 13ms', type: VirtualDomElements.Text }
@@ -24,9 +25,11 @@ test('registers the context menu listener on the list', () => {
   expect(dom[0]).toEqual({
     childCount: 1,
     className: mergeClassNames('RunningExtensions', 'Grow'),
+    onBlur: DomEventListenerFunctions.HandleBlur,
     onClick: DomEventListenerFunctions.HandleClick,
     onContextMenu: DomEventListenerFunctions.HandleContextMenu,
     role: AriaRoles.List,
+    tabIndex: TabIndex.Focusable,
     type: VirtualDomElements.Div,
   })
 })
@@ -129,7 +132,7 @@ test('renders a focus outline on the focused extension', () => {
     name: 'Sample Extension',
     version: '1.0.0',
   }
-  const dom = getRunningExtensionsVirtualDom([extension, extension], true, 1)
+  const dom = getRunningExtensionsVirtualDom([extension, extension], true, 1, -1, true)
 
   const rows = dom.filter((node) => node.role === AriaRoles.ListItem)
   expect(rows).toEqual([

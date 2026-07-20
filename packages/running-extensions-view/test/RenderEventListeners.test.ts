@@ -14,5 +14,9 @@ test('registers the context menu listener', () => {
       params: ['handleClickAt', 'event.clientY'],
       preventDefault: true,
     },
+    {
+      name: DomEventListenerFunctions.HandleBlur,
+      params: ['handleBlur'],
+    },
   ])
 })
