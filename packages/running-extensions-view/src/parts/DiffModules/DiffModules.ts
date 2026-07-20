@@ -4,6 +4,7 @@ export const isDomEqual = (oldState: RunningExtensionsState, newState: RunningEx
   return (
     oldState.extensions === newState.extensions &&
     oldState.focusedIndex === newState.focusedIndex &&
+    oldState.focusOutline === newState.focusOutline &&
     oldState.loaded === newState.loaded &&
     oldState.selectedIndex === newState.selectedIndex
   )

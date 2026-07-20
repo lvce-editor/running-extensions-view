@@ -24,14 +24,15 @@ const createState = (): RunningExtensionsState => {
 test('selects an extension based on the fixed item height', () => {
   const state = createState()
   const { itemHeight, y } = state
-  const newState = handleClickAt(state, y + itemHeight + 1)
+  const newState = handleClickAt({ ...state, focusedIndex: 0, focusOutline: true }, y + itemHeight + 1)
   expect(newState.selectedIndex).toBe(1)
-  expect(newState.focusedIndex).toBe(-1)
+  expect(newState.focusedIndex).toBe(0)
+  expect(newState.focusOutline).toBe(false)
 })
 
 test('clears the selection when clicking outside an extension', () => {
-  const state = createState()
+  const state = { ...createState(), focusOutline: true }
   const { extensions, itemHeight, y } = state
-  expect(handleClickAt(state, y - 1).selectedIndex).toBe(-1)
-  expect(handleClickAt(state, y + itemHeight * extensions.length).selectedIndex).toBe(-1)
+  expect(handleClickAt(state, y - 1)).toMatchObject({ focusOutline: false, selectedIndex: -1 })
+  expect(handleClickAt(state, y + itemHeight * extensions.length)).toMatchObject({ focusOutline: false, selectedIndex: -1 })
 })

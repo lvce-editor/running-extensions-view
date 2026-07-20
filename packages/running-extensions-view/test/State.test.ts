@@ -12,6 +12,7 @@ test('create registers the initial state', () => {
     assetDir: '/test/assets',
     extensions: [],
     focusedIndex: -1,
+    focusOutline: false,
     height: 400,
     itemHeight: 72,
     loaded: false,
@@ -36,6 +37,7 @@ test('diff helpers compare dom and css fields', () => {
   expect(isDomEqual(state, state)).toBe(true)
   expect(isDomEqual(state, { ...state, loaded: true })).toBe(false)
   expect(isDomEqual(state, { ...state, focusedIndex: 0 })).toBe(false)
+  expect(isDomEqual(state, { ...state, focusOutline: true })).toBe(false)
   expect(isDomEqual(state, { ...state, selectedIndex: 0 })).toBe(false)
   expect(isCssEqual(state, state)).toBe(true)
   expect(isCssEqual(state, { ...state, width: 200 })).toBe(false)

@@ -3,9 +3,10 @@ import type { RunningExtensionsState } from '../RunningExtensionsState/RunningEx
 import { getRunningExtensionsVirtualDom } from '../GetRunningExtensionsVirtualDom/GetRunningExtensionsVirtualDom.ts'
 
 export const renderDom = (oldState: RunningExtensionsState, newState: RunningExtensionsState): readonly any[] => {
+  // TODO incremental rendering
   return [
     ViewletCommand.SetDom2,
     newState.uid,
-    getRunningExtensionsVirtualDom(newState.extensions, newState.loaded, newState.focusedIndex, newState.selectedIndex),
+    getRunningExtensionsVirtualDom(newState.extensions, newState.loaded, newState.focusedIndex, newState.selectedIndex, newState.focusOutline),
   ]
 }

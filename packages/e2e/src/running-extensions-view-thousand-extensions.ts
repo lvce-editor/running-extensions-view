@@ -2,7 +2,7 @@ import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-thousand-extensions'
 
-export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
+export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   const extensions = Array.from({ length: 1000 }, (_, index) => ({
     activationEvent: 'onStartupFinished',
     activationTime: index,
@@ -12,20 +12,16 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
     version: `1.0.${index}`,
   }))
   await RunningExtensions.show()
-  await Command.execute('RunningExtensions.setExtensions', extensions)
+  await RunningExtensions.setExtensions(extensions)
 
-  const list = Locator('.RunningExtensions')
-  const rows = list.locator('.RunningExtension')
-  const firstRow = rows.first()
-  const lastRow = rows.nth(999)
-  await expect(rows).toHaveCount(1000)
-  await expect(firstRow).toBeVisible()
-  await expect(list).toHaveJSProperty('scrollTop', 0)
+  await expect(RunningExtensions.rows()).toHaveCount(1000)
+  await expect(RunningExtensions.row(0)).toBeVisible()
+  await expect(RunningExtensions.root()).toHaveJSProperty('scrollTop', 0)
 
-  await lastRow.hover()
+  await RunningExtensions.row(999).hover()
 
-  await expect(list).not.toHaveJSProperty('scrollTop', 0)
-  await expect(lastRow).toBeVisible()
-  await expect(lastRow.locator('.RunningExtensionName')).toHaveText('Extension 999')
-  await expect(lastRow.locator('.RunningExtensionVersion')).toHaveText('1.0.999')
+  await expect(RunningExtensions.root()).not.toHaveJSProperty('scrollTop', 0)
+  await expect(RunningExtensions.row(999)).toBeVisible()
+  await expect(RunningExtensions.name(999)).toHaveText('Extension 999')
+  await expect(RunningExtensions.version(999)).toHaveText('1.0.999')
 }

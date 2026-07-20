@@ -1,19 +1,7 @@
 import { PlatformType } from '@lvce-editor/constants'
-import { RendererWorker } from '@lvce-editor/rpc-registry'
+import { MainProcess, RendererWorker } from '@lvce-editor/rpc-registry'
 import type { RunningExtensionsState } from '../RunningExtensionsState/RunningExtensionsState.ts'
 import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
-
-interface TakeHeapSnapshotError {
-  readonly error: string
-  readonly ok: false
-}
-
-interface TakeHeapSnapshotSuccess {
-  readonly ok: true
-  readonly uri: string
-}
-
-type TakeHeapSnapshotResult = TakeHeapSnapshotError | TakeHeapSnapshotSuccess
 
 export const takeHeapSnapshot = async (state: RunningExtensionsState, index: number): Promise<RunningExtensionsState> => {
   const { extensions, platform } = state
@@ -23,11 +11,17 @@ export const takeHeapSnapshot = async (state: RunningExtensionsState, index: num
   }
   const windowId = await RendererWorker.getWindowId()
   const workerName = extension.workerName || RunningExtensionsStrings.extensionApiElectron(extension.id)
-  const result = (await RendererWorker.invoke('Developer.takeWorkerHeapSnapshot', windowId, workerName)) as TakeHeapSnapshotResult
-  if (!result.ok) {
-    await RendererWorker.confirm(result.error)
+  try {
+    const uri = await MainProcess.invoke('ElectronDeveloper.takeWorkerHeapSnapshot', windowId, workerName)
+    await RendererWorker.invoke('Main.openUri', uri)
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+    await RendererWorker.confirm(message)
     return state
   }
+<<<<<<< HEAD
   await RendererWorker.openUri(result.uri)
+=======
+>>>>>>> origin/main
   return state
 }
