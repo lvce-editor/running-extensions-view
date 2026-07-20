@@ -1,12 +1,17 @@
 import { PlatformType } from '@lvce-editor/constants'
 import { MainProcess, RendererWorker } from '@lvce-editor/rpc-registry'
+import type { RunningExtension } from '../RunningExtension/RunningExtension.ts'
 import type { RunningExtensionsState } from '../RunningExtensionsState/RunningExtensionsState.ts'
 import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
+
+const canTakeHeapSnapshot = (platform: number, extension: RunningExtension): boolean => {
+  return !(!extension || platform !== PlatformType.Electron || !extension.isolated)
+}
 
 export const takeHeapSnapshot = async (state: RunningExtensionsState, index: number): Promise<RunningExtensionsState> => {
   const { extensions, platform } = state
   const extension = extensions[index]
-  if (!extension || platform !== PlatformType.Electron || !extension.isolated) {
+  if (!canTakeHeapSnapshot(platform, extension)) {
     return state
   }
   const windowId = await RendererWorker.getWindowId()
