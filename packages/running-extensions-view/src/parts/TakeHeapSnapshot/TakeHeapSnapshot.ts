@@ -4,7 +4,6 @@ import type { RunningExtensionsState } from '../RunningExtensionsState/RunningEx
 import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
 import { RunningExtension } from '../RunningExtension/RunningExtension.ts'
 
-<<<<<<< HEAD
 interface TakeHeapSnapshotError {
   readonly error: string
   readonly ok: false
@@ -21,8 +20,6 @@ const canTakeHeapSnapshot = (platform: number, extension: RunningExtension): boo
   return !(!extension || platform !== PlatformType.Electron || !extension.isolated)
 }
 
-=======
->>>>>>> origin/main
 export const takeHeapSnapshot = async (state: RunningExtensionsState, index: number): Promise<RunningExtensionsState> => {
   const { extensions, platform } = state
   const extension = extensions[index]
