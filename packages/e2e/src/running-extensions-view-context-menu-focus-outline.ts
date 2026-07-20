@@ -4,7 +4,8 @@ export const name = 'running-extensions-view-context-menu-focus-outline'
 
 export const skip = ['webkit'] as const
 
-export const test: Test = async ({ Command, ContextMenu, expect, Locator, RunningExtensions }: TestApi) => {
+export const test: Test = async ({ ClipBoard, Command, ContextMenu, expect, Locator, RunningExtensions }: TestApi) => {
+  await ClipBoard.enableMemoryClipBoard()
   await RunningExtensions.show()
   await RunningExtensions.setExtensions([
     {
