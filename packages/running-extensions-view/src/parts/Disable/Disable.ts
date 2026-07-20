@@ -5,7 +5,7 @@ export const disable = async (state: RunningExtensionsState, index: number): Pro
   const { extensions, platform } = state
   const extension = extensions[index]
   if (extension) {
-    await ExtensionManagementWorker.invoke('Extensions.disable2', extension.id, platform)
+    await ExtensionManagementWorker.disable2(extension.id, platform)
   }
   return state
 }
