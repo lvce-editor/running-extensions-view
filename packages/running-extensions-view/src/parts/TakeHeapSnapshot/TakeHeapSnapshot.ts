@@ -1,8 +1,8 @@
 import { PlatformType } from '@lvce-editor/constants'
 import { MainProcess, RendererWorker } from '@lvce-editor/rpc-registry'
+import type { RunningExtension } from '../RunningExtension/RunningExtension.ts'
 import type { RunningExtensionsState } from '../RunningExtensionsState/RunningExtensionsState.ts'
 import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
-import { RunningExtension } from '../RunningExtension/RunningExtension.ts'
 
 const canTakeHeapSnapshot = (platform: number, extension: RunningExtension): boolean => {
   return !(!extension || platform !== PlatformType.Electron || !extension.isolated)
