@@ -7,7 +7,7 @@ import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningEx
 export const reportIssue = async (state: RunningExtensionsState, index: number): Promise<RunningExtensionsState> => {
   const { extensions, platform } = state
   const extension = extensions[index]
-  if (!extension || !extension.repository) {
+  if (!extension || !extension.repository || typeof extension.repository !== 'string') {
     return state
   }
   const issuesUrl = getIssuesUrl(extension.repository)
