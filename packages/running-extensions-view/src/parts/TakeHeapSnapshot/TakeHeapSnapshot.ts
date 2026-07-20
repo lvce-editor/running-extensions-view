@@ -4,18 +4,6 @@ import type { RunningExtensionsState } from '../RunningExtensionsState/RunningEx
 import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
 import { RunningExtension } from '../RunningExtension/RunningExtension.ts'
 
-interface TakeHeapSnapshotError {
-  readonly error: string
-  readonly ok: false
-}
-
-interface TakeHeapSnapshotSuccess {
-  readonly ok: true
-  readonly uri: string
-}
-
-type TakeHeapSnapshotResult = TakeHeapSnapshotError | TakeHeapSnapshotSuccess
-
 const canTakeHeapSnapshot = (platform: number, extension: RunningExtension): boolean => {
   return !(!extension || platform !== PlatformType.Electron || !extension.isolated)
 }
