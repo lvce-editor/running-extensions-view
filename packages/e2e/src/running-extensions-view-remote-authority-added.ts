@@ -18,5 +18,5 @@ export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   await RunningExtensions.setExtensions([{ ...extension, remoteAuthority: 'ssh-remote+dev.example.com' }])
 
   await expect(RunningExtensions.remoteAuthority(0)).toHaveText('SSH: dev.example.com')
-  await expect(RunningExtensions.id(0)).toHaveText('sample.extension')
+  await expect(RunningExtensions.name(0)).toHaveText('Sample Extension')
 }
