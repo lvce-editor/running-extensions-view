@@ -1,8 +1,13 @@
 import type { RunningExtensionsState } from '../RunningExtensionsState/RunningExtensionsState.ts'
 
+const getIndex = (eventY: number, y: number, itemHeight: number): number => {
+  const index = Math.floor((eventY - y) / itemHeight)
+  return index
+}
+
 export const handleClickAt = (state: RunningExtensionsState, eventY: number): RunningExtensionsState => {
   const { extensions, itemHeight, y } = state
-  const index = Math.floor((eventY - y) / itemHeight)
+  const index = getIndex(eventY, y, itemHeight)
   return {
     ...state,
     selectedIndex: extensions[index] ? index : -1,
