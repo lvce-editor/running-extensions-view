@@ -28,6 +28,6 @@ export const takeHeapSnapshot = async (state: RunningExtensionsState, index: num
     await RendererWorker.confirm(result.error)
     return state
   }
-  await RendererWorker.invoke('Main.openUri', result.uri)
+  await RendererWorker.openUri(result.uri)
   return state
 }
