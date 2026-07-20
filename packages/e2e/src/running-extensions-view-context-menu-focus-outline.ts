@@ -4,9 +4,10 @@ export const name = 'running-extensions-view-context-menu-focus-outline'
 
 export const skip = ['webkit'] as const
 
-export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
+export const test: Test = async ({ ClipBoard, Command, ContextMenu, expect, Locator, RunningExtensions }: TestApi) => {
+  await ClipBoard.enableMemoryClipBoard()
   await RunningExtensions.show()
-  await Command.execute('RunningExtensions.setExtensions', [
+  await RunningExtensions.setExtensions([
     {
       activationEvent: 'onStartupFinished',
       activationTime: 1,
@@ -25,9 +26,23 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
     },
   ])
 
-  const extensions = Locator('.RunningExtension')
-  const secondExtension = extensions.nth(1)
-  await RunningExtensions.handleContextMenu(1)
+  const outlinedRows = Locator('.RunningExtension.FocusOutline')
 
-  await expect(secondExtension).toHaveClass('FocusOutline')
+  await RunningExtensions.handleContextMenu(1)
+  await expect(outlinedRows).toHaveCount(1)
+  await ContextMenu.selectItem('Copy id (second.extension)')
+  await RunningExtensions.select(0)
+  await expect(outlinedRows).toHaveCount(0)
+
+  await RunningExtensions.handleContextMenu(1)
+  await expect(outlinedRows).toHaveCount(1)
+  await ContextMenu.selectItem('Copy id (second.extension)')
+  await Command.execute('RunningExtensions.handleClickAt', 10_000)
+  await expect(outlinedRows).toHaveCount(0)
+
+  await RunningExtensions.handleContextMenu(1)
+  await expect(outlinedRows).toHaveCount(1)
+  await ContextMenu.selectItem('Copy id (second.extension)')
+  await Command.execute('RunningExtensions.handleBlur')
+  await expect(outlinedRows).toHaveCount(0)
 }

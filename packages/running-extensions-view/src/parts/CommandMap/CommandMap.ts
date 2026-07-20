@@ -5,6 +5,7 @@ import * as Disable from '../Disable/Disable.ts'
 import * as DisableWorkspace from '../DisableWorkspace/DisableWorkspace.ts'
 import * as GetMenuEntries from '../GetMenuEntries/GetMenuEntries.ts'
 import * as GetMenuEntryIds from '../GetMenuEntryIds/GetMenuEntryIds.ts'
+import * as HandleBlur from '../HandleBlur/HandleBlur.ts'
 import * as HandleClickAt from '../HandleClickAt/HandleClickAt.ts'
 import * as HandleContextMenu from '../HandleContextMenu/HandleContextMenu.ts'
 import * as LoadContent from '../LoadContent/LoadContent.ts'
@@ -27,6 +28,7 @@ export const commandMap = {
   'RunningExtensions.getCommandIds': RunningExtensionsStates.getCommandIds,
   'RunningExtensions.getMenuEntries': RunningExtensionsStates.wrapGetter(GetMenuEntries.getMenuEntries),
   'RunningExtensions.getMenuEntryIds': GetMenuEntryIds.getMenuEntryIds,
+  'RunningExtensions.handleBlur': RunningExtensionsStates.wrapCommand(HandleBlur.handleBlur),
   'RunningExtensions.handleClickAt': RunningExtensionsStates.wrapCommand(HandleClickAt.handleClickAt),
   'RunningExtensions.handleContextMenu': RunningExtensionsStates.wrapCommand(HandleContextMenu.handleContextMenu),
   'RunningExtensions.loadContent': RunningExtensionsStates.wrapCommand(LoadContent.loadContent),

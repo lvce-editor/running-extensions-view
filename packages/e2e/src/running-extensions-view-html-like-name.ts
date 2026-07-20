@@ -2,10 +2,10 @@ import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-html-like-name'
 
-export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
+export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   const htmlLikeName = '<script>alert("test")</script>'
   await RunningExtensions.show()
-  await Command.execute('RunningExtensions.setExtensions', [
+  await RunningExtensions.setExtensions([
     {
       activationEvent: 'onStartupFinished',
       activationTime: 1,
@@ -16,8 +16,6 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
     },
   ])
 
-  const name = Locator('.RunningExtensionName')
-  const script = Locator('.RunningExtension script')
-  await expect(name).toHaveText(htmlLikeName)
-  await expect(script).toHaveCount(0)
+  await expect(RunningExtensions.name(0)).toHaveText(htmlLikeName)
+  await expect(RunningExtensions.row(0).locator('script')).toHaveCount(0)
 }

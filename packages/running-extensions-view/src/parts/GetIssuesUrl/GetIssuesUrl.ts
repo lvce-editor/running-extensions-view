@@ -1,7 +1,7 @@
 const gitSuffixRegex = /\.git$/
 
 export const getIssuesUrl = (repository: unknown): string => {
-  if (typeof repository !== 'string') {
+  if (typeof repository !== 'string' || !URL.canParse(repository)) {
     return ''
   }
   let url: URL
