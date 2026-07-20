@@ -11,9 +11,13 @@ const emptyNode: VirtualDomNode = {
   type: VirtualDomElements.Div,
 }
 
-export const getRunningExtensionsEmptyDom = (loaded: boolean): readonly VirtualDomNode[] => {
+const getMessage = (loaded: boolean): string => {
   const message = loaded ? RunningExtensionsStrings.noRunningExtensions() : RunningExtensionsStrings.loadingRunningExtensions()
+  return message
+}
 
+export const getRunningExtensionsEmptyDom = (loaded: boolean): readonly VirtualDomNode[] => {
+  const message = getMessage(loaded)
   return [
     {
       childCount: 1,
