@@ -1,4 +1,5 @@
 import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
+import { waitForRender } from './_wait-for-render.ts'
 
 export const name = 'running-extensions-view-selection-persists-after-append'
 
@@ -8,6 +9,7 @@ export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   await RunningExtensions.show()
   await RunningExtensions.setExtensions([first])
   await RunningExtensions.select(0)
+  await waitForRender()
   await expect(RunningExtensions.selectedRow(0)).toHaveCount(1)
 
   await RunningExtensions.setExtensions([first, second])

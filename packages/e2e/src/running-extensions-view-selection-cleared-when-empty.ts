@@ -1,4 +1,5 @@
 import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
+import { waitForRender } from './_wait-for-render.ts'
 
 export const name = 'running-extensions-view-selection-cleared-when-empty'
 
@@ -8,6 +9,7 @@ export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
     { activationEvent: '', activationTime: 1, icon: '', id: 'sample.extension', name: 'Sample Extension', version: '1.0.0' },
   ])
   await RunningExtensions.select(0)
+  await waitForRender()
   await expect(RunningExtensions.selectedRow(0)).toHaveCount(1)
 
   await RunningExtensions.setExtensions([])
