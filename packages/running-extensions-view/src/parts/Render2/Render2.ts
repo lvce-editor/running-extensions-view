@@ -2,6 +2,7 @@ import type { RunningExtensionsState } from '../RunningExtensionsState/RunningEx
 import * as DiffType from '../DiffType/DiffType.ts'
 import { renderCss } from '../RenderCss/RenderCss.ts'
 import { renderDom } from '../RenderDom/RenderDom.ts'
+import { renderIncremental } from '../RenderIncremental/RenderIncremental.ts'
 import * as RunningExtensionsStates from '../RunningExtensionsStates/RunningExtensionsStates.ts'
 
 const getRenderer = (diffType: number): ((oldState: RunningExtensionsState, newState: RunningExtensionsState) => readonly any[]) => {
@@ -10,6 +11,8 @@ const getRenderer = (diffType: number): ((oldState: RunningExtensionsState, newS
       return renderCss
     case DiffType.RenderDom:
       return renderDom
+    case DiffType.RenderIncremental:
+      return renderIncremental
     default:
       throw new Error(`Unknown diff type ${diffType}`)
   }
