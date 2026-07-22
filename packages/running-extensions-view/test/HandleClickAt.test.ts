@@ -31,6 +31,7 @@ test('selects an extension by index', () => {
 
 test('clears the selection when clicking outside an extension', () => {
   const state = { ...createState(), focusOutline: true }
+  const { extensions } = state
   expect(handleClickAt(state, -1)).toMatchObject({ focusOutline: false, selectedIndex: -1 })
-  expect(handleClickAt(state, state.extensions.length)).toMatchObject({ focusOutline: false, selectedIndex: -1 })
+  expect(handleClickAt(state, extensions.length)).toMatchObject({ focusOutline: false, selectedIndex: -1 })
 })

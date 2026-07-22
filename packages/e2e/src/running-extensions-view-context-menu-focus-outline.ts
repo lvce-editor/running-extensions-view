@@ -1,9 +1,12 @@
 import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
-import { waitForRender } from './_wait-for-render.ts'
 
 export const name = 'running-extensions-view-context-menu-focus-outline'
 
 export const skip = ['webkit'] as const
+
+const waitForRender = async (): Promise<void> => {
+  await new Promise((resolve) => setTimeout(resolve, 50))
+}
 
 export const test: Test = async ({ ClipBoard, Command, ContextMenu, expect, Locator, RunningExtensions }: TestApi) => {
   await ClipBoard.enableMemoryClipBoard()

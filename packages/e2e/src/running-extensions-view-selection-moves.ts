@@ -1,7 +1,10 @@
 import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
-import { waitForRender } from './_wait-for-render.ts'
 
 export const name = 'running-extensions-view-selection-moves'
+
+const waitForRender = async (): Promise<void> => {
+  await new Promise((resolve) => setTimeout(resolve, 50))
+}
 
 export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
   await RunningExtensions.show()

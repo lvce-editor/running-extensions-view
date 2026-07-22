@@ -1,7 +1,10 @@
 import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
-import { waitForRender } from './_wait-for-render.ts'
 
 export const name = 'running-extensions-view-selection-cleared-after-shrink'
+
+const waitForRender = async (): Promise<void> => {
+  await new Promise((resolve) => setTimeout(resolve, 50))
+}
 
 export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   const first = { activationEvent: '', activationTime: 1, icon: '', id: 'first.extension', name: 'First', version: '1.0.0' }
