@@ -1,4 +1,5 @@
 import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
+import { waitForRender } from './_wait-for-render.ts'
 
 export const name = 'running-extensions-view-context-menu-focus-outline'
 
@@ -32,6 +33,7 @@ export const test: Test = async ({ ClipBoard, Command, ContextMenu, expect, Loca
   await expect(outlinedRows).toHaveCount(1)
   await ContextMenu.selectItem('Copy id (second.extension)')
   await RunningExtensions.select(0)
+  await waitForRender()
   await expect(outlinedRows).toHaveCount(0)
 
   await RunningExtensions.handleContextMenu(1)

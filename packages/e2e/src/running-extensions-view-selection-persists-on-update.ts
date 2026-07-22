@@ -1,4 +1,5 @@
 import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
+import { waitForRender } from './_wait-for-render.ts'
 
 export const name = 'running-extensions-view-selection-persists-on-update'
 
@@ -18,6 +19,7 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
   const selectedRow = Locator('.RunningExtension.ExtensionActive')
   // eslint-disable-next-line e2e/no-direct-click -- verifies selection state across a data refresh
   await secondRow.click()
+  await waitForRender()
   await expect(selectedRow).toHaveAttribute('data-index', '1')
 
   const updatedExtensions = extensions.map((extension: Readonly<(typeof extensions)[number]>) => ({

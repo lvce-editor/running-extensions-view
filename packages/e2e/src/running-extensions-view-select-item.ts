@@ -1,4 +1,5 @@
 import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
+import { waitForRender } from './_wait-for-render.ts'
 
 export const name = 'running-extensions-view-select-item'
 
@@ -16,6 +17,7 @@ export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   )
 
   await RunningExtensions.select(1)
+  await waitForRender()
 
   await expect(RunningExtensions.selectedRow(0)).toHaveCount(0)
   await expect(RunningExtensions.selectedRow(1)).toHaveCount(1)

@@ -11,7 +11,7 @@ test('registers the context menu listener', () => {
     },
     {
       name: DomEventListenerFunctions.HandleClick,
-      params: ['handleClickAt', 'event.clientY'],
+      params: ['handleClickAt', 'event.target.dataset.index'],
       preventDefault: true,
     },
     {

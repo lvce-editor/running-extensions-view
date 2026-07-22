@@ -10,7 +10,7 @@ export const renderEventListeners = (): readonly any[] => {
     },
     {
       name: DomEventListenerFunctions.HandleClick,
-      params: ['handleClickAt', EventExpression.ClientY],
+      params: ['handleClickAt', 'event.target.dataset.index'],
       preventDefault: true,
     },
     {
