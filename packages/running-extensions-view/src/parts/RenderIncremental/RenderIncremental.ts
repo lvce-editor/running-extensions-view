@@ -1,7 +1,7 @@
 import { ViewletCommand } from '@lvce-editor/constants'
 import { diffTree } from '@lvce-editor/virtual-dom-worker'
-import { getRunningExtensionsVirtualDom } from '../GetRunningExtensionsVirtualDom/GetRunningExtensionsVirtualDom.ts'
 import type { RunningExtensionsState } from '../RunningExtensionsState/RunningExtensionsState.ts'
+import { getRunningExtensionsVirtualDom } from '../GetRunningExtensionsVirtualDom/GetRunningExtensionsVirtualDom.ts'
 
 export const renderIncremental = (oldState: RunningExtensionsState, newState: RunningExtensionsState): readonly any[] => {
   const oldDom = getRunningExtensionsVirtualDom(
