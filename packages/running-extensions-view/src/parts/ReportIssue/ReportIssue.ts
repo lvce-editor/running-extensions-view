@@ -12,9 +12,8 @@ const OpenCommand = {
 const getOpenCommand = (platform: number): number => {
   if (platform === PlatformType.Electron) {
     return OpenCommand.External
-  } else {
-    return OpenCommand.Url
   }
+  return OpenCommand.Url
 }
 
 const applyOpenCommand = async (cmd: number, issuesUrl: string): Promise<void> => {
