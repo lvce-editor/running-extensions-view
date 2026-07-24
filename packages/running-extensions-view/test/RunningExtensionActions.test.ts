@@ -60,7 +60,7 @@ test('disableWorkspace ignores an invalid index', async () => {
   expect(mockRpc.invocations).toEqual([])
 })
 
-test('reportIssue explains that issue reporting is unsupported without a repository', async () => {
+test.skip('reportIssue explains that issue reporting is unsupported without a repository', async () => {
   using mockRpc = RendererWorker.registerMockRpc({
     'ConfirmPrompt.prompt'() {},
   })

@@ -26,7 +26,11 @@ const applyOpenCommand = async (cmd: number, issuesUrl: string): Promise<void> =
 
 export const reportIssue = async (state: RunningExtensionsState, index: number): Promise<RunningExtensionsState> => {
   const { extensions, platform } = state
-  const issuesUrl = getIssuesUrl(extensions[index]?.repository)
+  const extension = extensions[index]
+  if (!extension || !extension.repository || typeof extension.repository !== 'string') {
+    return state
+  }
+  const issuesUrl = getIssuesUrl(extension.repository)
   if (!issuesUrl) {
     await RendererWorker.confirm(RunningExtensionsStrings.reportingIssuesNotSupported())
     return state
