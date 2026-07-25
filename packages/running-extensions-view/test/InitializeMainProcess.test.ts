@@ -14,12 +14,7 @@ test('initializes a lazy main process connection through the renderer worker', a
   rpc.send('test')
   await new Promise((resolve) => setTimeout(resolve, 0))
   expect(mockRendererRpc.invocations).toEqual([
-    [
-      'SendMessagePortToMainProcess.sendMessagePortToMainProcess',
-      expect.anything(),
-      'HandleElectronMessagePort.handleElectronMessagePort',
-      0,
-    ],
+    ['SendMessagePortToMainProcess.sendMessagePortToMainProcess', expect.anything(), 'HandleElectronMessagePort.handleElectronMessagePort', 0],
   ])
   await rpc.dispose()
 })

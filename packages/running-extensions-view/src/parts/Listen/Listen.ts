@@ -7,10 +7,5 @@ import { registerCommands } from '../RunningExtensionsStates/RunningExtensionsSt
 
 export const listen = async (): Promise<void> => {
   registerCommands(CommandMap.commandMap)
-  await Promise.all([
-    initializeRendererWorker(),
-    initializeClipBoardWorker(),
-    initializeExtensionManagementWorker(),
-    initializeMainProcess(),
-  ])
+  await Promise.all([initializeRendererWorker(), initializeClipBoardWorker(), initializeExtensionManagementWorker(), initializeMainProcess()])
 }
