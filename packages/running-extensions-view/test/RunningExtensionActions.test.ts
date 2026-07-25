@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals'
-import { ClipBoardWorker, ExtensionManagementWorker, MainProcess, RendererWorker } from '@lvce-editor/rpc-registry'
+import { ClipBoardWorker, DialogWorker, ExtensionManagementWorker, MainProcess, RendererWorker } from '@lvce-editor/rpc-registry'
 import { copyId } from '../src/parts/CopyId/CopyId.ts'
 import { disable } from '../src/parts/Disable/Disable.ts'
 import { disableWorkspace } from '../src/parts/DisableWorkspace/DisableWorkspace.ts'
@@ -61,7 +61,7 @@ test('disableWorkspace ignores an invalid index', async () => {
 })
 
 test('reportIssue explains that issue reporting is unsupported without a repository', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = DialogWorker.registerMockRpc({
     'ConfirmPrompt.prompt'() {},
   })
   await expect(reportIssue(state, 0)).resolves.toBe(state)
@@ -69,7 +69,7 @@ test('reportIssue explains that issue reporting is unsupported without a reposit
 })
 
 test('reportIssue explains that issue reporting is unsupported for an invalid repository', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = DialogWorker.registerMockRpc({
     'ConfirmPrompt.prompt'() {},
   })
   const stateWithInvalidRepository = {
@@ -106,7 +106,7 @@ test('reportIssue opens GitHub issues in a new browser tab', async () => {
 })
 
 test('startProfile explains that extension host profiling is unavailable', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = DialogWorker.registerMockRpc({
     'ConfirmPrompt.prompt'() {},
   })
   await expect(startProfile(state)).resolves.toBe(state)
@@ -169,19 +169,19 @@ test('takeHeapSnapshot shows an error when the worker is not found', async () =>
     },
   })
   using mockRendererRpc = RendererWorker.registerMockRpc({
-    'ConfirmPrompt.prompt'() {},
     'GetWindowId.getWindowId'() {
       return 7
     },
+  })
+  using mockDialogRpc = DialogWorker.registerMockRpc({
+    'ConfirmPrompt.prompt'() {},
   })
 
   await takeHeapSnapshot(state, 0)
 
   expect(mockMainProcessRpc.invocations).toEqual([['ElectronDeveloper.takeWorkerHeapSnapshot', 7, 'Extension API (Electron): sample.extension']])
-  expect(mockRendererRpc.invocations).toEqual([
-    ['GetWindowId.getWindowId'],
-    ['ConfirmPrompt.prompt', 'Worker not found: Sample Extension Worker', undefined],
-  ])
+  expect(mockRendererRpc.invocations).toEqual([['GetWindowId.getWindowId']])
+  expect(mockDialogRpc.invocations).toEqual([['ConfirmPrompt.prompt', 'Worker not found: Sample Extension Worker', undefined]])
 })
 
 test('takeHeapSnapshot handles non-error failures', async () => {
@@ -191,16 +191,19 @@ test('takeHeapSnapshot handles non-error failures', async () => {
     },
   })
   using mockRendererRpc = RendererWorker.registerMockRpc({
-    'ConfirmPrompt.prompt'() {},
     'GetWindowId.getWindowId'() {
       return 7
     },
+  })
+  using mockDialogRpc = DialogWorker.registerMockRpc({
+    'ConfirmPrompt.prompt'() {},
   })
 
   await takeHeapSnapshot(state, 0)
 
   expect(mockMainProcessRpc.invocations).toEqual([['ElectronDeveloper.takeWorkerHeapSnapshot', 7, 'Extension API (Electron): sample.extension']])
-  expect(mockRendererRpc.invocations).toEqual([['GetWindowId.getWindowId'], ['ConfirmPrompt.prompt', 'Snapshot failed', undefined]])
+  expect(mockRendererRpc.invocations).toEqual([['GetWindowId.getWindowId']])
+  expect(mockDialogRpc.invocations).toEqual([['ConfirmPrompt.prompt', 'Snapshot failed', undefined]])
 })
 
 test('takeHeapSnapshot is unavailable outside electron', async () => {

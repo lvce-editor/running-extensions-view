@@ -1,5 +1,5 @@
 import { PlatformType } from '@lvce-editor/constants'
-import { MainProcess, RendererWorker } from '@lvce-editor/rpc-registry'
+import { DialogWorker, MainProcess, RendererWorker } from '@lvce-editor/rpc-registry'
 import type { RunningExtension } from '../RunningExtension/RunningExtension.ts'
 import type { RunningExtensionsState } from '../RunningExtensionsState/RunningExtensionsState.ts'
 import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
@@ -21,7 +21,7 @@ export const takeHeapSnapshot = async (state: RunningExtensionsState, index: num
     await RendererWorker.invoke('Main.openUri', uri)
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error)
-    await RendererWorker.confirm(message)
+    await DialogWorker.invoke('ConfirmPrompt.prompt', message, undefined)
     return state
   }
   return state

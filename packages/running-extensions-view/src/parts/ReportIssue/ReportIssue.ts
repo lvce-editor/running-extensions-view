@@ -1,5 +1,5 @@
 import { PlatformType } from '@lvce-editor/constants'
-import { RendererWorker } from '@lvce-editor/rpc-registry'
+import { DialogWorker, RendererWorker } from '@lvce-editor/rpc-registry'
 import type { RunningExtensionsState } from '../RunningExtensionsState/RunningExtensionsState.ts'
 import { getIssuesUrl } from '../GetIssuesUrl/GetIssuesUrl.ts'
 import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
@@ -28,7 +28,7 @@ export const reportIssue = async (state: RunningExtensionsState, index: number):
   const { extensions, platform } = state
   const issuesUrl = getIssuesUrl(extensions[index]?.repository)
   if (!issuesUrl) {
-    await RendererWorker.confirm(RunningExtensionsStrings.reportingIssuesNotSupported())
+    await DialogWorker.invoke('ConfirmPrompt.prompt', RunningExtensionsStrings.reportingIssuesNotSupported(), undefined)
     return state
   }
   const cmd = getOpenCommand(platform)
