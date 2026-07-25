@@ -1,8 +1,13 @@
 import { LazyTransferMessagePortRpcParent } from '@lvce-editor/rpc'
-import { MainProcess, RpcId, SharedProcess } from '@lvce-editor/rpc-registry'
+import { MainProcess, RendererWorker } from '@lvce-editor/rpc-registry'
 
 const send = async (port: MessagePort): Promise<void> => {
-  await SharedProcess.invokeAndTransfer('TemporaryMessagePort.sendToElectron', port, RpcId.MainProcess, 0)
+  await RendererWorker.invokeAndTransfer(
+    'SendMessagePortToMainProcess.sendMessagePortToMainProcess',
+    port,
+    'HandleElectronMessagePort.handleElectronMessagePort',
+    0,
+  )
 }
 
 export const initializeMainProcess = async (): Promise<void> => {
