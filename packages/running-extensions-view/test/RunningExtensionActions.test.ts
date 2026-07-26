@@ -105,11 +105,132 @@ test('reportIssue opens GitHub issues in a new browser tab', async () => {
   expect(mockRpc.invocations).toEqual([['Open.openUrl', 'https://github.com/example/sample-extension/issues']])
 })
 
-test('startProfile explains that extension host profiling is unavailable', async () => {
+test('startProfile profiles the selected isolated extension worker and opens the result', async () => {
+  using mockMainProcessRpc = MainProcess.registerMockRpc({
+    'ElectronDeveloper.takeWorkerCpuProfile'() {
+      return '/home/test/Downloads/sample.cpuprofile'
+    },
+  })
+  using mockRendererRpc = RendererWorker.registerMockRpc({
+    'GetWindowId.getWindowId'() {
+      return 7
+    },
+    'Main.openUri'() {},
+  })
+
+  await expect(startProfile(state, 0)).resolves.toBe(state)
+
+  expect(mockMainProcessRpc.invocations).toEqual([['ElectronDeveloper.takeWorkerCpuProfile', 7, 'Extension API (Electron): sample.extension']])
+  expect(mockRendererRpc.invocations).toEqual([['GetWindowId.getWindowId'], ['Main.openUri', '/home/test/Downloads/sample.cpuprofile']])
+})
+
+test('startProfile profiles the extension host window for a shared extension and opens the result', async () => {
+  using mockMainProcessRpc = MainProcess.registerMockRpc({
+    'ElectronDeveloper.takeWindowCpuProfile'() {
+      return '/home/test/Downloads/shared.cpuprofile'
+    },
+  })
+  using mockRendererRpc = RendererWorker.registerMockRpc({
+    'GetWindowId.getWindowId'() {
+      return 7
+    },
+    'Main.openUri'() {},
+  })
+  const sharedExtensionHostState = {
+    ...state,
+    extensions: [{ id: 'sample.extension', isolated: false }],
+  }
+
+  await expect(startProfile(sharedExtensionHostState, 0)).resolves.toBe(sharedExtensionHostState)
+
+  expect(mockMainProcessRpc.invocations).toEqual([['ElectronDeveloper.takeWindowCpuProfile', 7]])
+  expect(mockRendererRpc.invocations).toEqual([['GetWindowId.getWindowId'], ['Main.openUri', '/home/test/Downloads/shared.cpuprofile']])
+})
+
+test('startProfile uses a custom worker name', async () => {
+  using mockMainProcessRpc = MainProcess.registerMockRpc({
+    'ElectronDeveloper.takeWorkerCpuProfile'() {
+      return '/home/test/Downloads/sample.cpuprofile'
+    },
+  })
+  using mockRendererRpc = RendererWorker.registerMockRpc({
+    'GetWindowId.getWindowId'() {
+      return 7
+    },
+    'Main.openUri'() {},
+  })
+  const stateWithCustomWorkerName = {
+    ...state,
+    extensions: [{ id: 'sample.extension', isolated: true, workerName: 'Sample Extension Worker' }],
+  }
+
+  await startProfile(stateWithCustomWorkerName, 0)
+
+  expect(mockMainProcessRpc.invocations).toEqual([['ElectronDeveloper.takeWorkerCpuProfile', 7, 'Sample Extension Worker']])
+  expect(mockRendererRpc.invocations).toEqual([['GetWindowId.getWindowId'], ['Main.openUri', '/home/test/Downloads/sample.cpuprofile']])
+})
+
+test('startProfile ignores an invalid index', async () => {
+  using mockRpc = RendererWorker.registerMockRpc({})
+
+  await expect(startProfile(state, 4)).resolves.toBe(state)
+  expect(mockRpc.invocations).toEqual([])
+})
+
+test('startProfile shows an error when profiling fails', async () => {
+  using mockMainProcessRpc = MainProcess.registerMockRpc({
+    'ElectronDeveloper.takeWorkerCpuProfile'() {
+      throw new Error('Profiling failed')
+    },
+  })
+  using mockRendererRpc = RendererWorker.registerMockRpc({
+    'GetWindowId.getWindowId'() {
+      return 7
+    },
+  })
+  using mockDialogRpc = DialogWorker.registerMockRpc({
+    'ConfirmPrompt.prompt'() {},
+  })
+
+  await startProfile(state, 0)
+
+  expect(mockMainProcessRpc.invocations).toEqual([['ElectronDeveloper.takeWorkerCpuProfile', 7, 'Extension API (Electron): sample.extension']])
+  expect(mockRendererRpc.invocations).toEqual([['GetWindowId.getWindowId']])
+  expect(mockDialogRpc.invocations).toEqual([['ConfirmPrompt.prompt', 'Profiling failed', undefined]])
+})
+
+test('startProfile handles non-error failures', async () => {
+  using mockMainProcessRpc = MainProcess.registerMockRpc({
+    'ElectronDeveloper.takeWorkerCpuProfile'() {
+      throw 'Profiling failed'
+    },
+  })
+  using mockRendererRpc = RendererWorker.registerMockRpc({
+    'GetWindowId.getWindowId'() {
+      return 7
+    },
+  })
+  using mockDialogRpc = DialogWorker.registerMockRpc({
+    'ConfirmPrompt.prompt'() {},
+  })
+
+  await startProfile(state, 0)
+
+  expect(mockMainProcessRpc.invocations).toEqual([['ElectronDeveloper.takeWorkerCpuProfile', 7, 'Extension API (Electron): sample.extension']])
+  expect(mockRendererRpc.invocations).toEqual([['GetWindowId.getWindowId']])
+  expect(mockDialogRpc.invocations).toEqual([['ConfirmPrompt.prompt', 'Profiling failed', undefined]])
+})
+
+test('startProfile explains that extension host profiling is unavailable outside Electron', async () => {
   using mockRpc = DialogWorker.registerMockRpc({
     'ConfirmPrompt.prompt'() {},
   })
-  await expect(startProfile(state)).resolves.toBe(state)
+  const browserState = {
+    ...state,
+    platform: 1,
+  }
+
+  await expect(startProfile(browserState, 0)).resolves.toBe(browserState)
   expect(mockRpc.invocations).toEqual([['ConfirmPrompt.prompt', 'Extension host profiling is not available yet.', undefined]])
 })
 

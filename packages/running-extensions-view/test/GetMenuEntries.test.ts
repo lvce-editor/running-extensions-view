@@ -13,7 +13,7 @@ test('returns the running extension menu in electron', () => {
     { args: [0], command: 'RunningExtensions.disableWorkspace', flags: MenuItemFlags.None, id: 'disableWorkspace', label: 'Disable (Workspace)' },
     { args: [0], command: 'RunningExtensions.disable', flags: MenuItemFlags.None, id: 'disable', label: 'Disable' },
     { command: '', flags: MenuItemFlags.Separator, id: 'separator2', label: '' },
-    { command: 'RunningExtensions.startProfile', flags: MenuItemFlags.None, id: 'startProfile', label: 'Start Extension Host Profile' },
+    { args: [0], command: 'RunningExtensions.startProfile', flags: MenuItemFlags.None, id: 'startProfile', label: 'Start Extension Host Profile' },
     { args: [0], command: 'RunningExtensions.takeHeapSnapshot', flags: MenuItemFlags.None, id: 'takeHeapSnapshot', label: 'Take Heap Snapshot' },
   ])
 })
