@@ -135,3 +135,85 @@ test('renders a focus outline', () => {
     className: mergeClassNames('RunningExtension', 'FocusOutline'),
   })
 })
+
+test('renders an activation error instead of an activation time', () => {
+  const dom = getExtensionVirtualDom({
+    activationEvent: 'onCommand:sample.run',
+    activationTime: 0,
+    error: 'Cannot find main.js',
+    icon: '',
+    id: 'sample.extension',
+    name: 'Sample Extension',
+    status: 'error',
+    version: '1.0.0',
+  })
+
+  expect(dom).toContainEqual({
+    childCount: 1,
+    className: mergeClassNames('RunningExtensionStatus', 'RunningExtensionStatusError'),
+    type: VirtualDomElements.Div,
+  })
+  expect(dom).toContainEqual({ childCount: 0, text: 'Error: Cannot find main.js', type: VirtualDomElements.Text })
+  expect(dom).not.toContainEqual(expect.objectContaining({ className: 'RunningExtensionActivationTime' }))
+})
+
+test('renders a terminated worker status', () => {
+  const dom = getExtensionVirtualDom({
+    activationEvent: 'onStartupFinished',
+    activationTime: 10,
+    error: 'Extension worker stopped responding',
+    icon: '',
+    id: 'sample.extension',
+    name: 'Sample Extension',
+    status: 'terminated',
+    version: '1.0.0',
+  })
+
+  expect(dom).toContainEqual({
+    childCount: 1,
+    className: mergeClassNames('RunningExtensionStatus', 'RunningExtensionStatusTerminated'),
+    type: VirtualDomElements.Div,
+  })
+  expect(dom).toContainEqual({
+    childCount: 0,
+    text: 'Terminated: Extension worker stopped responding',
+    type: VirtualDomElements.Text,
+  })
+})
+
+test('falls back for invalid names and versions', () => {
+  const dom = getExtensionVirtualDom({
+    activationEvent: '',
+    activationTime: 1,
+    icon: '',
+    id: 'sample.extension',
+    name: 42,
+    version: 42,
+  })
+
+  expect(dom).toContainEqual(expectedFallbackName)
+  expect(dom).toContainEqual({ childCount: 0, text: '', type: VirtualDomElements.Text })
+})
+
+test('renders fallback messages for statuses without error details', () => {
+  const extension = {
+    activationEvent: '',
+    activationTime: 0,
+    error: '',
+    icon: '',
+    id: 'sample.extension',
+    name: 'Sample Extension',
+    version: '1.0.0',
+  }
+
+  expect(getExtensionVirtualDom({ ...extension, status: 'error' })).toContainEqual({
+    childCount: 0,
+    text: 'Error: Activation failed',
+    type: VirtualDomElements.Text,
+  })
+  expect(getExtensionVirtualDom({ ...extension, status: 'terminated' })).toContainEqual({
+    childCount: 0,
+    text: 'Terminated: Extension worker stopped',
+    type: VirtualDomElements.Text,
+  })
+})

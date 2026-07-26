@@ -43,6 +43,28 @@ const activationTimeNode: VirtualDomNode = {
   type: VirtualDomElements.Div,
 }
 
+const errorStatusNode: VirtualDomNode = {
+  childCount: 1,
+  className: mergeClassNames(ClassNames.RunningExtensionStatus, ClassNames.RunningExtensionStatusError),
+  type: VirtualDomElements.Div,
+}
+
+const terminatedStatusNode: VirtualDomNode = {
+  childCount: 1,
+  className: mergeClassNames(ClassNames.RunningExtensionStatus, ClassNames.RunningExtensionStatusTerminated),
+  type: VirtualDomElements.Div,
+}
+
+const getStatusVirtualDom = (extension: RunningExtension): readonly VirtualDomNode[] => {
+  if (extension.status === 'error') {
+    return [errorStatusNode, text(RunningExtensionsStrings.errorStatus(extension.error || 'Activation failed'))]
+  }
+  if (extension.status === 'terminated') {
+    return [terminatedStatusNode, text(RunningExtensionsStrings.terminatedStatus(extension.error || 'Extension worker stopped'))]
+  }
+  return [activationTimeNode, text(RunningExtensionsStrings.activationTime(Math.round(extension.activationTime)))]
+}
+
 const getActivationReasonVirtualDom = (activationEvent: string): readonly VirtualDomNode[] => {
   if (!activationEvent) {
     return []
@@ -77,8 +99,10 @@ const getClassName = (focused: boolean, selected: boolean): string => {
 }
 
 export const getExtensionVirtualDom = (extension: RunningExtension, focused = false, selected = false): readonly VirtualDomNode[] => {
-  const displayName = extension.name || extension.id
+  const displayName = typeof extension.name === 'string' && extension.name ? extension.name : extension.id
+  const displayVersion = typeof extension.version === 'string' ? extension.version : ''
   const activationReasonDom = getActivationReasonVirtualDom(extension.activationEvent)
+  const statusDom = getStatusVirtualDom(extension)
   const remoteAuthorityDom = getRemoteAuthorityVirtualDom(extension.remoteAuthority)
   const className = getClassName(focused, selected)
   return [
@@ -98,7 +122,7 @@ export const getExtensionVirtualDom = (extension: RunningExtension, focused = fa
     nameNode,
     text(displayName),
     versionNode,
-    text(extension.version),
+    text(displayVersion),
     ...remoteAuthorityDom,
     idNode,
     text(extension.id),
@@ -107,8 +131,7 @@ export const getExtensionVirtualDom = (extension: RunningExtension, focused = fa
       className: ClassNames.RunningExtensionActivationDetails,
       type: VirtualDomElements.Div,
     },
-    activationTimeNode,
-    text(RunningExtensionsStrings.activationTime(Math.round(extension.activationTime))),
+    ...statusDom,
     ...activationReasonDom,
   ]
 }
