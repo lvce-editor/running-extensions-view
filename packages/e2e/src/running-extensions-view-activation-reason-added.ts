@@ -18,6 +18,5 @@ export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   await RunningExtensions.setExtensions([{ ...extension, activationEvent: 'onCommand:sample.run' }])
 
   await expect(RunningExtensions.activationReason(0)).toHaveText('Activation reason: onCommand:sample.run')
-  await expect(RunningExtensions.activationReason(0)).toHaveAttribute('data-index', '0')
   await expect(RunningExtensions.activationTime(0)).toHaveText('Activation: 1ms')
 }

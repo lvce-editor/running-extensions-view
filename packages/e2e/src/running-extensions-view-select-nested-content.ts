@@ -20,12 +20,11 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
     })),
   )
 
-  const secondName = Locator('.RunningExtension[data-index="1"] .RunningExtensionName')
+  const secondName = Locator('.RunningExtensionName').nth(1)
   // eslint-disable-next-line e2e/no-direct-click -- verifies delegated selection from nested row content
   await secondName.click()
   await waitForRender()
 
   const selectedRow = Locator('.RunningExtension.ExtensionActive')
-  await expect(selectedRow).toHaveAttribute('data-index', '1')
   await expect(selectedRow.locator('.RunningExtensionName')).toHaveText('Second')
 }

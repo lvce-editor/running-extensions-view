@@ -3,13 +3,12 @@ import type { RunningExtension } from '../RunningExtension/RunningExtension.ts'
 import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
 import * as ClassNames from '../ClassNames/ClassNames.ts'
 
-export const getIconVirtualDom = (extension: RunningExtension, index?: number): readonly VirtualDomNode[] => {
+export const getIconVirtualDom = (extension: RunningExtension): readonly VirtualDomNode[] => {
   if (extension.icon) {
     return [
       {
         childCount: 0,
         className: ClassNames.RunningExtensionIcon,
-        'data-index': index,
         src: extension.icon,
         type: VirtualDomElements.Img,
       },
@@ -24,7 +23,6 @@ export const getIconVirtualDom = (extension: RunningExtension, index?: number): 
         ClassNames.MaskIcon,
         ClassNames.MaskIconExtensions,
       ),
-      'data-index': index,
       role: AriaRoles.None,
       type: VirtualDomElements.Div,
     },

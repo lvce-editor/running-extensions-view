@@ -14,7 +14,7 @@ export const test: Test = async ({ Command, expect, RunningExtensions }: TestApi
   ])
   await RunningExtensions.select(1)
   await waitForRender()
-  await expect(RunningExtensions.selectedRow(1)).toHaveCount(1)
+  await expect(RunningExtensions.root().locator('.RunningExtension.ExtensionActive .RunningExtensionName')).toHaveText('Second')
 
   await Command.execute('RunningExtensions.handleClickAt', 10_000)
 

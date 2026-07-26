@@ -28,8 +28,6 @@ export const getRunningExtensionsVirtualDom = (
       tabIndex: TabIndex.Focusable,
       type: VirtualDomElements.Div,
     },
-    ...extensions.flatMap((extension, index) =>
-      getExtensionVirtualDom(extension, index, focusOutline && index === focusedIndex, index === selectedIndex),
-    ),
+    ...extensions.flatMap((extension, index) => getExtensionVirtualDom(extension, focusOutline && index === focusedIndex, index === selectedIndex)),
   ]
 }

@@ -7,22 +7,50 @@ import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningEx
 
 const sshRemotePrefix = 'ssh-remote+'
 
-const getActivationReasonVirtualDom = (activationEvent: string, index?: number): readonly VirtualDomNode[] => {
+const activationReasonNode: VirtualDomNode = {
+  childCount: 1,
+  className: ClassNames.RunningExtensionActivationReason,
+  type: VirtualDomElements.Div,
+}
+
+const titleNode: VirtualDomNode = {
+  childCount: 2,
+  className: ClassNames.RunningExtensionTitle,
+  type: VirtualDomElements.Div,
+}
+
+const nameNode: VirtualDomNode = {
+  childCount: 1,
+  className: ClassNames.RunningExtensionName,
+  type: VirtualDomElements.Strong,
+}
+
+const versionNode: VirtualDomNode = {
+  childCount: 1,
+  className: ClassNames.RunningExtensionVersion,
+  type: VirtualDomElements.Span,
+}
+
+const idNode: VirtualDomNode = {
+  childCount: 1,
+  className: ClassNames.RunningExtensionId,
+  type: VirtualDomElements.Div,
+}
+
+const activationTimeNode: VirtualDomNode = {
+  childCount: 1,
+  className: ClassNames.RunningExtensionActivationTime,
+  type: VirtualDomElements.Div,
+}
+
+const getActivationReasonVirtualDom = (activationEvent: string): readonly VirtualDomNode[] => {
   if (!activationEvent) {
     return []
   }
-  return [
-    {
-      childCount: 1,
-      className: ClassNames.RunningExtensionActivationReason,
-      'data-index': index,
-      type: VirtualDomElements.Div,
-    },
-    text(RunningExtensionsStrings.activationReason(activationEvent)),
-  ]
+  return [activationReasonNode, text(RunningExtensionsStrings.activationReason(activationEvent))]
 }
 
-const getRemoteAuthorityVirtualDom = (remoteAuthority: string | undefined, index?: number): readonly VirtualDomNode[] => {
+const getRemoteAuthorityVirtualDom = (remoteAuthority: string | undefined): readonly VirtualDomNode[] => {
   if (!remoteAuthority) {
     return []
   }
@@ -31,7 +59,6 @@ const getRemoteAuthorityVirtualDom = (remoteAuthority: string | undefined, index
     {
       childCount: 1,
       className: mergeClassNames(ClassNames.RunningExtensionId, ClassNames.RunningExtensionRemoteAuthority),
-      'data-index': index,
       type: VirtualDomElements.Div,
     },
     text(RunningExtensionsStrings.ssh(host)),
@@ -49,66 +76,38 @@ const getClassName = (focused: boolean, selected: boolean): string => {
   return className
 }
 
-export const getExtensionVirtualDom = (extension: RunningExtension, index?: number, focused = false, selected = false): readonly VirtualDomNode[] => {
+export const getExtensionVirtualDom = (extension: RunningExtension, focused = false, selected = false): readonly VirtualDomNode[] => {
   const displayName = extension.name || extension.id
-  const activationReasonDom = getActivationReasonVirtualDom(extension.activationEvent, index)
-  const remoteAuthorityDom = getRemoteAuthorityVirtualDom(extension.remoteAuthority, index)
+  const activationReasonDom = getActivationReasonVirtualDom(extension.activationEvent)
+  const remoteAuthorityDom = getRemoteAuthorityVirtualDom(extension.remoteAuthority)
   const className = getClassName(focused, selected)
   return [
     {
       childCount: 3,
       className,
-      'data-index': index,
       role: AriaRoles.ListItem,
       type: VirtualDomElements.Div,
     },
-    ...getIconVirtualDom(extension, index),
+    ...getIconVirtualDom(extension),
     {
       childCount: remoteAuthorityDom.length > 0 ? 3 : 2,
       className: ClassNames.RunningExtensionDetails,
-      'data-index': index,
       type: VirtualDomElements.Div,
     },
-    {
-      childCount: 2,
-      className: ClassNames.RunningExtensionTitle,
-      'data-index': index,
-      type: VirtualDomElements.Div,
-    },
-    {
-      childCount: 1,
-      className: ClassNames.RunningExtensionName,
-      'data-index': index,
-      type: VirtualDomElements.Strong,
-    },
+    titleNode,
+    nameNode,
     text(displayName),
-    {
-      childCount: 1,
-      className: ClassNames.RunningExtensionVersion,
-      'data-index': index,
-      type: VirtualDomElements.Span,
-    },
+    versionNode,
     text(extension.version),
     ...remoteAuthorityDom,
-    {
-      childCount: 1,
-      className: ClassNames.RunningExtensionId,
-      'data-index': index,
-      type: VirtualDomElements.Div,
-    },
+    idNode,
     text(extension.id),
     {
       childCount: activationReasonDom.length > 0 ? 2 : 1,
       className: ClassNames.RunningExtensionActivationDetails,
-      'data-index': index,
       type: VirtualDomElements.Div,
     },
-    {
-      childCount: 1,
-      className: ClassNames.RunningExtensionActivationTime,
-      'data-index': index,
-      type: VirtualDomElements.Div,
-    },
+    activationTimeNode,
     text(RunningExtensionsStrings.activationTime(Math.round(extension.activationTime))),
     ...activationReasonDom,
   ]

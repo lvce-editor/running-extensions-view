@@ -5,12 +5,12 @@ export const renderEventListeners = (): readonly any[] => {
   return [
     {
       name: DomEventListenerFunctions.HandleContextMenu,
-      params: ['handleContextMenu', 'event.target.dataset.index', EventExpression.ClientX, EventExpression.ClientY],
+      params: ['handleContextMenu', EventExpression.ClientX, EventExpression.ClientY],
       preventDefault: true,
     },
     {
       name: DomEventListenerFunctions.HandleClick,
-      params: ['handleClickAt', 'event.target.dataset.index'],
+      params: ['handleClickAt', EventExpression.ClientY],
       preventDefault: true,
     },
     {

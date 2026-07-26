@@ -13,7 +13,7 @@ export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   ])
   await RunningExtensions.select(0)
   await waitForRender()
-  await expect(RunningExtensions.selectedRow(0)).toHaveCount(1)
+  await expect(RunningExtensions.root().locator('.RunningExtension.ExtensionActive .RunningExtensionName')).toHaveText('Sample Extension')
 
   await RunningExtensions.setExtensions([])
 
