@@ -14,7 +14,6 @@ const expectedExtensionVersion = { childCount: 0, text: '1.2.3', type: VirtualDo
 const expectedIcon = {
   childCount: 0,
   className: 'RunningExtensionIcon',
-  'data-index': 0,
   src: '/icons/sample.png',
   type: VirtualDomElements.Img,
 }
@@ -103,7 +102,6 @@ test('registers one delegated click listener and renders the selected extension'
   expect(dom).toContainEqual(
     expect.objectContaining({
       className: mergeClassNames('RunningExtension', 'ExtensionActive'),
-      'data-index': 1,
     }),
   )
 })
@@ -116,7 +114,6 @@ test('falls back to the extension id and default icon', () => {
   expect(dom).toContainEqual({
     childCount: 0,
     className: mergeClassNames('RunningExtensionIcon', 'RunningExtensionDefaultIcon', 'MaskIcon', 'MaskIconExtensions'),
-    'data-index': 0,
     role: AriaRoles.None,
     type: VirtualDomElements.Div,
   })
@@ -136,7 +133,7 @@ test('renders a focus outline on the focused extension', () => {
 
   const rows = dom.filter((node) => node.role === AriaRoles.ListItem)
   expect(rows).toEqual([
-    expect.objectContaining({ className: 'RunningExtension', 'data-index': 0 }),
-    expect.objectContaining({ className: mergeClassNames('RunningExtension', 'FocusOutline'), 'data-index': 1 }),
+    expect.objectContaining({ className: 'RunningExtension' }),
+    expect.objectContaining({ className: mergeClassNames('RunningExtension', 'FocusOutline') }),
   ])
 })

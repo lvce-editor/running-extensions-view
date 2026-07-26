@@ -32,20 +32,23 @@ export const test: Test = async ({ ClipBoard, Command, ContextMenu, expect, Loca
 
   const outlinedRows = Locator('.RunningExtension.FocusOutline')
 
-  await RunningExtensions.handleContextMenu(1)
+  // eslint-disable-next-line e2e/no-direct-click -- verifies delegated context menu handling
+  await RunningExtensions.row(1).click({ button: 'right' })
   await expect(outlinedRows).toHaveCount(1)
   await ContextMenu.selectItem('Copy id (second.extension)')
   await RunningExtensions.select(0)
   await waitForRender()
   await expect(outlinedRows).toHaveCount(0)
 
-  await RunningExtensions.handleContextMenu(1)
+  // eslint-disable-next-line e2e/no-direct-click -- verifies delegated context menu handling
+  await RunningExtensions.row(1).click({ button: 'right' })
   await expect(outlinedRows).toHaveCount(1)
   await ContextMenu.selectItem('Copy id (second.extension)')
   await Command.execute('RunningExtensions.handleClickAt', 10_000)
   await expect(outlinedRows).toHaveCount(0)
 
-  await RunningExtensions.handleContextMenu(1)
+  // eslint-disable-next-line e2e/no-direct-click -- verifies delegated context menu handling
+  await RunningExtensions.row(1).click({ button: 'right' })
   await expect(outlinedRows).toHaveCount(1)
   await ContextMenu.selectItem('Copy id (second.extension)')
   await Command.execute('RunningExtensions.handleBlur')

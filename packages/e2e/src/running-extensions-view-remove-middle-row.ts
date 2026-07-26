@@ -16,5 +16,4 @@ export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   await expect(RunningExtensions.name(0)).toHaveText('First')
   await expect(RunningExtensions.name(1)).toHaveText('Third')
   await expect(RunningExtensions.id(1)).toHaveText('third.extension')
-  await expect(RunningExtensions.row(1)).toHaveAttribute('data-index', '1')
 }

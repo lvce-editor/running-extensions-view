@@ -13,12 +13,12 @@ export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   await RunningExtensions.setExtensions([first])
   await RunningExtensions.select(0)
   await waitForRender()
-  await expect(RunningExtensions.selectedRow(0)).toHaveCount(1)
+  const selectedName = RunningExtensions.root().locator('.RunningExtension.ExtensionActive .RunningExtensionName')
+  await expect(selectedName).toHaveText('First')
 
   await RunningExtensions.setExtensions([first, second])
 
-  await expect(RunningExtensions.selectedRow(0)).toHaveCount(1)
-  await expect(RunningExtensions.selectedRow(1)).toHaveCount(0)
+  await expect(selectedName).toHaveText('First')
   await expect(RunningExtensions.name(0)).toHaveText('First')
   await expect(RunningExtensions.name(1)).toHaveText('Second')
 }

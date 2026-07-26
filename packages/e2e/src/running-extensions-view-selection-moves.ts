@@ -27,11 +27,11 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
   // eslint-disable-next-line e2e/no-direct-click -- verifies selection transitions between rows
   await secondRow.click()
   await waitForRender()
-  await expect(selectedRow).toHaveAttribute('data-index', '1')
+  await expect(selectedRow.locator('.RunningExtensionName')).toHaveText('Second')
 
   // eslint-disable-next-line e2e/no-direct-click -- verifies selection transitions between rows
   await firstRow.click()
   await waitForRender()
   await expect(selectedRow).toHaveCount(1)
-  await expect(selectedRow).toHaveAttribute('data-index', '0')
+  await expect(selectedRow.locator('.RunningExtensionName')).toHaveText('First')
 }

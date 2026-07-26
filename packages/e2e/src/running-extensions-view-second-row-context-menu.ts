@@ -25,7 +25,8 @@ export const test: Test = async ({ expect, Locator, RunningExtensions }: TestApi
     },
   ])
 
-  await RunningExtensions.handleContextMenu(1)
+  // eslint-disable-next-line e2e/no-direct-click -- verifies delegated context menu handling for the second row
+  await RunningExtensions.row(1).click({ button: 'right' })
 
   const menuEntries = Locator('.Menu > [role]')
   const copyId = menuEntries.first()

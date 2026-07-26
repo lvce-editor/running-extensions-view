@@ -22,6 +22,6 @@ export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   await RunningExtensions.select(1)
   await waitForRender()
 
-  await expect(RunningExtensions.selectedRow(0)).toHaveCount(0)
-  await expect(RunningExtensions.selectedRow(1)).toHaveCount(1)
+  const selectedName = RunningExtensions.root().locator('.RunningExtension.ExtensionActive .RunningExtensionName')
+  await expect(selectedName).toHaveText('Extension 1')
 }

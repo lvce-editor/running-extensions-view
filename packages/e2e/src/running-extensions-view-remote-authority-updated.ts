@@ -20,5 +20,4 @@ export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
 
   await expect(RunningExtensions.remoteAuthority(0)).toHaveCount(1)
   await expect(RunningExtensions.remoteAuthority(0)).toHaveText('SSH: second.example.com')
-  await expect(RunningExtensions.remoteAuthority(0)).toHaveAttribute('data-index', '0')
 }

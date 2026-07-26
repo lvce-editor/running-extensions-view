@@ -6,12 +6,12 @@ test('registers the context menu listener', () => {
   expect(renderEventListeners()).toEqual([
     {
       name: DomEventListenerFunctions.HandleContextMenu,
-      params: ['handleContextMenu', 'event.target.dataset.index', 'event.clientX', 'event.clientY'],
+      params: ['handleContextMenu', 'event.clientX', 'event.clientY'],
       preventDefault: true,
     },
     {
       name: DomEventListenerFunctions.HandleClick,
-      params: ['handleClickAt', 'event.target.dataset.index'],
+      params: ['handleClickAt', 'event.clientY'],
       preventDefault: true,
     },
     {

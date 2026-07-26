@@ -20,7 +20,8 @@ export const test: Test = async ({ expect, Locator, RunningExtensions }: TestApi
 
   await expect(RunningExtensions.row(0)).toBeVisible()
 
-  await RunningExtensions.handleContextMenu(0)
+  // eslint-disable-next-line e2e/no-direct-click -- verifies delegated context menu handling
+  await RunningExtensions.row(0).click({ button: 'right' })
 
   const menuEntries = Locator('.Menu > [role]')
   await expect(menuEntries).toHaveCount(7)
