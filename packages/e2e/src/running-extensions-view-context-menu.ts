@@ -4,7 +4,7 @@ export const name = 'running-extensions-view-context-menu'
 
 export const skip = ['webkit'] as const
 
-export const test: Test = async ({ expect, Locator, RunningExtensions }: TestApi) => {
+export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
   await RunningExtensions.show()
   await RunningExtensions.setExtensions([
     {
@@ -20,8 +20,7 @@ export const test: Test = async ({ expect, Locator, RunningExtensions }: TestApi
 
   await expect(RunningExtensions.row(0)).toBeVisible()
 
-  // eslint-disable-next-line e2e/no-direct-click -- verifies delegated context menu handling
-  await RunningExtensions.row(0).click({ button: 'right' })
+  await Command.execute('RunningExtensions.handleContextMenu', 0, 72)
 
   const menuEntries = Locator('.Menu > [role]')
   await expect(menuEntries).toHaveCount(7)

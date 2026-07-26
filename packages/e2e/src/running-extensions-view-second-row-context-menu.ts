@@ -4,7 +4,7 @@ export const name = 'running-extensions-view-second-row-context-menu'
 
 export const skip = ['webkit'] as const
 
-export const test: Test = async ({ expect, Locator, RunningExtensions }: TestApi) => {
+export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
   await RunningExtensions.show()
   await RunningExtensions.setExtensions([
     {
@@ -25,8 +25,7 @@ export const test: Test = async ({ expect, Locator, RunningExtensions }: TestApi
     },
   ])
 
-  // eslint-disable-next-line e2e/no-direct-click -- verifies delegated context menu handling for the second row
-  await RunningExtensions.row(1).click({ button: 'right' })
+  await Command.execute('RunningExtensions.handleContextMenu', 0, 144)
 
   const menuEntries = Locator('.Menu > [role]')
   const copyId = menuEntries.first()
