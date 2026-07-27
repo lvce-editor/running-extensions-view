@@ -27,9 +27,8 @@ test('registers the context menu listener on the list', () => {
     onBlur: DomEventListenerFunctions.HandleBlur,
     onClick: DomEventListenerFunctions.HandleClick,
     onContextMenu: DomEventListenerFunctions.HandleContextMenu,
-    role: AriaRoles.List,
     tabIndex: TabIndex.Focusable,
-    type: VirtualDomElements.Div,
+    type: VirtualDomElements.Ul,
   })
 })
 
@@ -60,6 +59,10 @@ test('renders a loading message before content is loaded', () => {
 
 test('renders an empty message when no extensions are running', () => {
   const dom = getRunningExtensionsVirtualDom([], true)
+  expect(dom[1]).toMatchObject({
+    className: 'RunningExtensionsEmpty',
+    type: VirtualDomElements.Li,
+  })
   expect(dom[2]).toEqual(expectedEmptyMessage)
 })
 
@@ -131,7 +134,7 @@ test('renders a focus outline on the focused extension', () => {
   }
   const dom = getRunningExtensionsVirtualDom([extension, extension], true, 1, -1, true)
 
-  const rows = dom.filter((node) => node.role === AriaRoles.ListItem)
+  const rows = dom.filter((node) => node.type === VirtualDomElements.Li)
   expect(rows).toEqual([
     expect.objectContaining({ className: 'RunningExtension' }),
     expect.objectContaining({ className: mergeClassNames('RunningExtension', 'FocusOutline') }),

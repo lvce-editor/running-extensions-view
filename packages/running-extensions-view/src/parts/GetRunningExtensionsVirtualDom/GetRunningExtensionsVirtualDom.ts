@@ -1,6 +1,5 @@
 import { mergeClassNames, type VirtualDomNode, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
 import type { RunningExtension } from '../RunningExtension/RunningExtension.ts'
-import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
 import * as ClassNames from '../ClassNames/ClassNames.ts'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import { getExtensionVirtualDom } from '../GetExtensionVirtualDom/GetExtensionVirtualDom.ts'
@@ -24,9 +23,8 @@ export const getRunningExtensionsVirtualDom = (
       onBlur: DomEventListenerFunctions.HandleBlur,
       onClick: DomEventListenerFunctions.HandleClick,
       onContextMenu: DomEventListenerFunctions.HandleContextMenu,
-      role: AriaRoles.List,
       tabIndex: TabIndex.Focusable,
-      type: VirtualDomElements.Div,
+      type: VirtualDomElements.Ul,
     },
     ...extensions.flatMap((extension, index) => getExtensionVirtualDom(extension, focusOutline && index === focusedIndex, index === selectedIndex)),
   ]
