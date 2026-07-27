@@ -1,4 +1,5 @@
 import { mergeClassNames, type VirtualDomNode, text, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
+import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
 import * as ClassNames from '../ClassNames/ClassNames.ts'
 import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
@@ -24,6 +25,7 @@ export const getRunningExtensionsEmptyDom = (loaded: boolean): readonly VirtualD
       onBlur: DomEventListenerFunctions.HandleBlur,
       onClick: DomEventListenerFunctions.HandleClick,
       onContextMenu: DomEventListenerFunctions.HandleContextMenu,
+      role: AriaRoles.List,
       tabIndex: TabIndex.Focusable,
       type: VirtualDomElements.Ul,
     },

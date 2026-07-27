@@ -1,5 +1,6 @@
 import { mergeClassNames, text, type VirtualDomNode, VirtualDomElements } from '@lvce-editor/virtual-dom-worker'
 import type { RunningExtension } from '../RunningExtension/RunningExtension.ts'
+import * as AriaRoles from '../AriaRoles/AriaRoles.ts'
 import * as ClassNames from '../ClassNames/ClassNames.ts'
 import { getIconVirtualDom } from '../GetIconVirtualDom/GetIconVirtualDom.ts'
 import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
@@ -108,6 +109,7 @@ export const getExtensionVirtualDom = (extension: RunningExtension, focused = fa
     {
       childCount: 3,
       className,
+      role: AriaRoles.ListItem,
       type: VirtualDomElements.Li,
     },
     ...getIconVirtualDom(extension),

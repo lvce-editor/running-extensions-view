@@ -27,6 +27,7 @@ test('registers the context menu listener on the list', () => {
     onBlur: DomEventListenerFunctions.HandleBlur,
     onClick: DomEventListenerFunctions.HandleClick,
     onContextMenu: DomEventListenerFunctions.HandleContextMenu,
+    role: AriaRoles.List,
     tabIndex: TabIndex.Focusable,
     type: VirtualDomElements.Ul,
   })
