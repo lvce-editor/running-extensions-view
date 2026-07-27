@@ -26,7 +26,7 @@ export const getRunningExtensionsVirtualDom = (
       onContextMenu: DomEventListenerFunctions.HandleContextMenu,
       role: AriaRoles.List,
       tabIndex: TabIndex.Focusable,
-      type: VirtualDomElements.Div,
+      type: VirtualDomElements.Ul,
     },
     ...extensions.flatMap((extension, index) => getExtensionVirtualDom(extension, focusOutline && index === focusedIndex, index === selectedIndex)),
   ]

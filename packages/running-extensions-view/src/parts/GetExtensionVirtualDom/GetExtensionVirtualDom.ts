@@ -110,7 +110,7 @@ export const getExtensionVirtualDom = (extension: RunningExtension, focused = fa
       childCount: 3,
       className,
       role: AriaRoles.ListItem,
-      type: VirtualDomElements.Div,
+      type: VirtualDomElements.Li,
     },
     ...getIconVirtualDom(extension),
     {

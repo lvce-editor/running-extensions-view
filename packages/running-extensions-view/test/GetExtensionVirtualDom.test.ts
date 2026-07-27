@@ -10,7 +10,7 @@ const expectedActivationDetails = {
 }
 
 const expectedDom = [
-  { childCount: 3, className: 'RunningExtension', role: AriaRoles.ListItem, type: VirtualDomElements.Div },
+  { childCount: 3, className: 'RunningExtension', role: AriaRoles.ListItem, type: VirtualDomElements.Li },
   { childCount: 0, className: 'RunningExtensionIcon', src: '/icons/sample.png', type: VirtualDomElements.Img },
   { childCount: 2, className: 'RunningExtensionDetails', type: VirtualDomElements.Div },
   { childCount: 2, className: 'RunningExtensionTitle', type: VirtualDomElements.Div },

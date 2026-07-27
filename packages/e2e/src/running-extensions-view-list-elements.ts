@@ -1,6 +1,6 @@
 import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
-export const name = 'running-extensions-view-all-row-roles'
+export const name = 'running-extensions-view-list-elements'
 
 export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   await RunningExtensions.show()
@@ -10,7 +10,8 @@ export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
     { activationEvent: '', activationTime: 3, icon: '', id: 'third.extension', name: 'Third', version: '3.0.0' },
   ])
 
-  await expect(RunningExtensions.row(0)).toHaveAttribute('role', 'listitem')
-  await expect(RunningExtensions.row(1)).toHaveAttribute('role', 'listitem')
-  await expect(RunningExtensions.row(2)).toHaveAttribute('role', 'listitem')
+  await expect(RunningExtensions.root()).toHaveJSProperty('tagName', 'UL')
+  await expect(RunningExtensions.row(0)).toHaveJSProperty('tagName', 'LI')
+  await expect(RunningExtensions.row(1)).toHaveJSProperty('tagName', 'LI')
+  await expect(RunningExtensions.row(2)).toHaveJSProperty('tagName', 'LI')
 }
