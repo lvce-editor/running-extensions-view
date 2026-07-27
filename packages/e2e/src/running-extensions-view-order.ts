@@ -5,7 +5,7 @@ export const name = 'running-extensions-view-order'
 export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   await RunningExtensions.show()
   await RunningExtensions.setExtensions(
-    ['First', 'Second', 'Third'].map((name) => ({
+    ['Third', 'First', 'Second'].map((name) => ({
       activationEvent: 'onStartupFinished',
       activationTime: 1,
       icon: '',
