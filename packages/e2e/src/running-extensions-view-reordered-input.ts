@@ -1,6 +1,6 @@
 import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
-export const name = 'running-extensions-view-reorder'
+export const name = 'running-extensions-view-reordered-input'
 
 export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
   const first = {
@@ -34,8 +34,8 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
 
   await Command.execute('RunningExtensions.setExtensions', [second, first])
 
-  await expect(firstId).toHaveText('second.extension')
-  await expect(firstVersion).toHaveText('2.0.0')
-  await expect(secondId).toHaveText('first.extension')
-  await expect(secondVersion).toHaveText('1.0.0')
+  await expect(firstId).toHaveText('first.extension')
+  await expect(firstVersion).toHaveText('1.0.0')
+  await expect(secondId).toHaveText('second.extension')
+  await expect(secondVersion).toHaveText('2.0.0')
 }
