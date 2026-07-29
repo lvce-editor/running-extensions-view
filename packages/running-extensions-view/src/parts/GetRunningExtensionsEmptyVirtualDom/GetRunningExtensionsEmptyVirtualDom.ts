@@ -5,6 +5,17 @@ import * as DomEventListenerFunctions from '../DomEventListenerFunctions/DomEven
 import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
 import * as TabIndex from '../TabIndex/TabIndex.ts'
 
+const runningExtensionsNode: VirtualDomNode = {
+  childCount: 1,
+  className: mergeClassNames(ClassNames.RunningExtensions, ClassNames.Grow),
+  onBlur: DomEventListenerFunctions.HandleBlur,
+  onClick: DomEventListenerFunctions.HandleClick,
+  onContextMenu: DomEventListenerFunctions.HandleContextMenu,
+  role: AriaRoles.List,
+  tabIndex: TabIndex.Focusable,
+  type: VirtualDomElements.Ul,
+}
+
 const emptyNode: VirtualDomNode = {
   childCount: 1,
   className: ClassNames.RunningExtensionsEmpty,
@@ -18,18 +29,5 @@ const getMessage = (loaded: boolean): string => {
 
 export const getRunningExtensionsEmptyDom = (loaded: boolean): readonly VirtualDomNode[] => {
   const message = getMessage(loaded)
-  return [
-    {
-      childCount: 1,
-      className: mergeClassNames(ClassNames.RunningExtensions, ClassNames.Grow),
-      onBlur: DomEventListenerFunctions.HandleBlur,
-      onClick: DomEventListenerFunctions.HandleClick,
-      onContextMenu: DomEventListenerFunctions.HandleContextMenu,
-      role: AriaRoles.List,
-      tabIndex: TabIndex.Focusable,
-      type: VirtualDomElements.Ul,
-    },
-    emptyNode,
-    text(message),
-  ]
+  return [runningExtensionsNode, emptyNode, text(message)]
 }

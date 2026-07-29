@@ -37,6 +37,12 @@ const idNode: VirtualDomNode = {
   type: VirtualDomElements.Div,
 }
 
+const remoteAuthorityNode: VirtualDomNode = {
+  childCount: 1,
+  className: mergeClassNames(ClassNames.RunningExtensionId, ClassNames.RunningExtensionRemoteAuthority),
+  type: VirtualDomElements.Div,
+}
+
 const activationTimeNode: VirtualDomNode = {
   childCount: 1,
   className: ClassNames.RunningExtensionActivationTime,
@@ -77,14 +83,7 @@ const getRemoteAuthorityVirtualDom = (remoteAuthority: string | undefined): read
     return []
   }
   const host = remoteAuthority.startsWith(sshRemotePrefix) ? remoteAuthority.slice(sshRemotePrefix.length) : remoteAuthority
-  return [
-    {
-      childCount: 1,
-      className: mergeClassNames(ClassNames.RunningExtensionId, ClassNames.RunningExtensionRemoteAuthority),
-      type: VirtualDomElements.Div,
-    },
-    text(RunningExtensionsStrings.ssh(host)),
-  ]
+  return [remoteAuthorityNode, text(RunningExtensionsStrings.ssh(host))]
 }
 
 const getClassName = (focused: boolean, selected: boolean): string => {
