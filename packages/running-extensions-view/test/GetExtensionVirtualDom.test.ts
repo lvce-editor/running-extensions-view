@@ -195,6 +195,20 @@ test('falls back for invalid names and versions', () => {
   expect(dom).toContainEqual({ childCount: 0, text: '', type: VirtualDomElements.Text })
 })
 
+test('does not render an undefined version string', () => {
+  const dom = getExtensionVirtualDom({
+    activationEvent: '',
+    activationTime: 1,
+    icon: '',
+    id: 'sample.extension',
+    name: 'Sample Extension',
+    version: 'undefined',
+  })
+
+  expect(dom).not.toContainEqual({ childCount: 0, text: 'undefined', type: VirtualDomElements.Text })
+  expect(dom).toContainEqual({ childCount: 0, text: '', type: VirtualDomElements.Text })
+})
+
 test('renders fallback messages for statuses without error details', () => {
   const extension = {
     activationEvent: '',
