@@ -6,6 +6,7 @@ import { getIconVirtualDom } from '../GetIconVirtualDom/GetIconVirtualDom.ts'
 import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
 
 const sshRemotePrefix = 'ssh-remote+'
+const undefinedValue = 'undefined'
 
 const activationReasonNode: VirtualDomNode = {
   childCount: 1,
@@ -99,7 +100,7 @@ const getClassName = (focused: boolean, selected: boolean): string => {
 
 export const getExtensionVirtualDom = (extension: RunningExtension, focused = false, selected = false): readonly VirtualDomNode[] => {
   const displayName = typeof extension.name === 'string' && extension.name ? extension.name : extension.id
-  const displayVersion = typeof extension.version === 'string' ? extension.version : ''
+  const displayVersion = typeof extension.version === 'string' && extension.version !== undefinedValue ? extension.version : ''
   const activationReasonDom = getActivationReasonVirtualDom(extension.activationEvent)
   const statusDom = getStatusVirtualDom(extension)
   const remoteAuthorityDom = getRemoteAuthorityVirtualDom(extension.remoteAuthority)
