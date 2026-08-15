@@ -8,6 +8,7 @@ import * as GetMenuEntryIds from '../GetMenuEntryIds/GetMenuEntryIds.ts'
 import * as HandleBlur from '../HandleBlur/HandleBlur.ts'
 import * as HandleClickAt from '../HandleClickAt/HandleClickAt.ts'
 import * as HandleContextMenu from '../HandleContextMenu/HandleContextMenu.ts'
+import { handleMessagePort } from '../HandleMessagePort/HandleMessagePort.ts'
 import * as LoadContent from '../LoadContent/LoadContent.ts'
 import * as Render2 from '../Render2/Render2.ts'
 import * as RenderEventListeners from '../RenderEventListeners/RenderEventListeners.ts'
@@ -31,6 +32,7 @@ export const commandMap = {
   'RunningExtensions.handleBlur': RunningExtensionsStates.wrapCommand(HandleBlur.handleBlur),
   'RunningExtensions.handleClickAt': RunningExtensionsStates.wrapCommand(HandleClickAt.handleClickAt),
   'RunningExtensions.handleContextMenu': RunningExtensionsStates.wrapCommand(HandleContextMenu.handleContextMenu),
+  'RunningExtensions.handleMessagePort': handleMessagePort,
   'RunningExtensions.loadContent': RunningExtensionsStates.wrapCommand(LoadContent.loadContent),
   'RunningExtensions.render2': Render2.render2,
   'RunningExtensions.renderEventListeners': RenderEventListeners.renderEventListeners,
