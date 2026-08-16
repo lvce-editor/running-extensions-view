@@ -19,6 +19,8 @@ import * as SetExtensions from '../SetExtensions/SetExtensions.ts'
 import * as StartProfile from '../StartProfile/StartProfile.ts'
 import * as TakeHeapSnapshot from '../TakeHeapSnapshot/TakeHeapSnapshot.ts'
 
+const handleDirectMessagePort = (port: MessagePort): Promise<void> => handleMessagePort(port, commandMap)
+
 export const commandMap = {
   'RunningExtensions.copyId': RunningExtensionsStates.wrapCommand(CopyId.copyId),
   'RunningExtensions.create': Create.create,
@@ -32,7 +34,7 @@ export const commandMap = {
   'RunningExtensions.handleBlur': RunningExtensionsStates.wrapCommand(HandleBlur.handleBlur),
   'RunningExtensions.handleClickAt': RunningExtensionsStates.wrapCommand(HandleClickAt.handleClickAt),
   'RunningExtensions.handleContextMenu': RunningExtensionsStates.wrapCommand(HandleContextMenu.handleContextMenu),
-  'RunningExtensions.handleMessagePort': handleMessagePort,
+  'RunningExtensions.handleMessagePort': handleDirectMessagePort,
   'RunningExtensions.loadContent': RunningExtensionsStates.wrapCommand(LoadContent.loadContent),
   'RunningExtensions.render2': Render2.render2,
   'RunningExtensions.renderEventListeners': RenderEventListeners.renderEventListeners,
