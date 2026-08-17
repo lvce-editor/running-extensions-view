@@ -19,7 +19,7 @@ import * as SetExtensions from '../SetExtensions/SetExtensions.ts'
 import * as StartProfile from '../StartProfile/StartProfile.ts'
 import * as TakeHeapSnapshot from '../TakeHeapSnapshot/TakeHeapSnapshot.ts'
 
-const handleDirectMessagePort = (port: MessagePort, setAsRendererProcess = true): Promise<void> =>
+const handleDirectMessagePort = (port: MessagePort, setAsRendererProcess?: boolean): Promise<void> =>
   handleMessagePort(port, commandMap, setAsRendererProcess)
 
 export const commandMap = {
