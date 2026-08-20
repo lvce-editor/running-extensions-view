@@ -60,12 +60,12 @@ test('disableWorkspace ignores an invalid index', async () => {
   expect(mockRpc.invocations).toEqual([])
 })
 
-test('reportIssue explains that issue reporting is unsupported without a repository', async () => {
+test('reportIssue ignores an extension without a repository', async () => {
   using mockRpc = DialogWorker.registerMockRpc({
     'ConfirmPrompt.prompt'() {},
   })
   await expect(reportIssue(state, 0)).resolves.toBe(state)
-  expect(mockRpc.invocations).toEqual([['ConfirmPrompt.prompt', 'Reporting issues is not supported for this extension.', undefined]])
+  expect(mockRpc.invocations).toEqual([])
 })
 
 test('reportIssue explains that issue reporting is unsupported for an invalid repository', async () => {
