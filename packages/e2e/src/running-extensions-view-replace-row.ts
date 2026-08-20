@@ -2,9 +2,9 @@ import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-replace-row'
 
-export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
+export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   await RunningExtensions.show()
-  await Command.execute('RunningExtensions.setExtensions', [
+  await RunningExtensions.setExtensions([
     {
       activationEvent: 'onStartupFinished',
       activationTime: 1,
@@ -14,10 +14,9 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
       version: '1.0.0',
     },
   ])
-  const name = Locator('.RunningExtensionName')
-  await expect(name).toHaveText('Old Extension')
+  await expect(RunningExtensions.name(0)).toHaveText('Old Extension')
 
-  await Command.execute('RunningExtensions.setExtensions', [
+  await RunningExtensions.setExtensions([
     {
       activationEvent: 'onStartupFinished',
       activationTime: 2,
@@ -28,9 +27,7 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
     },
   ])
 
-  const rows = Locator('.RunningExtension')
-  const id = Locator('.RunningExtensionId')
-  await expect(rows).toHaveCount(1)
-  await expect(name).toHaveText('New Extension')
-  await expect(id).toHaveText('new.extension')
+  await expect(RunningExtensions.rows()).toHaveCount(1)
+  await expect(RunningExtensions.name(0)).toHaveText('New Extension')
+  await expect(RunningExtensions.id(0)).toHaveText('new.extension')
 }

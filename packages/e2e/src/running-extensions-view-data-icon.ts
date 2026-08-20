@@ -2,10 +2,10 @@ import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-data-icon'
 
-export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
+export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   const icon = 'data:image/svg+xml,icon'
   await RunningExtensions.show()
-  await Command.execute('RunningExtensions.setExtensions', [
+  await RunningExtensions.setExtensions([
     {
       activationEvent: 'onStartupFinished',
       activationTime: 1,
@@ -16,6 +16,5 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
     },
   ])
 
-  const image = Locator('img.RunningExtensionIcon')
-  await expect(image).toHaveAttribute('src', icon)
+  await expect(RunningExtensions.icon(0)).toHaveAttribute('src', icon)
 }

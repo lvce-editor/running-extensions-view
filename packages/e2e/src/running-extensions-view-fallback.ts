@@ -2,9 +2,9 @@ import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-fallback'
 
-export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
+export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   await RunningExtensions.show()
-  await Command.execute('RunningExtensions.setExtensions', [
+  await RunningExtensions.setExtensions([
     {
       activationEvent: '',
       activationTime: 0,
@@ -15,10 +15,7 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
     },
   ])
 
-  const extension = Locator('.RunningExtension').first()
-  await expect(extension.locator('.RunningExtensionName')).toHaveText('sample.extension')
-
-  const defaultIcon = extension.locator('.RunningExtensionDefaultIcon')
-  await expect(defaultIcon).toBeVisible()
-  await expect(defaultIcon).toHaveAttribute('role', 'none')
+  await expect(RunningExtensions.name(0)).toHaveText('sample.extension')
+  await expect(RunningExtensions.defaultIcon(0)).toBeVisible()
+  await expect(RunningExtensions.defaultIcon(0)).toHaveAttribute('role', 'none')
 }

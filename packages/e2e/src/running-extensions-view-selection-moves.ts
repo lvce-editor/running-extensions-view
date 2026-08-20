@@ -2,6 +2,10 @@ import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-selection-moves'
 
+const waitForRender = async (): Promise<void> => {
+  await new Promise((resolve) => setTimeout(resolve, 50))
+}
+
 export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
   await RunningExtensions.show()
   await Command.execute(
@@ -22,10 +26,12 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
   const selectedRow = Locator('.RunningExtension.ExtensionActive')
   // eslint-disable-next-line e2e/no-direct-click -- verifies selection transitions between rows
   await secondRow.click()
-  await expect(selectedRow).toHaveAttribute('data-index', '1')
+  await waitForRender()
+  await expect(selectedRow.locator('.RunningExtensionName')).toHaveText('Second')
 
   // eslint-disable-next-line e2e/no-direct-click -- verifies selection transitions between rows
   await firstRow.click()
+  await waitForRender()
   await expect(selectedRow).toHaveCount(1)
-  await expect(selectedRow).toHaveAttribute('data-index', '0')
+  await expect(selectedRow.locator('.RunningExtensionName')).toHaveText('First')
 }

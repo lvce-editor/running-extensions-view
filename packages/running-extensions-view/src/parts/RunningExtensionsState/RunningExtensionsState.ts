@@ -4,6 +4,7 @@ export interface RunningExtensionsState {
   readonly assetDir: string
   readonly extensions: readonly RunningExtension[]
   readonly focusedIndex: number
+  readonly focusOutline: boolean
   readonly height: number
   readonly itemHeight: number
   readonly loaded: boolean

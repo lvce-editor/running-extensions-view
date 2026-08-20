@@ -2,6 +2,10 @@ import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-selection-persists-on-update'
 
+const waitForRender = async (): Promise<void> => {
+  await new Promise((resolve) => setTimeout(resolve, 50))
+}
+
 export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
   const extensions = ['First', 'Second'].map((name, index) => ({
     activationEvent: 'onStartupFinished',
@@ -18,7 +22,8 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
   const selectedRow = Locator('.RunningExtension.ExtensionActive')
   // eslint-disable-next-line e2e/no-direct-click -- verifies selection state across a data refresh
   await secondRow.click()
-  await expect(selectedRow).toHaveAttribute('data-index', '1')
+  await waitForRender()
+  await expect(selectedRow.locator('.RunningExtensionName')).toHaveText('Second')
 
   const updatedExtensions = extensions.map((extension: Readonly<(typeof extensions)[number]>) => ({
     ...extension,
@@ -28,7 +33,6 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
   await Command.execute('RunningExtensions.setExtensions', updatedExtensions)
 
   await expect(selectedRow).toHaveCount(1)
-  await expect(selectedRow).toHaveAttribute('data-index', '1')
   await expect(selectedRow.locator('.RunningExtensionName')).toHaveText('Updated Second')
   await expect(selectedRow.locator('.RunningExtensionVersion')).toHaveText('2.0.0')
 }

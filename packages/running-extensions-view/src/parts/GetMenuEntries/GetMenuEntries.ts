@@ -52,6 +52,7 @@ export const getMenuEntries = (state: RunningExtensionsState): readonly MenuEntr
       label: '',
     },
     {
+      args,
       command: 'RunningExtensions.startProfile',
       flags: MenuItemFlags.None,
       id: 'startProfile',

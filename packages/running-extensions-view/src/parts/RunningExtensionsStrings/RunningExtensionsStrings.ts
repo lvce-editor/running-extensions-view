@@ -27,6 +27,12 @@ export const disableWorkspace = (): string => {
   return I18nString.i18nString(UiStrings.DisableWorkspace)
 }
 
+export const errorStatus = (message: string): string => {
+  return I18nString.i18nString(UiStrings.ErrorStatus, {
+    PH1: message,
+  })
+}
+
 export const extensionApiElectron = (id: string): string => {
   return I18nString.i18nString(UiStrings.ExtensionApiElectron, {
     PH1: id,
@@ -65,4 +71,10 @@ export const startExtensionHostProfile = (): string => {
 
 export const takeHeapSnapshot = (): string => {
   return I18nString.i18nString(UiStrings.TakeHeapSnapshot)
+}
+
+export const terminatedStatus = (message: string): string => {
+  return I18nString.i18nString(UiStrings.TerminatedStatus, {
+    PH1: message,
+  })
 }

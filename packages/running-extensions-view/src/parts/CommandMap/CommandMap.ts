@@ -5,8 +5,10 @@ import * as Disable from '../Disable/Disable.ts'
 import * as DisableWorkspace from '../DisableWorkspace/DisableWorkspace.ts'
 import * as GetMenuEntries from '../GetMenuEntries/GetMenuEntries.ts'
 import * as GetMenuEntryIds from '../GetMenuEntryIds/GetMenuEntryIds.ts'
+import * as HandleBlur from '../HandleBlur/HandleBlur.ts'
 import * as HandleClickAt from '../HandleClickAt/HandleClickAt.ts'
 import * as HandleContextMenu from '../HandleContextMenu/HandleContextMenu.ts'
+import { handleMessagePort } from '../HandleMessagePort/HandleMessagePort.ts'
 import * as LoadContent from '../LoadContent/LoadContent.ts'
 import * as Render2 from '../Render2/Render2.ts'
 import * as RenderEventListeners from '../RenderEventListeners/RenderEventListeners.ts'
@@ -16,6 +18,9 @@ import * as RunningExtensionsStates from '../RunningExtensionsStates/RunningExte
 import * as SetExtensions from '../SetExtensions/SetExtensions.ts'
 import * as StartProfile from '../StartProfile/StartProfile.ts'
 import * as TakeHeapSnapshot from '../TakeHeapSnapshot/TakeHeapSnapshot.ts'
+
+const handleDirectMessagePort = (port: MessagePort, setAsRendererProcess?: boolean): Promise<void> =>
+  handleMessagePort(port, commandMap, setAsRendererProcess)
 
 export const commandMap = {
   'RunningExtensions.copyId': RunningExtensionsStates.wrapCommand(CopyId.copyId),
@@ -27,8 +32,10 @@ export const commandMap = {
   'RunningExtensions.getCommandIds': RunningExtensionsStates.getCommandIds,
   'RunningExtensions.getMenuEntries': RunningExtensionsStates.wrapGetter(GetMenuEntries.getMenuEntries),
   'RunningExtensions.getMenuEntryIds': GetMenuEntryIds.getMenuEntryIds,
+  'RunningExtensions.handleBlur': RunningExtensionsStates.wrapCommand(HandleBlur.handleBlur),
   'RunningExtensions.handleClickAt': RunningExtensionsStates.wrapCommand(HandleClickAt.handleClickAt),
   'RunningExtensions.handleContextMenu': RunningExtensionsStates.wrapCommand(HandleContextMenu.handleContextMenu),
+  'RunningExtensions.handleMessagePort': handleDirectMessagePort,
   'RunningExtensions.loadContent': RunningExtensionsStates.wrapCommand(LoadContent.loadContent),
   'RunningExtensions.render2': Render2.render2,
   'RunningExtensions.renderEventListeners': RenderEventListeners.renderEventListeners,

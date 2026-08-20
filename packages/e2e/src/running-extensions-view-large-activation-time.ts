@@ -2,9 +2,9 @@ import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-large-activation-time'
 
-export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
+export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   await RunningExtensions.show()
-  await Command.execute('RunningExtensions.setExtensions', [
+  await RunningExtensions.setExtensions([
     {
       activationEvent: 'onStartupFinished',
       activationTime: 987_654.6,
@@ -15,6 +15,5 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
     },
   ])
 
-  const activationTime = Locator('.RunningExtensionActivationTime')
-  await expect(activationTime).toHaveText('Activation: 987655ms')
+  await expect(RunningExtensions.activationTime(0)).toHaveText('Activation: 987655ms')
 }

@@ -6,7 +6,7 @@ export const skip = ['webkit'] as const
 
 export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
   await RunningExtensions.show()
-  await Command.execute('RunningExtensions.setExtensions', [
+  await RunningExtensions.setExtensions([
     {
       activationEvent: 'onCommand:test.running-extension',
       activationTime: 1,
@@ -18,10 +18,9 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
     },
   ])
 
-  const firstExtension = Locator('.RunningExtension').first()
-  await expect(firstExtension).toBeVisible()
+  await expect(RunningExtensions.row(0)).toBeVisible()
 
-  await RunningExtensions.handleContextMenu(0)
+  await Command.execute('RunningExtensions.handleContextMenu', 0, 72)
 
   const menuEntries = Locator('.Menu > [role]')
   await expect(menuEntries).toHaveCount(7)

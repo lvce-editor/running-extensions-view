@@ -1,33 +1,28 @@
 import { PlatformType } from '@lvce-editor/constants'
-import { RendererWorker } from '@lvce-editor/rpc-registry'
+import { DialogWorker, MainProcess, RendererWorker } from '@lvce-editor/rpc-registry'
+import type { RunningExtension } from '../RunningExtension/RunningExtension.ts'
 import type { RunningExtensionsState } from '../RunningExtensionsState/RunningExtensionsState.ts'
 import * as RunningExtensionsStrings from '../RunningExtensionsStrings/RunningExtensionsStrings.ts'
 
-interface TakeHeapSnapshotError {
-  readonly error: string
-  readonly ok: false
+const canTakeHeapSnapshot = (platform: number, extension: RunningExtension): boolean => {
+  return !(!extension || platform !== PlatformType.Electron || !extension.isolated)
 }
-
-interface TakeHeapSnapshotSuccess {
-  readonly ok: true
-  readonly uri: string
-}
-
-type TakeHeapSnapshotResult = TakeHeapSnapshotError | TakeHeapSnapshotSuccess
 
 export const takeHeapSnapshot = async (state: RunningExtensionsState, index: number): Promise<RunningExtensionsState> => {
   const { extensions, platform } = state
   const extension = extensions[index]
-  if (!extension || platform !== PlatformType.Electron || !extension.isolated) {
+  if (!canTakeHeapSnapshot(platform, extension)) {
     return state
   }
   const windowId = await RendererWorker.getWindowId()
   const workerName = extension.workerName || RunningExtensionsStrings.extensionApiElectron(extension.id)
-  const result = (await RendererWorker.invoke('Developer.takeWorkerHeapSnapshot', windowId, workerName)) as TakeHeapSnapshotResult
-  if (!result.ok) {
-    await RendererWorker.confirm(result.error)
+  try {
+    const uri = await MainProcess.invoke('ElectronDeveloper.takeWorkerHeapSnapshot', windowId, workerName)
+    await RendererWorker.invoke('Main.openUri', uri)
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+    await DialogWorker.invoke('ConfirmPrompt.prompt', message, undefined)
     return state
   }
-  await RendererWorker.invoke('Main.openUri', result.uri)
   return state
 }

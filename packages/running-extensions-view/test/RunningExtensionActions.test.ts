@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals'
-import { ClipBoardWorker, ExtensionManagementWorker, RendererWorker } from '@lvce-editor/rpc-registry'
+import { ClipBoardWorker, DialogWorker, ExtensionManagementWorker, MainProcess, RendererWorker } from '@lvce-editor/rpc-registry'
 import { copyId } from '../src/parts/CopyId/CopyId.ts'
 import { disable } from '../src/parts/Disable/Disable.ts'
 import { disableWorkspace } from '../src/parts/DisableWorkspace/DisableWorkspace.ts'
@@ -60,16 +60,16 @@ test('disableWorkspace ignores an invalid index', async () => {
   expect(mockRpc.invocations).toEqual([])
 })
 
-test.skip('reportIssue explains that issue reporting is unsupported without a repository', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+test('reportIssue ignores an extension without a repository', async () => {
+  using mockRpc = DialogWorker.registerMockRpc({
     'ConfirmPrompt.prompt'() {},
   })
   await expect(reportIssue(state, 0)).resolves.toBe(state)
-  expect(mockRpc.invocations).toEqual([['ConfirmPrompt.prompt', 'Reporting issues is not supported for this extension.', undefined]])
+  expect(mockRpc.invocations).toEqual([])
 })
 
 test('reportIssue explains that issue reporting is unsupported for an invalid repository', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+  using mockRpc = DialogWorker.registerMockRpc({
     'ConfirmPrompt.prompt'() {},
   })
   const stateWithInvalidRepository = {
@@ -105,22 +105,142 @@ test('reportIssue opens GitHub issues in a new browser tab', async () => {
   expect(mockRpc.invocations).toEqual([['Open.openUrl', 'https://github.com/example/sample-extension/issues']])
 })
 
-test('startProfile explains that extension host profiling is unavailable', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
+test('startProfile profiles the selected isolated extension worker and opens the result', async () => {
+  using mockMainProcessRpc = MainProcess.registerMockRpc({
+    'ElectronDeveloper.takeWorkerCpuProfile'() {
+      return '/home/test/Downloads/sample.cpuprofile'
+    },
+  })
+  using mockRendererRpc = RendererWorker.registerMockRpc({
+    'GetWindowId.getWindowId'() {
+      return 7
+    },
+    'Main.openUri'() {},
+  })
+
+  await expect(startProfile(state, 0)).resolves.toBe(state)
+
+  expect(mockMainProcessRpc.invocations).toEqual([['ElectronDeveloper.takeWorkerCpuProfile', 7, 'Extension API (Electron): sample.extension']])
+  expect(mockRendererRpc.invocations).toEqual([['GetWindowId.getWindowId'], ['Main.openUri', '/home/test/Downloads/sample.cpuprofile']])
+})
+
+test('startProfile profiles the extension host window for a shared extension and opens the result', async () => {
+  using mockMainProcessRpc = MainProcess.registerMockRpc({
+    'ElectronDeveloper.takeWindowCpuProfile'() {
+      return '/home/test/Downloads/shared.cpuprofile'
+    },
+  })
+  using mockRendererRpc = RendererWorker.registerMockRpc({
+    'GetWindowId.getWindowId'() {
+      return 7
+    },
+    'Main.openUri'() {},
+  })
+  const sharedExtensionHostState = {
+    ...state,
+    extensions: [{ id: 'sample.extension', isolated: false }],
+  }
+
+  await expect(startProfile(sharedExtensionHostState, 0)).resolves.toBe(sharedExtensionHostState)
+
+  expect(mockMainProcessRpc.invocations).toEqual([['ElectronDeveloper.takeWindowCpuProfile', 7]])
+  expect(mockRendererRpc.invocations).toEqual([['GetWindowId.getWindowId'], ['Main.openUri', '/home/test/Downloads/shared.cpuprofile']])
+})
+
+test('startProfile uses a custom worker name', async () => {
+  using mockMainProcessRpc = MainProcess.registerMockRpc({
+    'ElectronDeveloper.takeWorkerCpuProfile'() {
+      return '/home/test/Downloads/sample.cpuprofile'
+    },
+  })
+  using mockRendererRpc = RendererWorker.registerMockRpc({
+    'GetWindowId.getWindowId'() {
+      return 7
+    },
+    'Main.openUri'() {},
+  })
+  const stateWithCustomWorkerName = {
+    ...state,
+    extensions: [{ id: 'sample.extension', isolated: true, workerName: 'Sample Extension Worker' }],
+  }
+
+  await startProfile(stateWithCustomWorkerName, 0)
+
+  expect(mockMainProcessRpc.invocations).toEqual([['ElectronDeveloper.takeWorkerCpuProfile', 7, 'Sample Extension Worker']])
+  expect(mockRendererRpc.invocations).toEqual([['GetWindowId.getWindowId'], ['Main.openUri', '/home/test/Downloads/sample.cpuprofile']])
+})
+
+test('startProfile ignores an invalid index', async () => {
+  using mockRpc = RendererWorker.registerMockRpc({})
+
+  await expect(startProfile(state, 4)).resolves.toBe(state)
+  expect(mockRpc.invocations).toEqual([])
+})
+
+test('startProfile shows an error when profiling fails', async () => {
+  using mockMainProcessRpc = MainProcess.registerMockRpc({
+    'ElectronDeveloper.takeWorkerCpuProfile'() {
+      throw new Error('Profiling failed')
+    },
+  })
+  using mockRendererRpc = RendererWorker.registerMockRpc({
+    'GetWindowId.getWindowId'() {
+      return 7
+    },
+  })
+  using mockDialogRpc = DialogWorker.registerMockRpc({
     'ConfirmPrompt.prompt'() {},
   })
-  await expect(startProfile(state)).resolves.toBe(state)
+
+  await startProfile(state, 0)
+
+  expect(mockMainProcessRpc.invocations).toEqual([['ElectronDeveloper.takeWorkerCpuProfile', 7, 'Extension API (Electron): sample.extension']])
+  expect(mockRendererRpc.invocations).toEqual([['GetWindowId.getWindowId']])
+  expect(mockDialogRpc.invocations).toEqual([['ConfirmPrompt.prompt', 'Profiling failed', undefined]])
+})
+
+test('startProfile handles non-error failures', async () => {
+  using mockMainProcessRpc = MainProcess.registerMockRpc({
+    'ElectronDeveloper.takeWorkerCpuProfile'() {
+      throw 'Profiling failed'
+    },
+  })
+  using mockRendererRpc = RendererWorker.registerMockRpc({
+    'GetWindowId.getWindowId'() {
+      return 7
+    },
+  })
+  using mockDialogRpc = DialogWorker.registerMockRpc({
+    'ConfirmPrompt.prompt'() {},
+  })
+
+  await startProfile(state, 0)
+
+  expect(mockMainProcessRpc.invocations).toEqual([['ElectronDeveloper.takeWorkerCpuProfile', 7, 'Extension API (Electron): sample.extension']])
+  expect(mockRendererRpc.invocations).toEqual([['GetWindowId.getWindowId']])
+  expect(mockDialogRpc.invocations).toEqual([['ConfirmPrompt.prompt', 'Profiling failed', undefined]])
+})
+
+test('startProfile explains that extension host profiling is unavailable outside Electron', async () => {
+  using mockRpc = DialogWorker.registerMockRpc({
+    'ConfirmPrompt.prompt'() {},
+  })
+  const browserState = {
+    ...state,
+    platform: 1,
+  }
+
+  await expect(startProfile(browserState, 0)).resolves.toBe(browserState)
   expect(mockRpc.invocations).toEqual([['ConfirmPrompt.prompt', 'Extension host profiling is not available yet.', undefined]])
 })
 
 test('takeHeapSnapshot takes a snapshot of the selected isolated extension worker', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
-    'Developer.takeWorkerHeapSnapshot'() {
-      return {
-        ok: true,
-        uri: '/home/test/Downloads/sample.heapsnapshot',
-      }
+  using mockMainProcessRpc = MainProcess.registerMockRpc({
+    'ElectronDeveloper.takeWorkerHeapSnapshot'() {
+      return '/home/test/Downloads/sample.heapsnapshot'
     },
+  })
+  using mockRendererRpc = RendererWorker.registerMockRpc({
     'GetWindowId.getWindowId'() {
       return 7
     },
@@ -129,11 +249,8 @@ test('takeHeapSnapshot takes a snapshot of the selected isolated extension worke
 
   await expect(takeHeapSnapshot(state, 0)).resolves.toBe(state)
 
-  expect(mockRpc.invocations).toEqual([
-    ['GetWindowId.getWindowId'],
-    ['Developer.takeWorkerHeapSnapshot', 7, 'Extension API (Electron): sample.extension'],
-    ['Main.openUri', '/home/test/Downloads/sample.heapsnapshot'],
-  ])
+  expect(mockMainProcessRpc.invocations).toEqual([['ElectronDeveloper.takeWorkerHeapSnapshot', 7, 'Extension API (Electron): sample.extension']])
+  expect(mockRendererRpc.invocations).toEqual([['GetWindowId.getWindowId'], ['Main.openUri', '/home/test/Downloads/sample.heapsnapshot']])
 })
 
 test('takeHeapSnapshot ignores an invalid index', async () => {
@@ -144,13 +261,12 @@ test('takeHeapSnapshot ignores an invalid index', async () => {
 })
 
 test('takeHeapSnapshot uses a custom worker name', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
-    'Developer.takeWorkerHeapSnapshot'() {
-      return {
-        ok: true,
-        uri: '/home/test/Downloads/sample.heapsnapshot',
-      }
+  using mockMainProcessRpc = MainProcess.registerMockRpc({
+    'ElectronDeveloper.takeWorkerHeapSnapshot'() {
+      return '/home/test/Downloads/sample.heapsnapshot'
     },
+  })
+  using mockRendererRpc = RendererWorker.registerMockRpc({
     'GetWindowId.getWindowId'() {
       return 7
     },
@@ -163,34 +279,52 @@ test('takeHeapSnapshot uses a custom worker name', async () => {
 
   await takeHeapSnapshot(stateWithCustomWorkerName, 0)
 
-  expect(mockRpc.invocations).toEqual([
-    ['GetWindowId.getWindowId'],
-    ['Developer.takeWorkerHeapSnapshot', 7, 'Sample Extension Worker'],
-    ['Main.openUri', '/home/test/Downloads/sample.heapsnapshot'],
-  ])
+  expect(mockMainProcessRpc.invocations).toEqual([['ElectronDeveloper.takeWorkerHeapSnapshot', 7, 'Sample Extension Worker']])
+  expect(mockRendererRpc.invocations).toEqual([['GetWindowId.getWindowId'], ['Main.openUri', '/home/test/Downloads/sample.heapsnapshot']])
 })
 
 test('takeHeapSnapshot shows an error when the worker is not found', async () => {
-  using mockRpc = RendererWorker.registerMockRpc({
-    'ConfirmPrompt.prompt'() {},
-    'Developer.takeWorkerHeapSnapshot'() {
-      return {
-        error: 'Worker not found: Sample Extension Worker',
-        ok: false,
-      }
+  using mockMainProcessRpc = MainProcess.registerMockRpc({
+    'ElectronDeveloper.takeWorkerHeapSnapshot'() {
+      throw new Error('Worker not found: Sample Extension Worker')
     },
+  })
+  using mockRendererRpc = RendererWorker.registerMockRpc({
     'GetWindowId.getWindowId'() {
       return 7
     },
   })
+  using mockDialogRpc = DialogWorker.registerMockRpc({
+    'ConfirmPrompt.prompt'() {},
+  })
 
   await takeHeapSnapshot(state, 0)
 
-  expect(mockRpc.invocations).toEqual([
-    ['GetWindowId.getWindowId'],
-    ['Developer.takeWorkerHeapSnapshot', 7, 'Extension API (Electron): sample.extension'],
-    ['ConfirmPrompt.prompt', 'Worker not found: Sample Extension Worker', undefined],
-  ])
+  expect(mockMainProcessRpc.invocations).toEqual([['ElectronDeveloper.takeWorkerHeapSnapshot', 7, 'Extension API (Electron): sample.extension']])
+  expect(mockRendererRpc.invocations).toEqual([['GetWindowId.getWindowId']])
+  expect(mockDialogRpc.invocations).toEqual([['ConfirmPrompt.prompt', 'Worker not found: Sample Extension Worker', undefined]])
+})
+
+test('takeHeapSnapshot handles non-error failures', async () => {
+  using mockMainProcessRpc = MainProcess.registerMockRpc({
+    'ElectronDeveloper.takeWorkerHeapSnapshot'() {
+      throw 'Snapshot failed'
+    },
+  })
+  using mockRendererRpc = RendererWorker.registerMockRpc({
+    'GetWindowId.getWindowId'() {
+      return 7
+    },
+  })
+  using mockDialogRpc = DialogWorker.registerMockRpc({
+    'ConfirmPrompt.prompt'() {},
+  })
+
+  await takeHeapSnapshot(state, 0)
+
+  expect(mockMainProcessRpc.invocations).toEqual([['ElectronDeveloper.takeWorkerHeapSnapshot', 7, 'Extension API (Electron): sample.extension']])
+  expect(mockRendererRpc.invocations).toEqual([['GetWindowId.getWindowId']])
+  expect(mockDialogRpc.invocations).toEqual([['ConfirmPrompt.prompt', 'Snapshot failed', undefined]])
 })
 
 test('takeHeapSnapshot is unavailable outside electron', async () => {

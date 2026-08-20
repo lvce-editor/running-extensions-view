@@ -3,6 +3,7 @@ import { mergeClassNames, VirtualDomElements } from '@lvce-editor/virtual-dom-wo
 import * as AriaRoles from '../src/parts/AriaRoles/AriaRoles.ts'
 import * as DomEventListenerFunctions from '../src/parts/DomEventListenerFunctions/DomEventListenerFunctions.ts'
 import { getRunningExtensionsVirtualDom } from '../src/parts/GetRunningExtensionsVirtualDom/GetRunningExtensionsVirtualDom.ts'
+import * as TabIndex from '../src/parts/TabIndex/TabIndex.ts'
 
 const expectedActivationReason = { childCount: 0, text: 'Activation reason: onStartupFinished', type: VirtualDomElements.Text }
 const expectedActivationTime = { childCount: 0, text: 'Activation: 13ms', type: VirtualDomElements.Text }
@@ -13,7 +14,6 @@ const expectedExtensionVersion = { childCount: 0, text: '1.2.3', type: VirtualDo
 const expectedIcon = {
   childCount: 0,
   className: 'RunningExtensionIcon',
-  'data-index': 0,
   src: '/icons/sample.png',
   type: VirtualDomElements.Img,
 }
@@ -24,10 +24,12 @@ test('registers the context menu listener on the list', () => {
   expect(dom[0]).toEqual({
     childCount: 1,
     className: mergeClassNames('RunningExtensions', 'Grow'),
+    onBlur: DomEventListenerFunctions.HandleBlur,
     onClick: DomEventListenerFunctions.HandleClick,
     onContextMenu: DomEventListenerFunctions.HandleContextMenu,
     role: AriaRoles.List,
-    type: VirtualDomElements.Div,
+    tabIndex: TabIndex.Focusable,
+    type: VirtualDomElements.Ul,
   })
 })
 
@@ -58,6 +60,10 @@ test('renders a loading message before content is loaded', () => {
 
 test('renders an empty message when no extensions are running', () => {
   const dom = getRunningExtensionsVirtualDom([], true)
+  expect(dom[1]).toMatchObject({
+    className: 'RunningExtensionsEmpty',
+    type: VirtualDomElements.Li,
+  })
   expect(dom[2]).toEqual(expectedEmptyMessage)
 })
 
@@ -100,7 +106,6 @@ test('registers one delegated click listener and renders the selected extension'
   expect(dom).toContainEqual(
     expect.objectContaining({
       className: mergeClassNames('RunningExtension', 'ExtensionActive'),
-      'data-index': 1,
     }),
   )
 })
@@ -113,7 +118,6 @@ test('falls back to the extension id and default icon', () => {
   expect(dom).toContainEqual({
     childCount: 0,
     className: mergeClassNames('RunningExtensionIcon', 'RunningExtensionDefaultIcon', 'MaskIcon', 'MaskIconExtensions'),
-    'data-index': 0,
     role: AriaRoles.None,
     type: VirtualDomElements.Div,
   })
@@ -129,11 +133,11 @@ test('renders a focus outline on the focused extension', () => {
     name: 'Sample Extension',
     version: '1.0.0',
   }
-  const dom = getRunningExtensionsVirtualDom([extension, extension], true, 1)
+  const dom = getRunningExtensionsVirtualDom([extension, extension], true, 1, -1, true)
 
-  const rows = dom.filter((node) => node.role === AriaRoles.ListItem)
+  const rows = dom.filter((node) => node.type === VirtualDomElements.Li)
   expect(rows).toEqual([
-    expect.objectContaining({ className: 'RunningExtension', 'data-index': 0 }),
-    expect.objectContaining({ className: mergeClassNames('RunningExtension', 'FocusOutline'), 'data-index': 1 }),
+    expect.objectContaining({ className: 'RunningExtension' }),
+    expect.objectContaining({ className: mergeClassNames('RunningExtension', 'FocusOutline') }),
   ])
 })
