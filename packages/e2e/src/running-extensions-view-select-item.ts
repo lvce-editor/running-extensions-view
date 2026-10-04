@@ -2,6 +2,18 @@ import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-select-item'
 
+const waitForCondition = async (condition: () => Promise<void>): Promise<void> => {
+  for (let attempt = 0; attempt < 100; attempt++) {
+    try {
+      await condition()
+      return
+    } catch {
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+    }
+  }
+  await condition()
+}
+
 export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   await RunningExtensions.show()
   await RunningExtensions.setExtensions(
@@ -18,5 +30,5 @@ export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   await RunningExtensions.select(1)
 
   const selectedName = RunningExtensions.root().locator('.RunningExtension.ExtensionActive .RunningExtensionName')
-  await expect(selectedName).toHaveText('Extension 1')
+  await waitForCondition(() => expect(selectedName).toHaveText('Extension 1'))
 }

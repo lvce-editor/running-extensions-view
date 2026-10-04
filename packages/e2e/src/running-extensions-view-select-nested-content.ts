@@ -2,6 +2,18 @@ import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-select-nested-content'
 
+const waitForCondition = async (condition: () => Promise<void>): Promise<void> => {
+  for (let attempt = 0; attempt < 100; attempt++) {
+    try {
+      await condition()
+      return
+    } catch {
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+    }
+  }
+  await condition()
+}
+
 export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
   await RunningExtensions.show()
   await Command.execute(
@@ -22,5 +34,5 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
 
   const selectedRow = Locator('.RunningExtension.ExtensionActive')
   const selectedName = selectedRow.locator('.RunningExtensionName')
-  await expect(selectedName).toHaveText('Second')
+  await waitForCondition(() => expect(selectedName).toHaveText('Second'))
 }

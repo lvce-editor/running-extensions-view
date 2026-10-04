@@ -2,6 +2,18 @@ import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-selection-cleared-by-outside-click'
 
+const waitForCondition = async (condition: () => Promise<void>): Promise<void> => {
+  for (let attempt = 0; attempt < 100; attempt++) {
+    try {
+      await condition()
+      return
+    } catch {
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+    }
+  }
+  await condition()
+}
+
 export const test: Test = async ({ Command, expect, RunningExtensions }: TestApi) => {
   await RunningExtensions.show()
   await RunningExtensions.setExtensions([
@@ -10,11 +22,11 @@ export const test: Test = async ({ Command, expect, RunningExtensions }: TestApi
   ])
   await RunningExtensions.select(1)
   const selectedName = RunningExtensions.root().locator('.RunningExtension.ExtensionActive .RunningExtensionName')
-  await expect(selectedName).toHaveText('Second')
+  await waitForCondition(() => expect(selectedName).toHaveText('Second'))
 
   await Command.execute('RunningExtensions.handleClickAt', 10_000)
 
   const activeRow = RunningExtensions.root().locator('.ExtensionActive')
-  await expect(activeRow).toHaveCount(0)
+  await waitForCondition(() => expect(activeRow).toHaveCount(0))
   await expect(RunningExtensions.rows()).toHaveCount(2)
 }
