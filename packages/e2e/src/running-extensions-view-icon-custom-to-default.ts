@@ -17,7 +17,8 @@ export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
 
   await RunningExtensions.setExtensions([{ ...extension, icon: '' }])
 
-  await expect(RunningExtensions.row(0).locator('img.RunningExtensionIcon')).toHaveCount(0)
+  const extensionIcon = RunningExtensions.row(0).locator('img.RunningExtensionIcon')
+  await expect(extensionIcon).toHaveCount(0)
   await expect(RunningExtensions.defaultIcon(0)).toBeVisible()
   await expect(RunningExtensions.defaultIcon(0)).toHaveAttribute('role', 'none')
 }

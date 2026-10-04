@@ -16,8 +16,10 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
   ])
 
   const row = Locator('.RunningExtension')
-  await expect(row.locator('.RunningExtensionDefaultIcon')).toHaveCount(1)
-  await expect(row.locator('.RunningExtensionActivationReason')).toHaveCount(0)
+  const defaultIcon = row.locator('.RunningExtensionDefaultIcon')
+  const activationReason = row.locator('.RunningExtensionActivationReason')
+  await expect(defaultIcon).toHaveCount(1)
+  await expect(activationReason).toHaveCount(0)
 
   await Command.execute('RunningExtensions.setExtensions', [
     {
@@ -30,10 +32,14 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
     },
   ])
 
-  await expect(row.locator('.RunningExtensionName')).toHaveText('Updated Extension')
-  await expect(row.locator('.RunningExtensionVersion')).toHaveText('2.0.0')
-  await expect(row.locator('.RunningExtensionActivationTime')).toHaveText('Activation: 8ms')
-  await expect(row.locator('.RunningExtensionActivationReason')).toHaveText('Activation reason: onCommand:sample.run')
-  await expect(row.locator('img.RunningExtensionIcon')).toHaveAttribute('src', '/icons/updated.svg')
-  await expect(row.locator('.RunningExtensionDefaultIcon')).toHaveCount(0)
+  const extensionName = row.locator('.RunningExtensionName')
+  const extensionVersion = row.locator('.RunningExtensionVersion')
+  const activationTime = row.locator('.RunningExtensionActivationTime')
+  const extensionIcon = row.locator('img.RunningExtensionIcon')
+  await expect(extensionName).toHaveText('Updated Extension')
+  await expect(extensionVersion).toHaveText('2.0.0')
+  await expect(activationTime).toHaveText('Activation: 8ms')
+  await expect(activationReason).toHaveText('Activation reason: onCommand:sample.run')
+  await expect(extensionIcon).toHaveAttribute('src', '/icons/updated.svg')
+  await expect(defaultIcon).toHaveCount(0)
 }

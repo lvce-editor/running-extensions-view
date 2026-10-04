@@ -16,7 +16,8 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
   ])
 
   const activationDetails = Locator('.RunningExtensionActivationDetails')
+  const activationTime = activationDetails.locator('.RunningExtensionActivationTime')
   const activationReason = activationDetails.locator('.RunningExtensionActivationReason')
-  await expect(activationDetails.locator('.RunningExtensionActivationTime')).toHaveText('Activation: 1ms')
+  await expect(activationTime).toHaveText('Activation: 1ms')
   await expect(activationReason).toHaveCount(0)
 }

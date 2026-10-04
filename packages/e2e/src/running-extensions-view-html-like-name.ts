@@ -17,5 +17,6 @@ export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   ])
 
   await expect(RunningExtensions.name(0)).toHaveText(htmlLikeName)
-  await expect(RunningExtensions.row(0).locator('script')).toHaveCount(0)
+  const script = RunningExtensions.row(0).locator('script')
+  await expect(script).toHaveCount(0)
 }

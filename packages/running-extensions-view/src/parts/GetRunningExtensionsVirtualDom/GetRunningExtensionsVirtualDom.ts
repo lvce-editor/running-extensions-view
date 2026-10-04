@@ -7,6 +7,8 @@ import { getExtensionVirtualDom } from '../GetExtensionVirtualDom/GetExtensionVi
 import { getRunningExtensionsEmptyDom } from '../GetRunningExtensionsEmptyVirtualDom/GetRunningExtensionsEmptyVirtualDom.ts'
 import * as TabIndex from '../TabIndex/TabIndex.ts'
 
+const containerClassName = mergeClassNames(ClassNames.RunningExtensions, ClassNames.Grow)
+
 export const getRunningExtensionsVirtualDom = (
   extensions: readonly RunningExtension[],
   loaded: boolean,
@@ -20,7 +22,7 @@ export const getRunningExtensionsVirtualDom = (
   return [
     {
       childCount: extensions.length,
-      className: mergeClassNames(ClassNames.RunningExtensions, ClassNames.Grow),
+      className: containerClassName,
       onBlur: DomEventListenerFunctions.HandleBlur,
       onClick: DomEventListenerFunctions.HandleClick,
       onContextMenu: DomEventListenerFunctions.HandleContextMenu,
