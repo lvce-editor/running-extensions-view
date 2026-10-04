@@ -4,12 +4,7 @@ export const getIssuesUrl = (repository: unknown): string => {
   if (typeof repository !== 'string' || !URL.canParse(repository)) {
     return ''
   }
-  let url: URL
-  try {
-    url = new URL(repository)
-  } catch {
-    return ''
-  }
+  const url = new URL(repository)
   if (url.protocol !== 'https:' || url.hostname !== 'github.com') {
     return ''
   }

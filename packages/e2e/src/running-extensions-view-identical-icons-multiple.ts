@@ -10,7 +10,8 @@ export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
     { activationEvent: '', activationTime: 2, icon, id: 'second.extension', name: 'Second', version: '2.0.0' },
   ])
 
-  await expect(RunningExtensions.root().locator('img.RunningExtensionIcon')).toHaveCount(2)
+  const extensionIcons = RunningExtensions.root().locator('img.RunningExtensionIcon')
+  await expect(extensionIcons).toHaveCount(2)
   await expect(RunningExtensions.icon(0)).toHaveAttribute('src', icon)
   await expect(RunningExtensions.icon(1)).toHaveAttribute('src', icon)
 }

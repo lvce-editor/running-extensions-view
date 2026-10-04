@@ -2,8 +2,16 @@ import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-selection-persists-after-append'
 
-const waitForRender = async (): Promise<void> => {
-  await new Promise((resolve) => setTimeout(resolve, 50))
+const waitForCondition = async (condition: () => Promise<void>): Promise<void> => {
+  for (let attempt = 0; attempt < 100; attempt++) {
+    try {
+      await condition()
+      return
+    } catch {
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+    }
+  }
+  await condition()
 }
 
 export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
@@ -12,9 +20,8 @@ export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   await RunningExtensions.show()
   await RunningExtensions.setExtensions([first])
   await RunningExtensions.select(0)
-  await waitForRender()
   const selectedName = RunningExtensions.root().locator('.RunningExtension.ExtensionActive .RunningExtensionName')
-  await expect(selectedName).toHaveText('First')
+  await waitForCondition(() => expect(selectedName).toHaveText('First'))
 
   await RunningExtensions.setExtensions([first, second])
 

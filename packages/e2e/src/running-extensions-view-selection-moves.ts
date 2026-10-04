@@ -2,8 +2,16 @@ import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-selection-moves'
 
-const waitForRender = async (): Promise<void> => {
-  await new Promise((resolve) => setTimeout(resolve, 50))
+const waitForCondition = async (condition: () => Promise<void>): Promise<void> => {
+  for (let attempt = 0; attempt < 100; attempt++) {
+    try {
+      await condition()
+      return
+    } catch {
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+    }
+  }
+  await condition()
 }
 
 export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
@@ -26,12 +34,11 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
   const selectedRow = Locator('.RunningExtension.ExtensionActive')
   // eslint-disable-next-line e2e/no-direct-click -- verifies selection transitions between rows
   await secondRow.click()
-  await waitForRender()
-  await expect(selectedRow.locator('.RunningExtensionName')).toHaveText('Second')
+  const selectedName = selectedRow.locator('.RunningExtensionName')
+  await waitForCondition(() => expect(selectedName).toHaveText('Second'))
 
   // eslint-disable-next-line e2e/no-direct-click -- verifies selection transitions between rows
   await firstRow.click()
-  await waitForRender()
   await expect(selectedRow).toHaveCount(1)
-  await expect(selectedRow.locator('.RunningExtensionName')).toHaveText('First')
+  await waitForCondition(() => expect(selectedName).toHaveText('First'))
 }

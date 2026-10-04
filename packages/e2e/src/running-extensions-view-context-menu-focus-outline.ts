@@ -4,8 +4,16 @@ export const name = 'running-extensions-view-context-menu-focus-outline'
 
 export const skip = ['webkit'] as const
 
-const waitForRender = async (): Promise<void> => {
-  await new Promise((resolve) => setTimeout(resolve, 50))
+const waitForCondition = async (condition: () => Promise<void>): Promise<void> => {
+  for (let attempt = 0; attempt < 100; attempt++) {
+    try {
+      await condition()
+      return
+    } catch {
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+    }
+  }
+  await condition()
 }
 
 export const test: Test = async ({ ClipBoard, Command, ContextMenu, expect, Locator, RunningExtensions }: TestApi) => {
@@ -36,8 +44,7 @@ export const test: Test = async ({ ClipBoard, Command, ContextMenu, expect, Loca
   await expect(outlinedRows).toHaveCount(1)
   await ContextMenu.selectItem('Copy id (second.extension)')
   await RunningExtensions.select(0)
-  await waitForRender()
-  await expect(outlinedRows).toHaveCount(0)
+  await waitForCondition(() => expect(outlinedRows).toHaveCount(0))
 
   await Command.execute('RunningExtensions.handleContextMenu', 0, 144)
   await expect(outlinedRows).toHaveCount(1)

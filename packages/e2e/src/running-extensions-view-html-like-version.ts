@@ -17,5 +17,6 @@ export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
   ])
 
   await expect(RunningExtensions.version(0)).toHaveText(version)
-  await expect(RunningExtensions.row(0).locator('img')).toHaveCount(0)
+  const images = RunningExtensions.row(0).locator('img')
+  await expect(images).toHaveCount(0)
 }

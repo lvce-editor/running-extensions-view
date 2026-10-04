@@ -2,8 +2,16 @@ import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-selection-cleared-by-outside-click'
 
-const waitForRender = async (): Promise<void> => {
-  await new Promise((resolve) => setTimeout(resolve, 50))
+const waitForCondition = async (condition: () => Promise<void>): Promise<void> => {
+  for (let attempt = 0; attempt < 100; attempt++) {
+    try {
+      await condition()
+      return
+    } catch {
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+    }
+  }
+  await condition()
 }
 
 export const test: Test = async ({ Command, expect, RunningExtensions }: TestApi) => {
@@ -13,11 +21,12 @@ export const test: Test = async ({ Command, expect, RunningExtensions }: TestApi
     { activationEvent: '', activationTime: 2, icon: '', id: 'second.extension', name: 'Second', version: '2.0.0' },
   ])
   await RunningExtensions.select(1)
-  await waitForRender()
-  await expect(RunningExtensions.root().locator('.RunningExtension.ExtensionActive .RunningExtensionName')).toHaveText('Second')
+  const selectedName = RunningExtensions.root().locator('.RunningExtension.ExtensionActive .RunningExtensionName')
+  await waitForCondition(() => expect(selectedName).toHaveText('Second'))
 
   await Command.execute('RunningExtensions.handleClickAt', 10_000)
 
-  await expect(RunningExtensions.root().locator('.ExtensionActive')).toHaveCount(0)
+  const activeRow = RunningExtensions.root().locator('.ExtensionActive')
+  await waitForCondition(() => expect(activeRow).toHaveCount(0))
   await expect(RunningExtensions.rows()).toHaveCount(2)
 }

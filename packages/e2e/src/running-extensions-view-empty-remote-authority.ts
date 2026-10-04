@@ -17,6 +17,8 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
   ])
 
   const row = Locator('.RunningExtension')
-  await expect(row.locator('.RunningExtensionRemoteAuthority')).toHaveCount(0)
-  await expect(row.locator('.RunningExtensionId')).toHaveText('sample.extension')
+  const remoteAuthority = row.locator('.RunningExtensionRemoteAuthority')
+  const extensionId = row.locator('.RunningExtensionId')
+  await expect(remoteAuthority).toHaveCount(0)
+  await expect(extensionId).toHaveText('sample.extension')
 }

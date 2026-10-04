@@ -2,8 +2,16 @@ import type { Test, TestApi } from '@lvce-editor/test-with-playwright'
 
 export const name = 'running-extensions-view-select-nested-content'
 
-const waitForRender = async (): Promise<void> => {
-  await new Promise((resolve) => setTimeout(resolve, 50))
+const waitForCondition = async (condition: () => Promise<void>): Promise<void> => {
+  for (let attempt = 0; attempt < 100; attempt++) {
+    try {
+      await condition()
+      return
+    } catch {
+      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()))
+    }
+  }
+  await condition()
 }
 
 export const test: Test = async ({ Command, expect, Locator, RunningExtensions }: TestApi) => {
@@ -23,8 +31,8 @@ export const test: Test = async ({ Command, expect, Locator, RunningExtensions }
   const secondName = Locator('.RunningExtensionName').nth(1)
   // eslint-disable-next-line e2e/no-direct-click -- verifies delegated selection from nested row content
   await secondName.click()
-  await waitForRender()
 
   const selectedRow = Locator('.RunningExtension.ExtensionActive')
-  await expect(selectedRow.locator('.RunningExtensionName')).toHaveText('Second')
+  const selectedName = selectedRow.locator('.RunningExtensionName')
+  await waitForCondition(() => expect(selectedName).toHaveText('Second'))
 }

@@ -10,5 +10,6 @@ export const test: Test = async ({ expect, RunningExtensions }: TestApi) => {
     { activationEvent: 'onCommand:third.run', activationTime: 3, icon: '', id: 'third.extension', name: 'Third', version: '3.0.0' },
   ])
 
-  await expect(RunningExtensions.root().locator('[data-index]')).toHaveCount(0)
+  const indexedRows = RunningExtensions.root().locator('[data-index]')
+  await expect(indexedRows).toHaveCount(0)
 }
