@@ -24,9 +24,14 @@ const getRemoteUrl = (path: string): string => {
 const content = await readFile(rendererWorkerPath, 'utf8')
 const workerPath = join(root, '.tmp', 'dist', 'dist', 'runningExtensionsViewMain.js')
 const remoteUrl = getRemoteUrl(workerPath)
-const occurrence = `// const runningExtensionsViewWorkerUrl = \`\${assetDir}/packages/running-extensions-view/dist/runningExtensionsViewMain.js\`
+const legacyOccurrence = `// const runningExtensionsViewWorkerUrl = \`\${assetDir}/packages/running-extensions-view/dist/runningExtensionsViewMain.js\`
 const runningExtensionsViewWorkerUrl = \`${remoteUrl}\``
-const replacement = `const runningExtensionsViewWorkerUrl = \`\${assetDir}/packages/running-extensions-view/dist/runningExtensionsViewMain.js\``
+const legacyReplacement = `const runningExtensionsViewWorkerUrl = \`\${assetDir}/packages/running-extensions-view/dist/runningExtensionsViewMain.js\``
+const currentOccurrence = `\`${remoteUrl}\``
+const currentReplacement = `\`\${assetDir}/packages/running-extensions-view/dist/runningExtensionsViewMain.js\``
+const runtimeOccurrence = `\`\${assetDir}/packages/renderer-worker/node_modules/@lvce-editor/running-extensions-view/dist/runningExtensionsViewMain.js\``
+const occurrence = content.includes(legacyOccurrence) ? legacyOccurrence : content.includes(currentOccurrence) ? currentOccurrence : runtimeOccurrence
+const replacement = content.includes(legacyOccurrence) ? legacyReplacement : currentReplacement
 
 if (!content.includes(occurrence)) {
   throw new Error('occurrence not found')
